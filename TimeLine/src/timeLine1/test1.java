@@ -6,4 +6,7 @@ public class test1 {
 		int[] arr = {1,2,5,3,7,5,3};
 		
 	}
+	public void thisissparta() {
+		
+	}
 }
