@@ -1,9 +1,9 @@
 package model;
 
-public class Event {
+public abstract class Event {
 	
-	private String title = "";
-	private String description = "";
+	String title = "";
+	String description = "";
 	
 	public String getTitle() {
 		return title;
