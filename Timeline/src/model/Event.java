@@ -5,7 +5,12 @@ public abstract class Event {
 	String title = "";
 	String description = "";
 	
-	public String getTitle() {
+	public Event (String t, String d){ // Constructor
+		title = t;
+		description = d;
+	}
+	
+	public String getTitle() { // Getters and setters
 		return title;
 	}
 	public void setTitle(String title) {
