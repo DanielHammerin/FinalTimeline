@@ -1,32 +1,32 @@
 package model;
 
-import java.util.Date;
+import java.util.Calendar;
 
 
 public class EventTime extends Event{
 
-	Date startTime;
-	Date finishTime;
+	Calendar startTime;
+	Calendar finishTime;
 	
-	public EventTime(String t, String d, Date st, Date ft) {
+	public EventTime(String t, String d, Calendar st, Calendar ft) {
 		super(t, d);
 		this.setStartTime(st);
 		this.setFinishTime(ft);
 	}
 
-	 public void setStartTime (Date date) {
+	 public void setStartTime (Calendar date) {
 		 this.startTime = date;
 	 }
 	 
-	 public Date getStartTime (){
+	 public Calendar getStartTime (){
 		 return startTime;
 	 }
 	 
-	 public void setFinishTime (Date date) {
+	 public void setFinishTime (Calendar date) {
 		 this.finishTime = date;
 	 }
 	 
-	 public Date getFinishTime (){
+	 public Calendar getFinishTime (){
 		 return finishTime;
 	 }
  
