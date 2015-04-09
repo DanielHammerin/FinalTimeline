@@ -3,12 +3,12 @@ package model;
 import java.util.Date;
 
 
-public class EventWithTime extends Event{
+public class EventTime extends Event{
 
 	Date startTime;
 	Date finishTime;
 	
-	public EventWithTime(String t, String d, Date st, Date ft) {
+	public EventTime(String t, String d, Date st, Date ft) {
 		super(t, d);
 		this.setStartTime(st);
 		this.setFinishTime(ft);
