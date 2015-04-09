@@ -10,7 +10,7 @@ public class databaseTest {
 	public static void main(String[] args) {
 		
 		Calendar start = new Calendar ();
-		Calendar finish = new Calendar (THURSDAY);
+		Calendar finish = new Calendar ();
 		
 		EventTime firstSemester = new EventTime ("First Semester", "First Semerster for Software Technology Program", start, finish);
 		
