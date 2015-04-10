@@ -6,5 +6,10 @@ public class EventNT extends Event {
 		super (t,d);
 	}
 	
+	@Override
+	public String toString (){
+		return (this.title + ": " + this.description); 
+	}
+	
 
 }
