@@ -1,10 +1,6 @@
 package TestGUI;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 
 public class GraphicalEvent extends Label {
 
