@@ -1,4 +1,5 @@
 package model;
+import com.db4o.*;
 
 public abstract class Event {
 	
@@ -21,6 +22,28 @@ public abstract class Event {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void addToDatabase (ObjectContainer dataBase){
+		
+		boolean flag = true;
+		
+		ObjectSet retrieve = dataBase.query(Event.class); // created object to retrieve info from the database
+
+		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
+			if (this.equals(retrieve.next())){
+				flag = false;
+			}
+		}
+		
+		if (flag){
+			dataBase.store(this);
+			dataBase.commit();
+		} else {
+			System.out.println( "The event has been already added in the timeline!");
+		}
+		
+		
 	}
 	
 
