@@ -17,9 +17,7 @@ public class databaseTest2 {
 				
 				while (retrieve.hasNext()){
 					System.out.println (retrieve.next().toString());
-								
 				}
-				
 	        }
 	        
 	        finally

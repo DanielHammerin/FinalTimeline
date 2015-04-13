@@ -8,7 +8,8 @@ public class EventNT extends Event {
 	
 	@Override
 	public String toString (){
-		return (this.title + ": " + this.description); 
+		return (this.title + ": " + this.description);
+		
 	}
 	
 
