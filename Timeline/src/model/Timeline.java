@@ -63,7 +63,11 @@ public abstract class Timeline
 	 */
 	public void setDescription(String description) { this.description = description; }
 
-	public void addEvent(Event e) { events.add(e); }
+	public void addEvent(Event e) 
+	{ 
+		if(events.contains(e)) {System.err.println("This event already exists in this timeline.");}
+		events.add(e); 
+	}
 	
 	public void removeEvent(Event e) { events.remove(e); } // dada
 
@@ -73,7 +77,7 @@ public abstract class Timeline
 		
 		boolean flag = true;
 		
-		ObjectSet retrieve = dataBase.query (Timeline.class); // created object to retrieve info from the database
+		ObjectSet<Timeline> retrieve = dataBase.query (Timeline.class); // created object to retrieve info from the database
 
 		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
 			if (this.equals(retrieve.next())){
