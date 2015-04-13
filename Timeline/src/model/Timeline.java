@@ -2,6 +2,9 @@ package model;
 
 import java.util.LinkedList;
 
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+
 /**
  * Super class for the different kinds of timelines. Holds a string 
  * for description of a timeline, a string for the title of the of 
@@ -62,8 +65,30 @@ public abstract class Timeline
 
 	public void addEvent(Event e) { events.add(e); }
 	
-	public void removeEvent(Event e) { events.remove(e); }
+	public void removeEvent(Event e) { events.remove(e); } // dada
 
 	
+	
+	public void addToDataBase (ObjectContainer dataBase){
+		
+		boolean flag = true;
+		
+		ObjectSet retrieve = dataBase.query (Timeline.class); // created object to retrieve info from the database
+
+		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
+			if (this.equals(retrieve.next())){
+				flag = false;
+			}
+		}
+		
+		if (flag){
+			dataBase.store(this);
+			dataBase.commit();
+		} else {
+			System.out.println( "The Timeline has been already added in the database!");
+		}
+		
+		
+	}
 	
 }
