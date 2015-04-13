@@ -19,6 +19,7 @@ public class MainWindowController implements Initializable{
 		TimelineBlock tb2 = new TimelineBlock(30);
 		vBoxModules.getChildren().add(tb);
 		vBoxModules.getChildren().add(tb2);
+		
 	}
 	
 

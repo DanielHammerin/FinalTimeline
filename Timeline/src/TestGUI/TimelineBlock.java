@@ -28,6 +28,7 @@ public class TimelineBlock extends ScrollPane {
 		myGridPane.addColumns(amountColumns);
 		myGridPane.setGridLinesVisible(true);
 		
+		myGridPane.addEvent(new GraphicalEvent("dede"), 4, 1, 2);
 //		Rectangle r = new Rectangle(200, 50);
 //		r.setFill(Color.RED);
 //		

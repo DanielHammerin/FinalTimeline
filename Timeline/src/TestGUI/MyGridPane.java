@@ -1,16 +1,12 @@
 package TestGUI;
 
-import java.util.ArrayList;
-
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.Rectangle;
 
-public class MyGridPane extends GridPane {
-	
+public class MyGridPane extends GridPane {	
 
 	public MyGridPane(){		
 		this.setStyle("-fx-background-color: #FAFBFF;");
@@ -38,9 +34,8 @@ public class MyGridPane extends GridPane {
 		}	
 	}
 	
-	public void addEvent(Rectangle r, int columnIndex, int rowIndex, int colSpan){
-		
-		this.add(r, columnIndex, rowIndex,colSpan, 1);		
+	public void addEvent(GraphicalEvent ge, int columnIndex, int rowIndex, int colSpan){		
+		this.add(ge, columnIndex, rowIndex,colSpan, 1);		
 	}
 	
 
