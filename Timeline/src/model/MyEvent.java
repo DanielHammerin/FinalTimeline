@@ -24,6 +24,16 @@ public abstract class MyEvent {
 		this.description = description;
 	}
 	
+    public void addEevnt(String title,String description){
+		
+	}
+	public void deleteEvent(String title,String description){
+		 
+	}
+	public void editEvent(String title,String description){
+		
+	}
+	
 	public void addToDatabase (ObjectContainer dataBase){
 		
 		boolean flag = true;
