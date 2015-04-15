@@ -16,7 +16,7 @@ public abstract class Timeline
 {
 	private String title;
 	private String description;
-	private LinkedList<Event> events;
+	private LinkedList<MyEvent> events;
 	private static final int MAX_CHARS_TITLE = 30;
 	
 	/**
@@ -31,7 +31,7 @@ public abstract class Timeline
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
 		description = d;
-		events = new LinkedList<Event>();
+		events = new LinkedList<MyEvent>();
 	}
 
 	/**
@@ -63,13 +63,13 @@ public abstract class Timeline
 	 */
 	public void setDescription(String description) { this.description = description; }
 
-	public void addEvent(Event e) 
+	public void addEvent(MyEvent e) 
 	{ 
 		if(events.contains(e)) {System.err.println("This event already exists in this timeline.");}
 		events.add(e); 
 	}
 	
-	public void removeEvent(Event e) { events.remove(e); } // dada
+	public void removeEvent(MyEvent e) { events.remove(e); } // dada
 
 	
 	
@@ -93,6 +93,14 @@ public abstract class Timeline
 		}
 		
 		
+	}
+
+	public LinkedList<MyEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(LinkedList<MyEvent> events) {
+		this.events = events;
 	}
 	
 }

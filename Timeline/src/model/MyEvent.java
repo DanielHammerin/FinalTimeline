@@ -1,10 +1,13 @@
 package model;
+import javafx.scene.layout.StackPane;
+
 import com.db4o.*;
 
 public abstract class MyEvent {
 	
 	String title = "";
 	String description = "";
+	StackPane geometricFigure;
 	
 	public MyEvent (String t, String d){ // Constructor
 		title = t;
@@ -54,6 +57,14 @@ public abstract class MyEvent {
 		}
 		
 		
+	}
+
+	public StackPane getGeometricFigure() {
+		return geometricFigure;
+	}
+
+	public void setGeometricFigure(StackPane geometricFigure) {
+		this.geometricFigure = geometricFigure;
 	}
 	
 

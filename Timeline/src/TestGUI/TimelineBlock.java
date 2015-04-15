@@ -4,16 +4,12 @@ package TestGUI;
 import java.util.GregorianCalendar;
 
 import model.YearTimeline;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class TimelineBlock extends ScrollPane {
 
 	private AnchorPane myAnchorPane;
-//	private MyGridPane myGridPane;
 	private NewGrid myNewGrid;
 	
 	public TimelineBlock(int amountColumns){
@@ -27,6 +23,9 @@ public class TimelineBlock extends ScrollPane {
 		myAnchorPane.prefWidthProperty().bind(this.widthProperty());	
 		
 		myNewGrid = new NewGrid(new YearTimeline("TITLE", "DESCRIPTION", new GregorianCalendar(2010, 12, 1), new GregorianCalendar(2030, 2, 15)));
+		myNewGrid.prefHeight(myAnchorPane.getHeight());
+		myNewGrid.prefWidth(myAnchorPane.getWidth());
+		
 //		myGridPane = new MyGridPane();
 //		myGridPane.addColumns(amountColumns);
 //		myGridPane.setGridLinesVisible(true);//		

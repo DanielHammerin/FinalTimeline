@@ -2,8 +2,7 @@ package TestGUI;
 
 import java.util.ArrayList;
 
-import model.Event;
-import model.Timeline;
+import model.MyEvent;
 import model.YearTimeline;
 import javafx.scene.Group;
 import javafx.scene.layout.HBox;
@@ -17,14 +16,14 @@ public class NewGrid extends Group{
 	
 	ArrayList<Rectangle> allEvents = new ArrayList<Rectangle>();
 	YearTimeline yearTimeline;
+
+	static int recWidth = 50;
+	static int topHeight = 30;
 	
-	public NewGrid(YearTimeline timeline){	
+	public NewGrid(YearTimeline timeline){
 		this.yearTimeline= timeline;
 		VBox base = new VBox();
-		HBox topLine = new HBox();
-		int recWidth = 50;
-		int topHeight = 30;
-		
+		HBox topLine = new HBox();		
 		
 		//Header
 		for (int i = timeline.getStartYear(); i < yearTimeline.getEndYear(); i++){
@@ -54,16 +53,16 @@ public class NewGrid extends Group{
 		
 		base.getChildren().add(calenderColumns);
 	
-		StackPane r = addEventToGrid(new Event("TITLE","DESCRIPTION") {
-		});
-		
+	
 		this.getChildren().add(base);
-		this.getChildren().add(r);
+		for(int i=0;i<timeline.getEvents().size();i++){
+			this.getChildren().add(timeline.getEvents().get(i).getGeometricFigure());
+		}
+		
 	}
 	
-	
 	//adding event rectangle
-	public StackPane addEventToGrid(Event myEvent){
+	public StackPane addEventToGrid(MyEvent myEvent){
 		Rectangle eventRec = new Rectangle(50, 40);
 		eventRec.setFill(Color.RED);
 		eventRec.setStroke(Color.BLACK);
