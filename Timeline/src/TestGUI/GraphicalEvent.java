@@ -12,6 +12,7 @@ public class GraphicalEvent extends StackPane {
 		this.minHeight(50);
 		this.minWidth(50);
 		
+		
 		Rectangle r = new Rectangle();
 //		r.widthProperty().bind(this.widthProperty());
 //		r.heightProperty().bind(this.heightProperty());

@@ -1,6 +1,7 @@
 package TestGUI;
 
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -35,7 +36,18 @@ public class MyGridPane extends GridPane {
 	}
 	
 	public void addEvent(GraphicalEvent ge, int columnIndex, int rowIndex, int colSpan){		
-		this.add(ge, columnIndex, rowIndex,colSpan, 1);		
+		this.add(ge, columnIndex, rowIndex,colSpan, 1);
+		Node n = getNodeFromGridPane(this, columnIndex, rowIndex);
+		n.layoutXProperty().set(50);
+	}
+	
+	private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+	    for (Node node : gridPane.getChildren()) {
+	        if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+	            return node;
+	        }
+	    }
+	    return null;
 	}
 	
 
