@@ -1,6 +1,6 @@
 package model;
 
-import java.util.LinkedList;
+import java.util.TreeSet;
 
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -16,7 +16,7 @@ public abstract class Timeline
 {
 	private String title;
 	private String description;
-	private LinkedList<MyEvent> events;
+	private TreeSet <MyEvent> events;
 	private static final int MAX_CHARS_TITLE = 30;
 	
 	/**
@@ -31,7 +31,7 @@ public abstract class Timeline
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
 		description = d;
-		events = new LinkedList<MyEvent>();
+		events = new TreeSet <MyEvent>();
 	}
 
 	/**
@@ -95,11 +95,11 @@ public abstract class Timeline
 		
 	}
 
-	public LinkedList<MyEvent> getEvents() {
+	public TreeSet<MyEvent> getEvents() {
 		return events;
 	}
 
-	public void setEvents(LinkedList<MyEvent> events) {
+	public void setEvents(TreeSet<MyEvent> events) {
 		this.events = events;
 	}
 	
