@@ -27,35 +27,13 @@ public abstract class MyEvent {
 		this.description = description;
 	}
 	
-    public void addEevnt(String title,String description){
+    public void addEvent(String title,String description){
 		
 	}
 	public void deleteEvent(String title,String description){
 		 
 	}
 	public void editEvent(String title,String description){
-		
-	}
-	
-	public void addToDatabase (ObjectContainer dataBase){
-		
-		boolean flag = true;
-		
-		ObjectSet retrieve = dataBase.query(MyEvent.class); // created object to retrieve info from the database
-
-		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
-			if (this.equals(retrieve.next())){
-				flag = false;
-			}
-		}
-		
-		if (flag){
-			dataBase.store(this);
-			dataBase.commit();
-		} else {
-			System.out.println( "The event has been already added in the timeline!");
-		}
-		
 		
 	}
 
