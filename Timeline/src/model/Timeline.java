@@ -71,30 +71,6 @@ public abstract class Timeline
 	
 	public void removeEvent(MyEvent e) { events.remove(e); } // dada
 
-	
-	
-	public void addToDataBase (ObjectContainer dataBase){
-		
-		boolean flag = true;
-		
-		ObjectSet<Timeline> retrieve = dataBase.query (Timeline.class); // created object to retrieve info from the database
-
-		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
-			if (this.equals(retrieve.next())){
-				flag = false;
-			}
-		}
-		
-		if (flag){
-			dataBase.store(this);
-			dataBase.commit();
-		} else {
-			System.out.println( "The Timeline has been already added in the database!");
-		}
-		
-		
-	}
-
 	public TreeSet<MyEvent> getEvents() {
 		return events;
 	}
