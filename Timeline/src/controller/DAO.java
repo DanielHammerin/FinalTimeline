@@ -1,16 +1,35 @@
 package controller;
 /** This class is the implementation of the database access object implementation **/
 import java.util.List;
+
 import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+
 import model.MyEvent;
 import model.Timeline;
 
-public class DAO implements DaoInterface {
+public class DAO implements DaoInterface { // Data Access Objects
 	private List<Timeline> timelines;
 	
 	@Override
-	public void addData(ObjectContainer database, Timeline addTimeline) {
-		// TODO Auto-generated method stub
+	public void addData (ObjectContainer database, Timeline newTimeline) {
+
+		boolean flag = true;
+		
+//		ObjectSet<Timeline> retrieve = database.query (Timeline.class); // created object to retrieve info from the database
+
+//		while (retrieve.hasNext()){// THERE IS AN ERROR IN THIS LOOP
+//			if (addTimeline.equals(retrieve.next())){
+//				flag = false;
+//			}
+//		}
+		
+		if (flag){
+			database.store(newTimeline);
+			database.commit();
+		} else {
+			System.out.println( "The Timeline has been already added in the database!");
+		}
 		
 	}
 	@Override

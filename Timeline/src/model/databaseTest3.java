@@ -6,13 +6,13 @@ public class databaseTest3 {
 
 	public static void main(String[] args) {
 
-	        new File (".", "yoloBase420.data"); // creates the .data file
+	        new File (".", "timelineDatabase.data"); // creates the .data file
 	        
 	        ObjectContainer db = null; // creates the object "data base"
 	        
 	        try
 	        {
-	            db = Db4o.openFile("yoloBase420.data"); // assign file to the object
+	            db = Db4o.openFile("timelineDatabase.data"); // assign file to the object
 	
 				EventNT firstSemester = new EventNT ("First Semester", "First Semester for Software Technology Program"); // here I created some Events
 				EventNT secondSemester = new EventNT ("Second Semester", "Second Semester for Software Technology Program");
@@ -20,7 +20,6 @@ public class databaseTest3 {
 				EventNT fourthSemester = new EventNT ("Fourth Semester", "Fourth Semester for Software Technology Program");
 				
 //				db.store(firstSemester); // store objects on the databas
-				firstSemester.addToDatabase(db);
 				
 //				db.store(secondSemester);
 //				db.store(thirdSemester);

@@ -1,8 +1,6 @@
 package model;
 import javafx.scene.layout.StackPane;
 
-import com.db4o.*;
-
 public abstract class MyEvent {
 	
 	String title = "";

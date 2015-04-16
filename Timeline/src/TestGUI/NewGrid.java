@@ -12,15 +12,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+/**
+ * This class represents the graphical grid/timeline where the events of timelines have to be drawn on
+ * and updates have to occur
+ * @author Alexander
+ *
+ */
 public class NewGrid extends Group{
 	
-	ArrayList<Rectangle> allEvents = new ArrayList<Rectangle>();
 	YearTimeline yearTimeline;
 
-	static int recWidth = 50;
+	static int recWidth = 80;
 	static int topHeight = 30;
 	
-	public NewGrid(YearTimeline timeline){
+	/**
+	 * Constructor for the NewGrid
+	 * 
+	 * @param timeline to be represented
+	 * @param heightOfBox of the parent container (needed for height calculation)
+	 */
+	public NewGrid(YearTimeline timeline, double heightOfBox){
 		this.yearTimeline= timeline;
 		VBox base = new VBox();
 		HBox topLine = new HBox();		
@@ -30,38 +41,39 @@ public class NewGrid extends Group{
 			Rectangle r = new Rectangle(recWidth,topHeight);
 			r.setFill(Color.ANTIQUEWHITE);
 			r.setStroke(Color.BLACK);
-			
-			allEvents.add(r);
 			Text t = new Text(i + "");
 			StackPane stack = new StackPane();			
 			stack.getChildren().addAll(r, t);
 			topLine.getChildren().add(stack);
 		}
 		
-		base.getChildren().add(topLine);
+		base.getChildren().add(topLine);		
 		
+		//Columns
 		HBox calenderColumns = new HBox();
-		int calColHeight = 100;
 		Rectangle[] columns = new Rectangle[yearTimeline.getEndYear()-yearTimeline.getStartYear()];
 		
 		for (int i = 0; i < columns.length; i++){
-			columns[i] = new Rectangle(recWidth, calColHeight);
+			columns[i] = new Rectangle(recWidth, heightOfBox-topHeight);
 			columns[i].setFill(Color.AZURE);
 			columns[i].setStroke(Color.BLACK);
 			calenderColumns.getChildren().add(columns[i]);
 		}
 		
 		base.getChildren().add(calenderColumns);
-	
-	
 		this.getChildren().add(base);
+		
+		//Iterates through all events of this Timeline and gets the geometric figures to be placed in the grid
 		for(int i=0;i<timeline.getEvents().size();i++){
 			this.getChildren().add(timeline.getEvents().get(i).getGeometricFigure());
 		}
 		
+		this.getChildren().add(addEventToGrid(new MyEvent("Hello","Description") {
+		}));
+		
 	}
 	
-	//adding event rectangle
+	//adding event rectangle older version
 	public StackPane addEventToGrid(MyEvent myEvent){
 		Rectangle eventRec = new Rectangle(50, 40);
 		eventRec.setFill(Color.RED);

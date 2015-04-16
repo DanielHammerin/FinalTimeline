@@ -11,7 +11,7 @@ public class databaseTest2 {
 	        
 	        try
 	        {
-	            db = Db4o.openFile("yoloBase420.data"); // open file in the object
+	            db = Db4o.openFile("timelineDatabase.data"); // open file in the object
 				
 				ObjectSet retrieve = db.query(EventNT.class);
 				

@@ -43,5 +43,13 @@ public class EventTime extends MyEvent{
 	 public Calendar getFinishTime (){
 		 return finishTime;
 	 }
+
+	public boolean equals(EventTime in) 
+	{
+		boolean descriptions = super.getDescription().equals(in.getDescription());
+		boolean sameDate = in.getStartTime().equals(startTime) && in.getFinishTime().equals(finishTime);
+		boolean sameTitle = in.getTitle().equals(super.title);
+		return descriptions && sameDate && sameTitle;
+	}
  
 }
