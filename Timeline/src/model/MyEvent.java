@@ -26,13 +26,17 @@ public abstract class MyEvent {
 	}
 	
     public void addEvent(String title,String description){
-		
+    	this.title = title; 
+		this.description = description;
 	}
 	public void deleteEvent(String title,String description){
+		this.title = title; 
+		this.description = description;
 		 
 	}
 	public void editEvent(String title,String description){
-		
+		this.title = title; 
+		this.description = description;
 	}
 
 	public StackPane getGeometricFigure() {
