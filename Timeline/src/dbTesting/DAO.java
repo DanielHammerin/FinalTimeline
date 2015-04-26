@@ -4,7 +4,8 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
-public class DAO implements daoInterface { // This is the DAO or 'Data Access Object' is works as an iterator for the Database, it includes methods to save, delete and update the database among others. For a better understanding of the code check out db4oBasics.java file
+public class DAO implements daoInterface { // This is the DAO or 'Data Access Object' is works as an iterator for the Database, it includes methods to save, delete and update the database among others.
+										  //For a better understanding of the code check out db4oBasics.java file
 	
 	public void saveToDataBase (Book myBook) {  // This method saves object 'Book' to the database
 		
@@ -167,6 +168,23 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 					aux = retriever.next();
 					System.out.println (aux.returnTitle() + " by " + aux.returnAuthor());
 				}
+			}
+		}
+		finally {
+			db.close();
+		}
+	}
+
+	@Override
+	public boolean isEmpty() { //This method return true if the database is empty
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
+		
+		try{
+			ObjectSet <Book> retriever = db.query(Book.class);
+			if (retriever.hasNext()){ // check if the database is empty
+				return true; 
+			} else {
+				return false;
 			}
 		}
 		finally {

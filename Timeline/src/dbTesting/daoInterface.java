@@ -10,5 +10,6 @@ public interface daoInterface {
 	public void updateBook (Book myBook, String newTitle, String newAuthor); // updates book info and saves is to the database
 	public void printDatabase (); // prints out all books in the database
 	public void clearDatabase (); // deletes all books in the database
+	public boolean isEmpty (); // returns true is the database is currently empty
 	
 }

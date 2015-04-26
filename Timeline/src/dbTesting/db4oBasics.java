@@ -3,7 +3,7 @@ import java.io.File;
 
 import com.db4o.*;
 
-public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 101 for suckers
+public class db4oBasics { // Hello my name is Johnny Knoxville and this is "Db4o 101 for suckers"
 	
 	public static void main(String[] args) {
 	
