@@ -3,15 +3,15 @@ import java.io.File;
 
 import com.db4o.*;
 
-public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 101
+public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 101 for suckers
 	
 	public static void main(String[] args) {
 	
-    new File (".", "newDatabase.data").delete(); // creates the .data file
+    new File (".", "newDatabase.data").delete(); // creates the .data file, this needs to be done only once, notice the .delete() part should not be included in order to save the database file
     
     ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data"); // open file in the object container, this is how we iterate with the database. It will be replaced by the class DAO methods but it is good that you know how it works in case that Oskar asks
 	
-		try { // the infamous try-catch error handling part
+		try { // the infamous try-finally handling part
 			
 			Book catcherInTheRye = new Book ("The Catcher in the Rye", "William Faulkner"); // create some random books
 			Book inColdBlood = new Book ("In Cold Blood", "Truman Capote");
@@ -31,13 +31,13 @@ public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 
 			db.delete(brothersKaramazov); // deletes object from database
 			db.commit(); // saves changes in the database, again very important!
 
-			ObjectSet <Book> retriever = db.query(Book.class); // retrieves objects of a specific Class determined in the parameters, in this case 'Book'
+			ObjectSet <Book> retriever = db.query(Book.class); // ObjectSet retrieves objects of a specific Class determined in the parameters, in this case 'Book'
 			
-			while (retriever.hasNext()){						// let's test the retriever
+			while (retriever.hasNext()){						// let's test the ObjectSet
 				System.out.println (retriever.next().returnTitle());
 			}
 			
-			retriever = db.queryByExample(inColdBlood); // retrieves an specific Object determined in the parameters, in this case 'inColdBlood'
+			retriever = db.queryByExample(inColdBlood); // retrieves an specific Object determined in the parameters, in this case 'inColdBlood', notice that we updated the same ObjectSet with new parameters, but we could have also created a new ObjectSet
 			System.out.println ("\n" + retriever.next().returnAuthor());
 			
 			 												// How to update an object in the database:
@@ -49,7 +49,7 @@ public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 
 			
 			System.out.println("");
 			
-			retriever = db.query(Book.class); // let's try this out, Notice: it very is important to reset the retriever in order to get all books again, I don't know if there is a better way to do this but it works!.
+			retriever = db.query(Book.class); // let's try this out, Notice: it very is important to reset the ObjectSet in order to get all books again, I don't know if there is a better way to do this but it works!.
 			
 			while (retriever.hasNext()){ // let's retrieve that sweet sweet database, oh yea
 				System.out.println (retriever.next().returnAuthor());
@@ -63,4 +63,4 @@ public class db4oBasics { // Hello my name is Johnny Knoxville and this is db40 
 		}
 	}
 
-} // Ok I think that would be everything you will need to know about db4o for now, this is just the basics of db4o so everyone is in the known, remember that we will not use this methods but the methods from the class DAO.
+} // Ok I think that would be everything you will need to know about db4o for now, this is just the basics of db4o so everyone is in the known, remember that we will not implement these methods but the methods from the class DAO.
