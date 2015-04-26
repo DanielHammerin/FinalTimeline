@@ -1,6 +1,6 @@
 package dbTesting;
 
-public class daoTester {
+public class daoTest {
 
 	public static void main(String[] args) {
 		

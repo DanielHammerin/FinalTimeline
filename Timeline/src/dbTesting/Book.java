@@ -1,6 +1,6 @@
 package dbTesting;
 
-public class Book {
+public class Book { // This is a simple class I've created for testing purposes
 	
 	String title;
 	String author;
