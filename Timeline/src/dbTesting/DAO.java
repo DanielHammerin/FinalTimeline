@@ -20,7 +20,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 				db.commit();	// info about this methods and more on db4oBasics.java file
 				System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " succesfully saved in the book database!.");
 			} else {
-				System.out.println ("\nError!: "+myBook.returnTitle() + " by " + myBook.returnAuthor() + " has already been saved in the book database!.");
+				System.out.println ("\nError!: "+ myBook.returnTitle() + " by " + myBook.returnAuthor() + " has already been saved in the book database!.");
 			}
 			
 		} finally {
@@ -107,23 +107,37 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 	@Override
 	public void updateBook(Book myBook, String newTitle, String newAuthor) { // This method updates a Book in the database with new title and author
 		
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");
+		boolean flag = false;
 		
 		try {
 			ObjectSet <Book> retriever = db.queryByExample(myBook);
 			
 			if (retriever.hasNext()){
 				
-				System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " updated to " + newTitle + " by " + newAuthor);
+				retriever = db.queryByExample(new Book (newTitle, newAuthor));
 				
-				myBook.setAuthor(newAuthor);
-				myBook.setTitle(newTitle);
-				
-				db.store(myBook);
-				db.commit();
-				
+				if (!retriever.hasNext()){
+					System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " updated to " + newTitle + " by " + newAuthor);
+					
+					db.store(new Book (newTitle,newAuthor));
+					db.commit();
+					flag = true;
+					
+				} else {
+					System.out.println ("\nError!: "+ newTitle + " by " + newAuthor + " is already in the the book database!.");	
+				}	
 			} else {
 				System.out.println ("\nError!: "+ myBook.returnTitle() + " by " + myBook.returnAuthor() + " not found in the book database!.");
+			}
+			
+			if (flag){
+				
+			}
+				retriever = db.queryByExample(myBook);
+				if (retriever.hasNext()){ // check if the book is on the database
+					db.delete(retriever.next());
+					db.commit(); // info about this methods and more on db4oBasics.java file
 			}
 		}
 		finally {
