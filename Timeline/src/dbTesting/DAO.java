@@ -182,9 +182,9 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		try{
 			ObjectSet <Book> retriever = db.query(Book.class);
 			if (retriever.hasNext()){ // check if the database is empty
-				return true; 
+				return false; 
 			} else {
-				return false;
+				return true;
 			}
 		}
 		finally {
