@@ -1,5 +1,6 @@
 package dbTesting;
 
+import java.util.ArrayList;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -26,24 +27,6 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			db.close();
 		}
 	}
-	
-	public Book readDataBase () { // This method retrieves Books from the database
-			
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
-			
-			try{
-				ObjectSet <Book> retriever = db.query(Book.class);
-				if (retriever.hasNext()){ // check if there's an Object to retrieve
-					return retriever.next(); // retrieves Object
-				} else {
-					System.out.println ("\nMessage: " + "The database is currently empty!.");
-					return null;
-				}
-			}
-			finally {
-				db.close();
-			}
-		}
 	
 	public Book getBook (Book myBook){ // This method retrieves a specific Book from the database
 		
@@ -95,7 +78,6 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 				db.delete(retriever.next());
 				db.commit(); // info about this methods and more on db4oBasics.java file
 				System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " has been deleted from the book database!.");
-				
 			} else {
 				System.out.println ("\nError!: "+ myBook.returnTitle() + " by " + myBook.returnAuthor() + " not found in the book database!.");
 			}
@@ -191,5 +173,31 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			db.close();
 		}
 	}
+	
+	public ArrayList <Book> getAllBooks () { // This method retrieves Books from the database
+		
+		ArrayList <Book> findAll = new ArrayList <Book> ();
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
+			
+			try{
+				ObjectSet <Book> retriever = db.query(Book.class);
+				
+				if (retriever.hasNext()){ // check if there's an Object to retrieve
+					 while (retriever.hasNext()){
+						 findAll.add(retriever.next());
+					 }
+					return findAll;
+				
+				} else {
+					System.out.println ("\nMessage: " + "The database is currently empty!.");
+					return findAll;
+				}
+				
+			}
+			finally {
+				db.close();
+			}
+		}
 }
+
 
