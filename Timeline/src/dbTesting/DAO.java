@@ -8,16 +8,16 @@ import com.db4o.ObjectSet;
 public class DAO implements daoInterface { // This is the DAO or 'Data Access Object' is works as an iterator for the Database, it includes methods to save, delete and update the database among others.
 										  //For a better understanding of the code check out db4oBasics.java file
 	
-	public void saveToDataBase (Book myBook) {  // This method saves object 'Book' to the database
+	public void saveToDataBase (Book myBook) {  // This method saves object 'Book' in the database
 		
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");
 		try {
 			
 			ObjectSet <Book> retriever = db.queryByExample(myBook);
 			
-			if (!retriever.hasNext()){ // this line check if the objects is already in the database
+			if (!retriever.hasNext()){ // this line checks if the objects is already in the database
 				db.store(myBook);
-				db.commit();	// info about this methods and more on db4oBasics.java file
+				db.commit();	// info about these methods and more on the db4oBasics.java file
 				System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " succesfully saved in the book database!.");
 			} else {
 				System.out.println ("\nError!: "+ myBook.returnTitle() + " by " + myBook.returnAuthor() + " has already been saved in the book database!.");
@@ -76,7 +76,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			ObjectSet <Book> retriever = db.queryByExample(myBook);
 			if (retriever.hasNext()){ // check if the book is on the database
 				db.delete(retriever.next());
-				db.commit(); // info about this methods and more on db4oBasics.java file
+				db.commit(); // info about these methods and more on db4oBasics.java file
 				System.out.println ("\nMessage: " + myBook.returnTitle() + " by " + myBook.returnAuthor() + " has been deleted from the book database!.");
 			} else {
 				System.out.println ("\nError!: "+ myBook.returnTitle() + " by " + myBook.returnAuthor() + " not found in the book database!.");
@@ -87,7 +87,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 	}
 
 	@Override
-	public void clearDatabase() { // This method deletes all Books in the database
+	public void clearDatabase() { // This method deletes all the Books in the database
 		
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
 		
@@ -105,7 +105,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 	}
 
 	@Override
-	public void updateBook(Book myBook, String newTitle, String newAuthor) { // This method updates a Book in the database with new title and author
+	public void updateBook(Book myBook, String newTitle, String newAuthor) { // This method updates a Book in the database with a new title and author
 		
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");
 		boolean flag = false;
@@ -188,7 +188,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		}
 	}
 	
-	public ArrayList <Book> getAllBooks () { // This method retrieves Books from the database
+	public ArrayList <Book> getAllBooks () { // This method retrieves an ArrayList containing all Books currently in the database
 		
 		ArrayList <Book> findAll = new ArrayList <Book> ();
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "newDatabase.data");		
@@ -196,8 +196,8 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			try{
 				ObjectSet <Book> retriever = db.query(Book.class);
 				
-				if (retriever.hasNext()){ // check if there's an Object to retrieve
-					 while (retriever.hasNext()){
+				if (retriever.hasNext()){ // check if there're any Books to retrieve
+					 while (retriever.hasNext()){ // retrieves all Books in the database
 						 findAll.add(retriever.next());
 					 }
 					return findAll;

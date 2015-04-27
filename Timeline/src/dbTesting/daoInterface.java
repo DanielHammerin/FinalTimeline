@@ -3,9 +3,9 @@ package dbTesting;
 import java.util.ArrayList;
 public interface daoInterface {
 	
-	public void saveToDataBase (Book myBook); // saves Book into the database
-	public void deleteFromDatabase (Book myBook); // deletes a Book from the database
-	public boolean lookUp (Book myBook); // return true if the Book is in the database
+	public void saveToDataBase (Book myBook); // saves Book in the database
+	public void deleteFromDatabase (Book myBook); // deletes Book from the database
+	public boolean lookUp (Book myBook); // returns true if the Book is found in the database
 	public Book getBook (Book myBook); // retrieves a specific book from the database
 	public void updateBook (Book myBook, String newTitle, String newAuthor); // updates book info and saves is to the database
 	public void printDatabase (); // prints out all books in the database
