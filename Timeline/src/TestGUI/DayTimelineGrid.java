@@ -30,6 +30,9 @@ public class DayTimelineGrid
     private int daysToDraw;
     /* An integer for how high the top rectangles will be */
     static int topHeight = 30;
+    /* An array with the rectangles for the columns, necessary for resizing
+    * the columns for many multiple events*/
+    private Rectangle[] rectCols;
 
     /* The rectangle width of all the rectangles*/
     static int rectangleWidth = 30;
@@ -80,14 +83,14 @@ public class DayTimelineGrid
      */
     public void expandColumns()
     {
-        heightOfColumns = heightOfColumns * 2;
-        columns = new HBox();
-        for (int i = 1; i <= daysToDraw; i++)
+        heightOfColumns += 30;
+        columns.getChildren().removeAll(rectCols);
+        for (int i = 0; i < daysToDraw; i++)
         {
             Rectangle column = new Rectangle(rectangleWidth, heightOfColumns);
             column.setFill(Color.BISQUE);
             column.setStroke(Color.BLACK);
-            columns.getChildren().add(column);
+            rectCols[i] = column;
         }
     }
 
@@ -209,14 +212,16 @@ public class DayTimelineGrid
      */
     private HBox drawColumns(int columnsToDraw)
     {
-        HBox out = new HBox();
-        for (int i = 1; i <= daysToDraw; i++)
+        HBox out  = new HBox();
+        rectCols = new Rectangle[columnsToDraw];
+        for (int i = 0; i < daysToDraw; i++)
         {
             Rectangle column = new Rectangle(rectangleWidth, heightOfColumns);
             column.setFill(Color.BISQUE);
             column.setStroke(Color.BLACK);
-            out.getChildren().add(column);
+            rectCols[i] = column;
         }
+        out.getChildren().addAll(rectCols);
         return out;
     }
 }
