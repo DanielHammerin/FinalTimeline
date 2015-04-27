@@ -2,9 +2,6 @@ package model;
 
 import java.util.TreeSet;
 
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
-
 /**
  * Super class for the different kinds of timelines. Holds a string 
  * for description of a timeline, a string for the title of the of 
@@ -25,8 +22,12 @@ public abstract class Timeline
 	 * @param t the title
 	 * @param d
 	 */
-	public Timeline(String t, String d)
-	{
+	
+	public Timeline (){ // Note: I need this constructor for the DAO ;) puss puss Mauro <3
+		
+	}
+	
+	public Timeline(String t, String d)	{
 		if (t.length() > MAX_CHARS_TITLE) {throw new IllegalArgumentException("The title "
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
