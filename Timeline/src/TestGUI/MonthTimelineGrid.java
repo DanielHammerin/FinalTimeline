@@ -22,7 +22,7 @@ public class MonthTimelineGrid
     /* The part with all the columns representing the days */
     private HBox columns;
     /* The height of the daily columns */
-    private int heightOfColumns = 120;
+    private int heightOfColumns = 100;
     /* An integer for how high the top rectangles will be */
     static int topHeight = 30;
     /* An array with the rectangles for the columns, necessary for resizing
@@ -34,7 +34,7 @@ public class MonthTimelineGrid
     /* The rectangle width of all the rectangles*/
     static int rectangleWidth = 100;
 
-    /* A string array of all the months shared in the project */
+    /* A string array of all the months shared for all time lines */
     public String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
             , "October", "November", "December"};
 
@@ -72,7 +72,6 @@ public class MonthTimelineGrid
      * A method for expanding the height of the columns. This in case that the
      * timeline has so many events simultaneously that the events can't fit
      * vertically on the grid.
-     * OBSERVE: Currently not working correctly!!!! Jakob is working on it
      */
     public void expandColumns()
     {
@@ -180,7 +179,6 @@ public class MonthTimelineGrid
             column.setStroke(Color.BLACK);
             rectCols[i] = column;
         }
-        System.out.println(noMonths);
         out.getChildren().addAll(rectCols);
         return out;
     }

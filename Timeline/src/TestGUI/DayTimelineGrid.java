@@ -24,7 +24,7 @@ public class DayTimelineGrid
     /* The part with all the columns representing the days */
     private HBox columns;
     /* The height of the daily columns */
-    private int heightOfColumns = 120;
+    private int heightOfColumns = 100;
     /* An int keeping track on how many columns to draw, simplifies
     * the resizing of the day columns.*/
     private int daysToDraw;
@@ -37,7 +37,7 @@ public class DayTimelineGrid
     /* The rectangle width of all the rectangles*/
     static int rectangleWidth = 30;
 
-    /* A string array of all the months shared in the project */
+    /* A string array of all the months shared for all time lines */
     public String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
             , "October", "November", "December"};
 
@@ -79,7 +79,6 @@ public class DayTimelineGrid
      * A method for expanding the height of the columns. This in case that the
      * timeline has so many events simultaneously that the events can't fit
      * vertically on the grid.
-     * OBSERVE: Currently not working correctly!!!! Jakob is working on it
      */
     public void expandColumns()
     {
@@ -150,7 +149,7 @@ public class DayTimelineGrid
                 * any offset.*/
                 Rectangle monthRect = new Rectangle(daysSinceNewMonth * (rectangleWidth + 1) - 1, topHeight);
                 monthRect.setStroke(Color.BLACK);
-                monthRect.setFill(Color.RED);
+                monthRect.setFill(Color.BLUE);
                 Text monthName = new Text(months[currentMonth%12]);
                 StackPane monthPane = new StackPane();
                 monthPane.getChildren().addAll(monthRect, monthName);
@@ -165,7 +164,7 @@ public class DayTimelineGrid
                     daysSinceNewYear = daysPassed;
                     Rectangle yearRect = new Rectangle(daysPassed * (rectangleWidth + 1) - 1, topHeight);
                     yearRect.setStroke(Color.BLACK);
-                    yearRect.setFill(Color.AQUA);
+                    yearRect.setFill(Color.ANTIQUEWHITE);
                     Text yearText = new Text(Integer.parseInt(yearF.format(temp.getTime())) - 1 + "");
                     StackPane yearPane = new StackPane();
                     yearPane.getChildren().addAll(yearRect, yearText);
@@ -183,7 +182,7 @@ public class DayTimelineGrid
         /* Adding the last month pane, same code as in the loop*/
         Rectangle monthRect = new Rectangle(daysSinceNewMonth * (rectangleWidth + 1) - 1, topHeight);
         monthRect.setStroke(Color.BLACK);
-        monthRect.setFill(Color.RED);
+        monthRect.setFill(Color.BLUE);
         Text monthName = new Text(months[currentMonth%12]);
         StackPane monthPane = new StackPane();
         monthPane.getChildren().addAll(monthRect, monthName);
@@ -192,7 +191,7 @@ public class DayTimelineGrid
         /* Adding the last year rectangle.*/
         Rectangle yearRect = new Rectangle((daysPassed - daysSinceNewYear) * (rectangleWidth + 1) - 1, topHeight);
         yearRect.setStroke(Color.BLACK);
-        yearRect.setFill(Color.AQUA);
+        yearRect.setFill(Color.ANTIQUEWHITE);
         Text yearText = new Text(Integer.parseInt(yearF.format(temp.getTime())) + "");
         StackPane yearPane = new StackPane();
         yearPane.getChildren().addAll(yearRect, yearText);
