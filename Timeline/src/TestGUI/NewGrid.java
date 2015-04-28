@@ -135,8 +135,8 @@ public class NewGrid extends Group
 	public NewGrid(YearTimeline timeline, double heightOfBox)
 	{
 		this.yearTimeline= timeline;
-		topLine = new HBox();
-		base = new VBox();
+		HBox topLine = new HBox();
+		VBox base = new VBox();
 
 		//Header
 		for (int i = timeline.getStartYear(); i < yearTimeline.getEndYear(); i++)
@@ -154,7 +154,7 @@ public class NewGrid extends Group
 		base.getChildren().add(topLine);
 
 		//Columns
-		calenderColumns = new HBox();
+		HBox calenderColumns = new HBox();
 		Rectangle[] columns = new Rectangle[yearTimeline.getEndYear()-yearTimeline.getStartYear()];
 
 		for (int i = 0; i < columns.length; i++)
