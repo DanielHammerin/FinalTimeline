@@ -92,6 +92,7 @@ public class DayTimelineGrid
             column.setStroke(Color.BLACK);
             rectCols[i] = column;
         }
+        columns.getChildren().addAll(rectCols);
     }
 
     /**
