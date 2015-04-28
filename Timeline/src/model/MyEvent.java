@@ -1,6 +1,4 @@
 package model;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
 
 import javafx.scene.layout.StackPane;
 
