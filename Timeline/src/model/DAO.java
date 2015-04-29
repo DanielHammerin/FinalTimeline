@@ -21,7 +21,8 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 				db.commit();	// info about these methods and more on the db4oBasics.java file inside the dbTesting package
 				System.out.println ("\nMessage: Timeline is succesfully saved in the database!.");
 			} else {
-				throw new Exception("A timeline with the same title already exists!");
+				throw new Exception("A timeline with the same title already exists! Please change your "
+						+ "timeline title.");
 			}
 		} finally {
 			db.close();
