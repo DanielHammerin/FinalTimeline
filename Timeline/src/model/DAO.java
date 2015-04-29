@@ -12,14 +12,25 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 	public void saveToDataBase(Timeline newTimeline) throws Exception {  // This method saves object 'Timeline' in the database
 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
-
-		if (!lookUp(newTimeline.getTitle())){ // this line checks if the Timeline is already in the database
-			db.store(newTimeline);
-			db.commit();	// info about these methods and more on the db4oBasics.java file inside the dbTesting package
-			System.out.println ("\nMessage: Timeline is succesfully saved in the database!");
-		} else {
-			throw new Exception("A timeline with the same title already exists! Please change your "
-					+ "timeline title.");
+		try {
+			ObjectSet <Timeline> retriever = db.query(Timeline.class);
+			boolean flag = false;
+			while (retriever.hasNext()){
+				if (newTimeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
+					flag = true;
+				}
+			}
+			if (flag == false){ // this line checks if the Timeline is already in the database
+				db.store(newTimeline);
+				db.commit();	// info about these methods and more on the db4oBasics.java file inside the dbTesting package
+				System.out.println ("\nMessage: Timeline is succesfully saved in the database!");
+			} else {
+				throw new Exception("A timeline with the same title already exists! Please change your "
+						+ "timeline title.");
+			}
+		}
+		finally {
+			db.close();
 		}
 	}
 
