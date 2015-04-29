@@ -1,4 +1,4 @@
-package TestGUI;
+package view;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;

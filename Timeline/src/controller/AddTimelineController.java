@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
-import TestGUI.TimelineBlock;
 import model.DayTimeline;
 import model.MonthTimeline;
 import model.YearTimeline;
@@ -21,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.YearTimelineGrid;
 
 public class AddTimelineController implements Initializable{
 
@@ -42,10 +42,8 @@ public class AddTimelineController implements Initializable{
 		
     	if(tg.getSelectedToggle() == annualBtn){
     		
-    		YearTimeline y = new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd);
-    		TimelineBlock block = new TimelineBlock(y);
-    		
-    		vb.getChildren().add(block);
+    		YearTimelineGrid y = new YearTimelineGrid(new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+    		vb.getChildren().add(y.getTimeLineBlock());
     		
     		Stage stage = (Stage) cancelBtn.getScene().getWindow();        
             stage.close();

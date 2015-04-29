@@ -1,4 +1,4 @@
-package TestGUI;
+package view;
 
 import controller.MainWindowController;
 import javafx.scene.Group;
