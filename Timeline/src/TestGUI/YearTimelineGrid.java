@@ -1,5 +1,7 @@
 package TestGUI;
 
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -14,6 +16,7 @@ import model.YearTimeline;
  */
 public class YearTimelineGrid
 {
+    private YearTimeline yearTimeline;
     /* topAndColumns are the entire time line stacked.*/
     private VBox topAndColumns;
     /* The top part with the days, months and year rectangles*/
@@ -34,12 +37,42 @@ public class YearTimelineGrid
 
     public YearTimelineGrid(YearTimeline in)
     {
+        yearTimeline = in;
         top = drawTopPart(in);
         columns = drawColumns();
         topAndColumns = new VBox(top,columns);
     }
 
     public VBox getGrid(){ return topAndColumns; }
+
+    public ScrollPane getTimeLineBlock(){
+        ScrollPane timelineContainer = new ScrollPane();
+        AnchorPane myAnchorPane;
+        timelineContainer.setPrefHeight(300);
+        timelineContainer.setPrefWidth((yearTimeline.getEndYear() - yearTimeline.getStartYear()) * 50);
+
+        timelineContainer.setMinWidth((yearTimeline.getEndYear() - yearTimeline.getStartYear()) * 50);
+        timelineContainer.setMinHeight(300);
+        timelineContainer.setVisible(true);
+
+        System.out.println("Width of scrollPane: " + timelineContainer.getWidth());
+
+        myAnchorPane= new AnchorPane();
+        myAnchorPane.prefHeightProperty().bind(timelineContainer.heightProperty());
+        myAnchorPane.prefWidthProperty().bind(timelineContainer.widthProperty());
+
+        System.out.println(myAnchorPane.getWidth());
+
+        myAnchorPane.getChildren().add(topAndColumns);
+        AnchorPane.setBottomAnchor(topAndColumns, 0.0);
+        AnchorPane.setLeftAnchor(topAndColumns, 0.0);
+        AnchorPane.setTopAnchor(topAndColumns, 0.0);
+        AnchorPane.setRightAnchor(topAndColumns, 0.0);
+        timelineContainer.setContent(myAnchorPane);
+        //timelineContainer.getChildren().add(myAnchorPane);
+
+        return timelineContainer;
+    }
 
     public void expandColumns()
     {

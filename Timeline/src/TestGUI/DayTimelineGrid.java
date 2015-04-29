@@ -1,5 +1,7 @@
 package TestGUI;
 
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -17,6 +19,7 @@ import java.util.GregorianCalendar;
  */
 public class DayTimelineGrid
 {
+    private DayTimeline dayTimeline;
     /* topAndColumns are the entire time line stacked.*/
     private VBox topAndColumns;
     /* The top part with the days, months and year rectangles*/
@@ -52,6 +55,7 @@ public class DayTimelineGrid
      */
     public DayTimelineGrid(DayTimeline in)
     {
+        dayTimeline = in;
         top = drawTopPart(in);
         columns = drawColumns(daysToDraw);
         topAndColumns = new VBox(top,columns);
@@ -63,6 +67,30 @@ public class DayTimelineGrid
      */
     public VBox getGrid() { return topAndColumns; }
 
+
+    public ScrollPane getTimeLineBlock(){
+        ScrollPane timelineContainer = new ScrollPane();
+        AnchorPane myAnchorPane;
+        timelineContainer.setPrefHeight(500);
+		long diff = dayTimeline.getEndDate().getTime().getTime() -dayTimeline.getStartDate().getTime().getTime();
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+        timelineContainer.setPrefWidth((int) diffDays * 50);
+        timelineContainer.setMinWidth((int) diffDays * 50);
+        timelineContainer.setMinHeight(500);
+
+	    myAnchorPane= new AnchorPane();
+		myAnchorPane.prefHeightProperty().bind(timelineContainer.heightProperty());
+		myAnchorPane.prefWidthProperty().bind(timelineContainer.widthProperty());
+
+		myAnchorPane.getChildren().add(topAndColumns);
+		AnchorPane.setBottomAnchor(topAndColumns, 0.0);
+	    AnchorPane.setLeftAnchor(topAndColumns, 0.0);
+		AnchorPane.setTopAnchor(topAndColumns, 0.0);
+		AnchorPane.setRightAnchor(topAndColumns, 0.0);
+        timelineContainer.setContent(myAnchorPane);
+
+        return timelineContainer;
+    }
     /**
      * Getter for the VBox top
      * @return a VBox of the day, month and year rectangles

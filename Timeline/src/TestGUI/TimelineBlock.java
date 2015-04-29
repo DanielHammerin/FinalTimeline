@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 public class TimelineBlock extends ScrollPane {
 
 	private AnchorPane myAnchorPane;
-	private NewGrid myNewGrid;
+	private YearTimelineGrid myNewGrid;
 	
 	/**
 	 * Constructor for the yearTimeline block
@@ -24,7 +24,7 @@ public class TimelineBlock extends ScrollPane {
 	 */
 	public TimelineBlock(YearTimeline yTimeline){
 		this.setPrefHeight(300);
-		this.setPrefWidth((yTimeline.getEndYear()-yTimeline.getStartYear())*50);		
+		this.setPrefWidth((yTimeline.getEndYear()-yTimeline.getStartYear())*50);
 		this.setWidth((yTimeline.getEndYear()-yTimeline.getStartYear())*50);
 		this.setMinWidth((yTimeline.getEndYear()-yTimeline.getStartYear())*50);
 		this.setMinHeight(300);
@@ -38,15 +38,13 @@ public class TimelineBlock extends ScrollPane {
 		myAnchorPane.prefWidthProperty().bind(this.widthProperty());
 		
 		System.out.println(myAnchorPane.getWidth());
-		myNewGrid = new NewGrid(yTimeline, this.getHeight());
-		myNewGrid.prefHeight(myAnchorPane.getHeight());
-		myNewGrid.prefWidth(myAnchorPane.getWidth());
+		myNewGrid = new YearTimelineGrid(yTimeline);
 				
-		myAnchorPane.getChildren().add(myNewGrid);
-		AnchorPane.setBottomAnchor(myNewGrid, 0.0);
-		AnchorPane.setLeftAnchor(myNewGrid, 0.0);
-		AnchorPane.setTopAnchor(myNewGrid, 0.0);
-		AnchorPane.setRightAnchor(myNewGrid, 0.0);
+		myAnchorPane.getChildren().add(myNewGrid.getGrid());
+		AnchorPane.setBottomAnchor(myNewGrid.getGrid(), 0.0);
+		AnchorPane.setLeftAnchor(myNewGrid.getGrid(), 0.0);
+		AnchorPane.setTopAnchor(myNewGrid.getGrid(), 0.0);
+		AnchorPane.setRightAnchor(myNewGrid.getGrid(), 0.0);
 		this.setContent(myAnchorPane);
 		this.getChildren().add(myAnchorPane);
 	}
