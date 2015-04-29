@@ -9,19 +9,19 @@ import com.db4o.ObjectSet;
 public class DAO implements daoInterface { // This is the DAO or 'Data Access Object' is works as an iterator for the Database, it includes methods to save, delete and update the database among others.
 										  //For a better understanding of the code check out db4oBasics.java file
 	
-	public void saveToDataBase (Timeline myTimeline) {  // This method saves object 'Timeline' in the database
+	public void saveToDataBase(String title) throws Exception {  // This method saves object 'Timeline' in the database
 		
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
-			
-			ObjectSet <Timeline> retriever = db.queryByExample(myTimeline);
-			
+			Timeline auxiliary = new Timeline(title, null) {};
+			ObjectSet<Timeline> retriever = db.queryByExample(auxiliary);
+		
 			if (!retriever.hasNext()){ // this line checks if the Timeline is already in the database
-				db.store(myTimeline);
+				db.store(auxiliary);
 				db.commit();	// info about these methods and more on the db4oBasics.java file inside the dbTesting package
-				System.out.println ("\nMessage: Timeline succesfully saved in the database!.");
+				System.out.println ("\nMessage: Timeline is succesfully saved in the database!.");
 			} else {
-				System.out.println ("\nError!: The Timeline is already saved in the database!.");
+				throw new Exception("A timeline with the same title already exists!");
 			}
 		} finally {
 			db.close();

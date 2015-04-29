@@ -3,7 +3,7 @@ package model;
 import java.util.LinkedList;
 public interface daoInterface {
 	
-	public void saveToDataBase (Timeline myTimeline); // saves Timeline in the database
+	public void saveToDataBase (String title) throws Exception; // saves Timeline in the database
 	public void deleteFromDatabase (Timeline myTimeline); // deletes Timeline from the database
 	public boolean lookUp (Timeline myTimeline); // returns true if the Timeline is found in the database
 	public Timeline getTimeline (Timeline myTimeline); // retrieves a specific Timeline from the database
