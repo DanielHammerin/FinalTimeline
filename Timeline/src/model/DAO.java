@@ -115,12 +115,12 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			
 			if (retriever.hasNext()){
 				
-				retriever = db.queryByExample(new Timeline (newTitle, newDescription));
+				retriever = db.queryByExample(new Timeline (newTitle, newDescription) {});
 				
 				if (!retriever.hasNext()){
 					System.out.println ("\nMessage: " + myTimeline.getTitle() + " updated to " + newTitle + " by " + newDescription);
 					
-					db.store(new Timeline (newTitle,newDescription));
+					db.store(new Timeline (newTitle,newDescription) {});
 					db.commit();
 					flag = true;
 					
@@ -153,7 +153,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		try {
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 			
-			Timeline aux = new Timeline ();
+			Timeline aux = new Timeline () {};
 			
 			if (!retriever.hasNext()){
 				System.out.println ("\nMessage: The database is currently empty!");
