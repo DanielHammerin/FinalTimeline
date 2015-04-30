@@ -1,6 +1,8 @@
 package model;
 
 import java.util.LinkedList;
+
+import com.db4o.ObjectSet;
 public interface daoInterface {
 	
 	public void saveToDataBase(Timeline newTimeline) throws Exception; // saves Timeline in the database

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.LinkedList;
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -37,17 +36,15 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 	public Timeline getTimeline (String title){ // This method retrieves a specific Timeline from the database
 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
-
 		try{
-			ObjectSet <Timeline> retriever = db.queryByExample(new Timeline(title, null) {});
-
-			if (retriever.hasNext()){ // check if the Timeline is in the database
-				return retriever.next(); // retrieves Timeline
-
-			} else {
-				System.out.println ("\nError!: Timeline not found in the database!.");
-				return null;
+			Timeline aux = new Timeline(title, null) {};
+			ObjectSet <Timeline> retriever = db.query(Timeline.class);
+			for(int i = 0; i<retriever.size(); i++) {
+				if(retriever.get(i).getTitle().equals(aux.getTitle())) {
+					return retriever.get(i);
+				}
 			}
+			return null;
 		}
 		finally {
 			db.close();
