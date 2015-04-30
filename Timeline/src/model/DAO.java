@@ -34,12 +34,12 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		}
 	}
 
-	public Timeline getTimeline (Timeline myTimeline){ // This method retrieves a specific Timeline from the database
+	public Timeline getTimeline (String title){ // This method retrieves a specific Timeline from the database
 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 
 		try{
-			ObjectSet <Timeline> retriever = db.queryByExample(myTimeline);
+			ObjectSet <Timeline> retriever = db.queryByExample(new Timeline(title, null) {});
 
 			if (retriever.hasNext()){ // check if the Timeline is in the database
 				return retriever.next(); // retrieves Timeline
