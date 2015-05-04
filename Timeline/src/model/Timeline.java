@@ -20,6 +20,10 @@ public abstract class Timeline
 	private boolean isMonthTimeline = false;
 	private boolean isDayTimeline = false;
 
+	//For the different types of events
+	private TreeSet<EventNT> eventNTs;
+	private TreeSet<EventTime> eventTimes;
+
 
 
 	public Timeline () { // Note: I need this constructor for the DAO ;) puss puss Mauro <3
@@ -38,6 +42,9 @@ public abstract class Timeline
 		description = d;
 		events = new TreeSet <MyEvent>();
         inEditMode = false;
+
+		eventNTs = new TreeSet<EventNT>();
+		eventTimes = new TreeSet<EventTime>();
 	}
 
 	/**
@@ -69,6 +76,23 @@ public abstract class Timeline
 	 */
 	public void setDescription(String description) { this.description = description; }
 
+	/**
+	 * Method for adding an event without duration to the treeset of the time line containing
+	 * the events without duration.
+	 * @param in the event to be added.
+	 */
+	public abstract void addEventNT(EventNT in);
+
+	public TreeSet<EventNT> getEventNTs() { return eventNTs; }
+
+	/**
+	 * Method for adding an event with duration to the treeset of the time line containing
+	 * the events with duration.
+	 * @param in the event to be added.
+	 */
+	public abstract void addEventTime(EventTime in);
+
+	public TreeSet<EventTime> getEventTimes() { return eventTimes; }
 
 	public void addEvent(MyEvent e) throws Exception
 	{

@@ -61,7 +61,49 @@ public class YearTimeline extends Timeline
 	 * @return the end year (an int)
 	 */
 	public int getEndYear() { return endYear; }
-	
+
+	/**
+	 * Method for adding an event without duration to the treeset of the time line containing
+	 * the events without duration.
+	 *
+	 * @param in the event to be added.
+	 */
+	@Override
+	public void addEventNT(EventNT in)
+	{
+		int yearOfEvent = Integer.parseInt(yearF.format(in.getDate()));
+		if (startYear <= yearOfEvent && yearOfEvent <= endYear)
+		{
+			super.getEventNTs().add(in);
+		}
+		else
+		{
+			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+		}
+	}
+
+	/**
+	 * Method for adding an event with duration to the treeset of the time line containing
+	 * the events with duration.
+	 *
+	 * @param in the event to be added.
+	 */
+	@Override
+	public void addEventTime(EventTime in)
+	{
+		int startYearOfEvent = Integer.parseInt(yearF.format(in.getStartTime()));
+		int endYearOfEvent = Integer.parseInt(yearF.format(in.getFinishTime()));
+		if (startYear <= startYearOfEvent && endYearOfEvent <= endYear)
+		{
+			super.getEventTimes().add(in);
+		}
+		else
+		{
+			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+		}
+	}
 }
 
 

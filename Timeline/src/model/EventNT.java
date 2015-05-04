@@ -1,37 +1,37 @@
 package model;
 
-import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javafx.scene.shape.Circle;
 
-public class EventNT extends MyEvent {
+public class EventNT extends MyEvent implements Comparable<EventNT> {
 	
-	private Calendar dateOfEvent;
+	private GregorianCalendar dateOfEvent;
+	private Circle circle;
 		
-	public EventNT (String t, String d, Calendar date){
-		super (t,d);
+	public EventNT (String t, String d, GregorianCalendar date){
+		super(t, d);
 		dateOfEvent = date;
-		Circle c = new Circle(20);		
-		geometricFigure.setStyle("-fx-background-color: coral;");
-		geometricFigure.getChildren().add(c);		
+		circle = new Circle(20);
 	}
 	
 	@Override
 	public String toString (){
-		return (this.title + ": " + this.description);
+		return (this.getTitle() + ": " + this.getDescription());
 	}
 	
-	public Calendar getDate()
+	public GregorianCalendar getDate() { return dateOfEvent; }
+
+
+	public int compareTo(EventNT toCompare)
 	{
-		return dateOfEvent;
+		int dateC = dateOfEvent.compareTo(toCompare.getDate());
+		if (dateC != 0) { return dateC;}
+		int titleC = this.getTitle().compareTo(toCompare.getTitle());
+		if (titleC != 0) { return titleC; }
+		else { return this.getDescription().compareTo(toCompare.getDescription()); }
 	}
 
-	public boolean equals(EventNT in) 
-	{
-		boolean descriptions = super.getDescription().equals(in.getDescription());
-		boolean sameDate = in.getDate().equals(dateOfEvent);
-		boolean sameTitle = in.getTitle().equals(super.title);
-		return descriptions && sameDate && sameTitle;
-	}
 
 }
 

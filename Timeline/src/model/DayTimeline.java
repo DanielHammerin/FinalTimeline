@@ -48,6 +48,45 @@ public class DayTimeline extends Timeline
 	public GregorianCalendar getStartDate() { return startDate; }
 
 	public GregorianCalendar getEndDate() { return endDate; }
-	
-	
+
+
+	/**
+	 * Method for adding an event without duration to the treeset of the time line containing
+	 * the events without duration.
+	 *
+	 * @param in the event to be added.
+	 */
+	@Override
+	public void addEventNT(EventNT in)
+	{
+		if (in.getDate().compareTo(startDate) >= 0 && in.getDate().compareTo(endDate) <= 0)
+		{
+			super.getEventNTs().add(in);
+		}
+		else
+		{
+			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+		}
+	}
+
+	/**
+	 * Method for adding an event with duration to the treeset of the time line containing
+	 * the events with duration.
+	 *
+	 * @param in the event to be added.
+	 */
+	@Override
+	public void addEventTime(EventTime in)
+	{
+		if (in.getStartTime().compareTo(startDate) >= 0 && in.getFinishTime().compareTo(endDate) <= 0)
+		{
+			super.getEventTimes().add(in);
+		}
+		else
+		{
+			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+		}
+	}
 }

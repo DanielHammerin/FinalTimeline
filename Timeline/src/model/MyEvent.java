@@ -1,12 +1,10 @@
 package model;
 
-import javafx.scene.layout.StackPane;
 
 public abstract class MyEvent {
 
-	String title = "";
-	String description = "";
-	StackPane geometricFigure;
+	private String title;
+	private String description;
 
 	public MyEvent (String t, String d){ // Constructor
 		title = t;
@@ -25,23 +23,6 @@ public abstract class MyEvent {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public void deleteEvent(String title,String description){
 
-	}
-	public void editEvent(String title,String description){
-
-	}
-
-	public StackPane getGeometricFigure() {
-		return geometricFigure;
-	}
-
-	public void setGeometricFigure(StackPane geometricFigure) {
-		this.geometricFigure = geometricFigure;
-	}
-	public boolean equals(Object obj) {
-		//there are compare rules
-		return true;
-	}
 
 }
