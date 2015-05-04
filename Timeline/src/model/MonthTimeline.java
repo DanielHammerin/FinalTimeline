@@ -23,7 +23,7 @@ public class MonthTimeline extends Timeline
 	
 	public MonthTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
-		super(title, description);
+		super(title, description, "m");
 		int startYear = Integer.parseInt(yearF.format(start.getTime()));
 		int endYear = Integer.parseInt(yearF.format(end.getTime()));
 		/* MAX_YEARS_DIFFERENCE - 1 because say you want a monthly timeline
@@ -91,7 +91,7 @@ public class MonthTimeline extends Timeline
 	{
 		if (in.getDate().compareTo(startDate) >= 0 && in.getDate().compareTo(endDate) <= 0)
 		{
-			super.getEventNTs().add(in);
+			super.addEventNT(in);
 		}
 		else
 		{
@@ -111,7 +111,7 @@ public class MonthTimeline extends Timeline
 	{
 		if (in.getStartTime().compareTo(startDate) >= 0 && in.getFinishTime().compareTo(endDate) <= 0)
 		{
-			super.getEventTimes().add(in);
+			super.addEventTime(in);
 		}
 		else
 		{

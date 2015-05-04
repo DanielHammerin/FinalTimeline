@@ -22,7 +22,7 @@ public class YearTimeline extends Timeline
 	 */
 	public YearTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
-		super(title, description);
+		super(title, description, "y");
 		int startTemp = Integer.parseInt(yearF.format(start.getTime()));
 		int endTemp = Integer.parseInt(yearF.format(end.getTime()));
 		validateYear(startTemp, endTemp);
@@ -68,13 +68,12 @@ public class YearTimeline extends Timeline
 	 *
 	 * @param in the event to be added.
 	 */
-	@Override
 	public void addEventNT(EventNT in)
 	{
 		int yearOfEvent = Integer.parseInt(yearF.format(in.getDate()));
 		if (startYear <= yearOfEvent && yearOfEvent <= endYear)
 		{
-			super.getEventNTs().add(in);
+			super.addEventNT(in);
 		}
 		else
 		{
@@ -89,14 +88,13 @@ public class YearTimeline extends Timeline
 	 *
 	 * @param in the event to be added.
 	 */
-	@Override
 	public void addEventTime(EventTime in)
 	{
 		int startYearOfEvent = Integer.parseInt(yearF.format(in.getStartTime()));
 		int endYearOfEvent = Integer.parseInt(yearF.format(in.getFinishTime()));
 		if (startYear <= startYearOfEvent && endYearOfEvent <= endYear)
 		{
-			super.getEventTimes().add(in);
+			super.addEventTime(in);;
 		}
 		else
 		{

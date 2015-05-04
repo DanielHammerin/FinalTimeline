@@ -13,7 +13,6 @@ public abstract class Timeline
 {
 	private String title;
 	private String description;
-	private TreeSet <MyEvent> events;
 	private static final int MAX_CHARS_TITLE = 30;
     private boolean inEditMode;
 	private boolean isYearTimeline = false;
@@ -24,8 +23,6 @@ public abstract class Timeline
 	private TreeSet<EventNT> eventNTs;
 	private TreeSet<EventTime> eventTimes;
 
-
-
 	public Timeline () { // Note: I need this constructor for the DAO ;) puss puss Mauro <3
     }
 
@@ -34,14 +31,20 @@ public abstract class Timeline
      * of the event and a string containing the title as arguments.
      * @param t the title
      * @param d
+	 * @param typeOfTimeline a string for determining what type of timeline it is, "y"
+	 *                       for year time line, "m" for month time line and "d" for
+	 *                       a daily time line.
      */
-	public Timeline(String t, String d)	{
+	public Timeline(String t, String d, String typeOfTimeline)	{
 		if (t.length() > MAX_CHARS_TITLE) {throw new IllegalArgumentException("The title "
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
 		description = d;
-		events = new TreeSet <MyEvent>();
         inEditMode = false;
+
+		if (typeOfTimeline.equals("y")) { isYearTimeline = true; }
+		else if (typeOfTimeline.equals("m")) {isMonthTimeline = true; }
+		else {isDayTimeline = true; }
 
 		eventNTs = new TreeSet<EventNT>();
 		eventTimes = new TreeSet<EventTime>();
@@ -81,34 +84,17 @@ public abstract class Timeline
 	 * the events without duration.
 	 * @param in the event to be added.
 	 */
-	public abstract void addEventNT(EventNT in);
+	public void addEventNT(EventNT in) { eventNTs.add(in); }
+
+	public void addEventTime(EventTime in) { eventTimes.add(in); }
 
 	public TreeSet<EventNT> getEventNTs() { return eventNTs; }
 
-	/**
-	 * Method for adding an event with duration to the treeset of the time line containing
-	 * the events with duration.
-	 * @param in the event to be added.
-	 */
-	public abstract void addEventTime(EventTime in);
-
 	public TreeSet<EventTime> getEventTimes() { return eventTimes; }
 
-	public void addEvent(MyEvent e) throws Exception
-	{
-		if(events.contains(e)) {throw new Exception("The time line already has the event \"" + e.getTitle() + "\"");}
-		events.add(e);
-	}
+	public void removeEventNT(EventNT toRemove) {eventNTs.remove(toRemove); }
 
-	public void removeEvent(MyEvent e) { events.remove(e); } // dada
-
-	public TreeSet<MyEvent> getEvents() {
-		return events;
-	}
-
-	public void setEvents(TreeSet<MyEvent> events) {
-		this.events = events;
-	}
+	public void removeEventTime(EventTime toRemove) {eventTimes.remove(toRemove); }
 
     public void edit() {inEditMode = true; }
 
@@ -116,27 +102,9 @@ public abstract class Timeline
 
     public boolean isInEditMode(){return inEditMode; }
 
-	public boolean isMonthTimeline() {
-		return isMonthTimeline;
-	}
+	public boolean isMonthTimeline() { return isMonthTimeline; }
 
-	public void setIsMonthTimeline(boolean isMonthTimeline) {
-		this.isMonthTimeline = isMonthTimeline;
-	}
+	public boolean isYearTimeline() { return isYearTimeline; }
 
-	public boolean isYearTimeline() {
-		return isYearTimeline;
-	}
-
-	public void setIsYearTimeline(boolean isYearTimeline) {
-		this.isYearTimeline = isYearTimeline;
-	}
-
-	public boolean isDayTimeline() {
-		return isDayTimeline;
-	}
-
-	public void setIsDayTimeline(boolean isDayTimeline) {
-		this.isDayTimeline = isDayTimeline;
-	}
+	public boolean isDayTimeline() { return isDayTimeline; }
 }

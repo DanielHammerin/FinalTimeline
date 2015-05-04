@@ -20,7 +20,7 @@ public class DayTimeline extends Timeline
 	
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
-		super(title, description);
+		super(title, description, "d");
 		if (start.compareTo(end) >= 0)
 		{
 			throw new IllegalArgumentException("The start date has to be before the end date.");
@@ -61,7 +61,7 @@ public class DayTimeline extends Timeline
 	{
 		if (in.getDate().compareTo(startDate) >= 0 && in.getDate().compareTo(endDate) <= 0)
 		{
-			super.getEventNTs().add(in);
+			super.addEventNT(in);
 		}
 		else
 		{
@@ -81,7 +81,7 @@ public class DayTimeline extends Timeline
 	{
 		if (in.getStartTime().compareTo(startDate) >= 0 && in.getFinishTime().compareTo(endDate) <= 0)
 		{
-			super.getEventTimes().add(in);
+			super.addEventTime(in);
 		}
 		else
 		{
