@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
-
 import model.DayTimeline;
 import model.MonthTimeline;
 import model.YearTimeline;

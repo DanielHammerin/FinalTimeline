@@ -16,6 +16,9 @@ public abstract class Timeline
 	private TreeSet <MyEvent> events;
 	private static final int MAX_CHARS_TITLE = 30;
     private boolean inEditMode;
+	private boolean isYearTimeline = false;
+	private boolean isMonthTimeline = false;
+	private boolean isDayTimeline = false;
 
 
 
@@ -89,4 +92,27 @@ public abstract class Timeline
 
     public boolean isInEditMode(){return inEditMode; }
 
+	public boolean isMonthTimeline() {
+		return isMonthTimeline;
+	}
+
+	public void setIsMonthTimeline(boolean isMonthTimeline) {
+		this.isMonthTimeline = isMonthTimeline;
+	}
+
+	public boolean isYearTimeline() {
+		return isYearTimeline;
+	}
+
+	public void setIsYearTimeline(boolean isYearTimeline) {
+		this.isYearTimeline = isYearTimeline;
+	}
+
+	public boolean isDayTimeline() {
+		return isDayTimeline;
+	}
+
+	public void setIsDayTimeline(boolean isDayTimeline) {
+		this.isDayTimeline = isDayTimeline;
+	}
 }
