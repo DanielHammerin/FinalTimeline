@@ -40,7 +40,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 			Timeline aux = new Timeline(title, null) {};
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 			for(int i = 0; i<retriever.size(); i++) {
-				if(retriever.get(i).getTitle().equals(aux.getTitle())) {
+				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
 					return retriever.get(i);
 				}
 			}
