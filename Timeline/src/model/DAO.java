@@ -12,7 +12,7 @@ import com.db4o.ObjectSet;
  *
  */
 public class DAO implements daoInterface {
-	
+
 	/**
 	 * Database access object constructor.
 	 */
@@ -54,15 +54,13 @@ public class DAO implements daoInterface {
 	 * @return The required timeline.
 	 * @throws Exception 
 	 */
-	public Timeline getTimeline (String title) throws Exception{
-
+	public Timeline getTimeline(String title) throws Exception{
+		
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 		try{
-			if(isEmpty(db)) {throw new Exception("The database is empty!");}
-			
-			Timeline aux = new Timeline(title, null, null) {};
+			Timeline aux = new Timeline(title, "", ""){};
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
-			
+
 			for(int i = 0; i<retriever.size(); i++) {
 				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
 					return retriever.get(i);
@@ -86,8 +84,6 @@ public class DAO implements daoInterface {
 	public boolean lookUp(String title) throws Exception { 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");	
 		try {
-			if(isEmpty(db)) {throw new Exception("The database is empty!");}
-			
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 			boolean flag = false;
 			while (retriever.hasNext()){
@@ -124,7 +120,7 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-	
+
 	/**
 	 * Clears the database completely.
 	 * @throws Exception 
@@ -135,7 +131,6 @@ public class DAO implements daoInterface {
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 
 		try {
-			if(isEmpty(db)){ throw new Exception("The database is already empty!"); }
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 
 			while (retriever.hasNext()){
@@ -192,7 +187,7 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-	
+
 	/**
 	 * Prints out all the timelines in the database.
 	 */
@@ -233,7 +228,6 @@ public class DAO implements daoInterface {
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 
 		try{
-			if(isEmpty(db)){ throw new Exception("The database is empty!");}
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 
 			if (retriever.hasNext()){ // check if there're any Timelines to retrieve
@@ -246,18 +240,17 @@ public class DAO implements daoInterface {
 				System.out.println ("\nMessage: " + "The database is currently empty!.");
 				return null;
 			}
-
 		}
 		finally {
 			db.close();
 		}
 	}
-	
+
 	/**
 	 * Helping method that checks whether the database is empty.
 	 */
-	private boolean isEmpty(ObjectContainer db) {
-
+	public boolean isEmpty() {
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");	 
 		try{
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
 			if (retriever.hasNext()){ // check if the database is empty
@@ -270,7 +263,6 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 }
 
 
