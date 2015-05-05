@@ -11,7 +11,7 @@ public interface daoInterface {
 	public void updateTimeline(Timeline myTimeline, String newTitle, String newDescription); // updates Timeline info and saves is to the database
 	public void printDatabase(); // prints out all Timelines in the database
 	public void clearDatabase() throws Exception; // deletes all Timelines in the database
-	public boolean isEmpty(); // returns true is the database is currently empty
+//	private boolean isEmpty(); // returns true is the database is currently empty
 	public LinkedList <Timeline> getAllTimelines() throws Exception; // Retrieves LInkedList containing all Timelines in the database
 	
 }
