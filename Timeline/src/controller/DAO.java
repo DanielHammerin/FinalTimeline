@@ -60,12 +60,12 @@ public class DAO implements daoInterface {
 	 * @return The required timeline.
 	 * @throws Exception 
 	 */
-	public Timeline getTimeline(String title) throws Exception {
+	public YearTimeline getYearTimeline(String title) throws Exception {
 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 		try{
-			Timeline aux = new Timeline(title, "", ""){};	//Creates an auxiliary timeline with the required title.
-			ObjectSet <Timeline> retriever = db.query(Timeline.class); //Puts all the timelines from the database in an ObjectSet.
+			YearTimeline aux = new YearTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
+			ObjectSet<YearTimeline> retriever = db.query(YearTimeline.class); //Puts all the timelines from the database in an ObjectSet.
 			//Searches in the ObjectSet for the timeline with the same title.
 			for(int i = 0; i<retriever.size(); i++) {
 				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
@@ -77,7 +77,44 @@ public class DAO implements daoInterface {
 		finally {
 			db.close();
 		}
+	}
+	
+	public MonthTimeline getMonthTimeline(String title) throws Exception {
 
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
+		try{
+			MonthTimeline aux = new MonthTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
+			ObjectSet<MonthTimeline> retriever = db.query(MonthTimeline.class); //Puts all the timelines from the database in an ObjectSet.
+			//Searches in the ObjectSet for the timeline with the same title.
+			for(int i = 0; i<retriever.size(); i++) {
+				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
+					return retriever.get(i);
+				}
+			}
+			throw new Exception("There are no timelines with this title.");
+		}
+		finally {
+			db.close();
+		}
+	}
+	
+	public DayTimeline getDayTimeline(String title) throws Exception {
+
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
+		try{
+			DayTimeline aux = new DayTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
+			ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class); //Puts all the timelines from the database in an ObjectSet.
+			//Searches in the ObjectSet for the timeline with the same title.
+			for(int i = 0; i<retriever.size(); i++) {
+				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
+					return retriever.get(i);
+				}
+			}
+			throw new Exception("There are no timelines with this title.");
+		}
+		finally {
+			db.close();
+		}
 	}
 
 	/**
@@ -234,18 +271,18 @@ public class DAO implements daoInterface {
 					aux = retriever.next();
 					if(aux.isDayTimeline()){
 						DayTimeline auxDay = (DayTimeline) aux;
-					System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
-							+auxDay.getStartDate()+", End date: "+auxDay.getEndDate());
+						System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
+								+auxDay.getStartDate()+", End date: "+auxDay.getEndDate());
 					}
 					else if(aux.isMonthTimeline()){
 						MonthTimeline auxDay = (MonthTimeline) aux;
-					System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
-							+auxDay.getStartMonth()+", End date: "+auxDay.getEndMonth());
+						System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
+								+auxDay.getStartMonth()+", End date: "+auxDay.getEndMonth());
 					}
 					else if(aux.isYearTimeline()){
 						YearTimeline auxDay = (YearTimeline) aux;
-					System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
-							+auxDay.getStartYear()+", End date: "+auxDay.getEndYear());
+						System.out.println (auxDay.getTitle() + ": " + auxDay.getDescription() +", Start date: "
+								+auxDay.getStartYear()+", End date: "+auxDay.getEndYear());
 					}
 				}
 			}
