@@ -1,7 +1,6 @@
 package model;
 
 import java.util.GregorianCalendar;
-
 import javafx.scene.shape.Circle;
 
 public class EventNT extends MyEvent implements Comparable<EventNT> {
