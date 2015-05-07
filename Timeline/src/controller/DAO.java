@@ -7,9 +7,8 @@ import model.MonthTimeline;
 import model.Timeline;
 import model.YearTimeline;
 
-import com.db4o.Db4o;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
+import com.db4o.*;
+
 
 /**
  * A database access object class to connect between the view, controller and database.
@@ -43,10 +42,63 @@ public class DAO implements daoInterface {
 			if (flag == false){ // this line checks if the Timeline is already in the database
 				db.store(newTimeline);
 				db.commit();	
-				System.out.println ("\nMessage: Timeline is succesfully saved in the database!");
+				System.out.println ("\nMessage: Month timeline is succesfully saved in the database!");
 			} else {
 				throw new Exception("A timeline with the same title already exists! Please change your "
 						+ "timeline title.");
+			}
+		}
+		finally {
+			db.close();
+		}
+	}
+
+	public void SaveV2(Timeline timeline) throws Exception{
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
+		try {
+			/*if(timeline.isDayTimeline()) {
+				DayTimeline day = (DayTimeline) timeline;
+				int startYear = day.getStartDate().YEAR;
+				int startMonth = day.getStartDate().MONTH-1;
+				int startDay = day.getStartDate().DAY_OF_MONTH;
+				day.getStartArray().add(startYear);
+				day.getStartArray().add(startMonth);
+				day.getStartArray().add(startDay);
+				int endYear = day.getEndDate().YEAR;
+				int endMonth = day.getEndDate().MONTH-1;
+				int endDay = day.getEndDate().DAY_OF_MONTH;
+				day.getEndArray().add(endYear);
+				day.getEndArray().add(endMonth);
+				day.getEndArray().add(endDay);
+				ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class);
+				while (retriever.hasNext()){
+					if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
+						throw new Exception("A timeline with the same title already exists! Please change your "
+								+ "timeline title.");
+					}
+				}
+				db.store(timeline);
+				db.commit();	
+				System.out.println ("\nMessage: Day timeline is succesfully saved in the database!");
+			}*/
+			if(timeline.isMonthTimeline()){
+				MonthTimeline month = (MonthTimeline) timeline;
+				
+				month.setStartYear(month.getStartYear());
+				month.setStartMonth(month.getStartMonth() - 1);
+				month.setEndYear(month.getEndYear());
+				month.setEndMonth(month.getEndMonth() - 1);
+				
+				ObjectSet<MonthTimeline> retriever = db.query(MonthTimeline.class);
+				while (retriever.hasNext()){
+					if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
+						throw new Exception("A timeline with the same title already exists! Please change your "
+								+ "timeline title.");
+					}
+				}
+				db.store(timeline);
+				db.commit();	
+				System.out.println ("\nMessage: Timeline is succesfully saved in the database!");
 			}
 		}
 		finally {
@@ -60,50 +112,12 @@ public class DAO implements daoInterface {
 	 * @return The required timeline.
 	 * @throws Exception 
 	 */
-	public YearTimeline getYearTimeline(String title) throws Exception {
+	public Timeline getTimeline(String title) throws Exception {
 
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 		try{
-			YearTimeline aux = new YearTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
-			ObjectSet<YearTimeline> retriever = db.query(YearTimeline.class); //Puts all the timelines from the database in an ObjectSet.
-			//Searches in the ObjectSet for the timeline with the same title.
-			for(int i = 0; i<retriever.size(); i++) {
-				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
-					return retriever.get(i);
-				}
-			}
-			throw new Exception("There are no timelines with this title.");
-		}
-		finally {
-			db.close();
-		}
-	}
-	
-	public MonthTimeline getMonthTimeline(String title) throws Exception {
-
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
-		try{
-			MonthTimeline aux = new MonthTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
-			ObjectSet<MonthTimeline> retriever = db.query(MonthTimeline.class); //Puts all the timelines from the database in an ObjectSet.
-			//Searches in the ObjectSet for the timeline with the same title.
-			for(int i = 0; i<retriever.size(); i++) {
-				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
-					return retriever.get(i);
-				}
-			}
-			throw new Exception("There are no timelines with this title.");
-		}
-		finally {
-			db.close();
-		}
-	}
-	
-	public DayTimeline getDayTimeline(String title) throws Exception {
-
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
-		try{
-			DayTimeline aux = new DayTimeline(title, null, null, null);	//Creates an auxiliary timeline with the required title.
-			ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class); //Puts all the timelines from the database in an ObjectSet.
+			Timeline aux = new Timeline(title, "", ""){};	//Creates an auxiliary timeline with the required title.
+			ObjectSet<Timeline> retriever = db.query(Timeline.class); //Puts all the timelines from the database in an ObjectSet.
 			//Searches in the ObjectSet for the timeline with the same title.
 			for(int i = 0; i<retriever.size(); i++) {
 				if(retriever.get(i).getTitle().equalsIgnoreCase(aux.getTitle())) {
