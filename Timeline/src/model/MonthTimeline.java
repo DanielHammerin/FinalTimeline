@@ -140,5 +140,19 @@ public class MonthTimeline extends Timeline
 		this.endMonth = endMonth;
 	}
 	
+	public int getStartYear1() {
+		return startYear;
+	}
 	
+	public int getStartMonth1() {
+		return startMonth;
+	}
+	
+	public int getEndYear1() {
+		return endYear;
+	}
+	
+	public int getEndMonth1() {
+		return endMonth;
+	}
 }
