@@ -20,6 +20,10 @@ public class MonthTimeline extends Timeline
 	/* Same as monthF.*/
 	SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyyyy");
 	private static final int MAX_YEARS_DIFFERENCE = 5;
+	private int startYear;
+	private int startMonth;
+	private int endYear;
+	private int endMonth;
 	
 	public MonthTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
@@ -41,7 +45,7 @@ public class MonthTimeline extends Timeline
 		startDate = start;
 		endDate = end;
 	}
-	
+
 	/**
 	 * Method for getting the numerical value of the start month of 
 	 * the monthly scaled timeline. 
@@ -51,7 +55,7 @@ public class MonthTimeline extends Timeline
 	{
 		return Integer.parseInt(monthF.format(startDate.getTime()));
 	}
-	
+
 	/**
 	 * Method for getting the numerical value of the end month of 
 	 * the monthly scaled timeline. 
@@ -61,7 +65,7 @@ public class MonthTimeline extends Timeline
 	{
 		return Integer.parseInt(monthF.format(endDate.getTime()));
 	}
-	
+
 	/**
 	 * Method that returns the start year of the timeline
 	 * @return the start year
@@ -70,7 +74,7 @@ public class MonthTimeline extends Timeline
 	{
 		return Integer.parseInt(yearF.format(startDate.getTime()));
 	}
-	
+
 	/**
 	 * Method that returns the end year of the timeline
 	 * @return the end year
@@ -118,5 +122,37 @@ public class MonthTimeline extends Timeline
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
+	}
+
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+	
+	public int getStartYear1() {
+		return startYear;
+	}
+	
+	public int getStartMonth1() {
+		return startMonth;
+	}
+	
+	public int getEndYear1() {
+		return endYear;
+	}
+	
+	public int getEndMonth1() {
+		return endMonth;
 	}
 }
