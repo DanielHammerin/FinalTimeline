@@ -22,7 +22,7 @@ public abstract class Timeline
 	//For the different types of events
 	private TreeSet<EventNT> eventNTs;
 	private TreeSet<EventTime> eventTimes;
-
+	private TreeSet<MyEvent> myEvents;
 	public Timeline () { // Note: I need this constructor for the DAO ;) puss puss Mauro <3
     }
 
@@ -48,6 +48,7 @@ public abstract class Timeline
 
 		eventNTs = new TreeSet<EventNT>();
 		eventTimes = new TreeSet<EventTime>();
+		myEvents = new TreeSet<MyEvent>();
 	}
 
 	/**
@@ -85,6 +86,10 @@ public abstract class Timeline
 	 * @param in the event to be added.
 	 */
 	public void addEventNT(EventNT in) { eventNTs.add(in); }
+	
+	public void addEventNT(MyEvent in) { myEvents.add(in); }
+
+	public void removeEventNT(MyEvent in) { myEvents.remove(in); }
 
 	public void addEventTime(EventTime in) { eventTimes.add(in); }
 
