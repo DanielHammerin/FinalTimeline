@@ -44,7 +44,7 @@ public abstract class MyEvent extends Timeline {
 	}
     public java.util.Date getStartDate(){
 		return startDate;
-	}
+    }
 	public java.util.Date getEndDate(){
 		return endDate;
 	}
