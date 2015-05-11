@@ -37,6 +37,8 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 		 return finishTime;
 	 }
 
+	public Rectangle getRectangle(){return evRect; }
+
 	public int compareTo(EventTime toCompare)
 	{
 		int startDateC = startTime.compareTo(toCompare.startTime);
@@ -47,5 +49,22 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 		if (titleC != 0) { return titleC; }
 		else { return this.getDescription().compareTo(toCompare.getDescription()); }
 	}
- 
+
+	public boolean areSimultaneousEvents(EventTime in) {
+		boolean isOverlapping = false;
+		if (startTime.compareTo(in.getStartTime()) == 0 || startTime.compareTo(in.getFinishTime()) == 0
+				|| finishTime.compareTo(in.getStartTime()) == 0 || finishTime.compareTo(in.getFinishTime()) == 0) {
+			isOverlapping = true;
+		} else if (startTime.compareTo(in.getStartTime()) > 0) {
+			if (startTime.compareTo(in.getFinishTime()) < 0) {
+				isOverlapping = true;
+			}
+		} else if (startTime.compareTo(in.getStartTime()) < 0) {
+			if (startTime.compareTo(in.getFinishTime()) > 0) {
+				isOverlapping = true;
+			}
+		}
+		return isOverlapping;
+	}
+
 }

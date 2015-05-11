@@ -13,7 +13,9 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		dateOfEvent = date;
 		circle = new Circle(20);
 	}
-	
+
+	public Circle getCircle() { return  circle; }
+
 	@Override
 	public String toString (){
 		return (this.getTitle() + ": " + this.getDescription());
@@ -31,6 +33,12 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		else { return this.getDescription().compareTo(toCompare.getDescription()); }
 	}
 
+	public boolean areSimultaneousEvents(EventTime in)
+	{
+		int afterStartOfThisEvt = dateOfEvent.compareTo(in.getStartTime());
+		int beforeEndOfThisEvt = dateOfEvent.compareTo(in.getFinishTime());
+		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
+	}
 
 }
 
