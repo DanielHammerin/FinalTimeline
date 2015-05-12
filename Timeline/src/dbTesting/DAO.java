@@ -56,11 +56,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		
 		try {
 			ObjectSet <Book> retriever = db.queryByExample(myBook);
-			if (retriever.hasNext()){
-				return true;
-			} else {
-				return false;
-			}
+			return retriever.hasNext();
 		}
 		finally {
 			db.close();
@@ -177,11 +173,7 @@ public class DAO implements daoInterface { // This is the DAO or 'Data Access Ob
 		
 		try{
 			ObjectSet <Book> retriever = db.query(Book.class);
-			if (retriever.hasNext()){ // check if the database is empty
-				return false; 
-			} else {
-				return true;
-			}
+			return !retriever.hasNext();
 		}
 		finally {
 			db.close();
