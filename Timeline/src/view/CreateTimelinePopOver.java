@@ -7,24 +7,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import model.DAO;
+import controller.DAO;
 import model.DayTimeline;
 import model.MonthTimeline;
+import model.Timeline;
 import model.YearTimeline;
 import org.controlsfx.control.PopOver;
 
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Alexander on 29/04/2015.
+ * This popover defines the structure of the controls which the user can use to create a new timeline
  */
 public class CreateTimelinePopOver extends PopOver{
 
@@ -44,7 +46,11 @@ public class CreateTimelinePopOver extends PopOver{
     private ToggleGroup tg = new ToggleGroup();
     private javafx.scene.shape.Rectangle rect = new Rectangle();
 
-    public CreateTimelinePopOver(VBox vBoxMain){
+    /**
+     * Constructor of the pop-over which handles the creation of a new timeline
+     * @param vBoxMain The VBox where the graphical timeline should be added to
+     */
+    public CreateTimelinePopOver(VBox vBoxMain, ArrayList<Timeline> timelines){
         this.setHideOnEscape(true);
         this.setDetachable(false);
         this.hide();
@@ -54,6 +60,8 @@ public class CreateTimelinePopOver extends PopOver{
         rect.setWidth(50);
         rect.setHeight(50);
         rect.setFill(Color.YELLOWGREEN);
+
+        //Event which initializes the creation of a TimelineGrid and the Timeline
         rect.setOnMouseClicked(CreateTimeline -> {
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
@@ -67,19 +75,39 @@ public class CreateTimelinePopOver extends PopOver{
             System.out.println(gregorianStart.getTime());
             System.out.println(gregorianEnd.getTime());
 
+            //This if-statement handles the choice of an annual,monthly or daily timeline
             if(tg.getSelectedToggle() == annualBtn){
                 YearTimelineGrid y = new YearTimelineGrid(new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                try {
+                    dao.saveV2(y.getYearTimeline());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 vBoxMain.getChildren().add(y.getTimeLineBlock());
+                timelines.add(y.getYearTimeline());
             }else if(tg.getSelectedToggle() == monthlyBtn){
-                MonthTimeline m = new MonthTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd);
+                MonthTimelineGrid m = new MonthTimelineGrid(new MonthTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                try {
+                    dao.saveV2(m.getMonthTimeline());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                vBoxMain.getChildren().add(m.getTimeLineBlock());
+                timelines.add(m.getMonthTimeline());
             }else{
-                DayTimeline d = new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd);
+                DayTimelineGrid d = new DayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                try {
+                    dao.saveV2(d.getDayTimeline());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                vBoxMain.getChildren().add(d.getTimeLineBlock());
+                timelines.add(d.getDayTimeline());
             }
             this.hide();
         });
 
         vbox = new VBox();
-        this.setContentNode(vbox);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
         vbox.getChildren().add(titleTxt);
         vbox.getChildren().add(startDatePicker);
@@ -96,7 +124,6 @@ public class CreateTimelinePopOver extends PopOver{
         monthlyBtn.setText("Monthly");
         annualBtn.setText("Annual");
 
-
         dailyBtn.setToggleGroup(tg);
         monthlyBtn.setToggleGroup(tg);
         annualBtn.setToggleGroup(tg);
@@ -104,30 +131,4 @@ public class CreateTimelinePopOver extends PopOver{
         this.setContentNode(vbox);
     }
 
-    @FXML
-    void addTimeline(ActionEvent event) throws IOException {
-        LocalDate localStart = startDatePicker.getValue();
-        LocalDate localEnd = endDatePicker.getValue();
-
-        GregorianCalendar gregorianStart = new GregorianCalendar();
-        gregorianStart.set(localStart.getYear(), localStart.getMonthValue(), localStart.getDayOfMonth());
-
-        GregorianCalendar gregorianEnd = new GregorianCalendar();
-        gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
-
-        System.out.println(gregorianStart.getTime());
-        System.out.println(gregorianEnd.getTime());
-
-        if(tg.getSelectedToggle() == annualBtn){
-            YearTimelineGrid y = new YearTimelineGrid(new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
-            vbox.getChildren().add(y.getTimeLineBlock());
-
-            Stage stage = (Stage) cancelBtn.getScene().getWindow();
-            stage.close();
-        }else if(tg.getSelectedToggle() == monthlyBtn){
-            MonthTimeline m = new MonthTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd);
-        }else{
-            DayTimeline d = new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd);
-        }
-    }
 }

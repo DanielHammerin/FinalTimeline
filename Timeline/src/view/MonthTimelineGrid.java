@@ -1,5 +1,7 @@
 package view;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -17,6 +19,14 @@ import model.MonthTimeline;
  */
 public class MonthTimelineGrid
 {
+    public MonthTimeline getMonthTimeline() {
+        return monthTimeline;
+    }
+
+    public void setMonthTimeline(MonthTimeline monthTimeline) {
+        this.monthTimeline = monthTimeline;
+    }
+
     private MonthTimeline monthTimeline;
     /* topAndColumns are the entire time line stacked.*/
     private VBox topAndColumns;
@@ -63,11 +73,14 @@ public class MonthTimelineGrid
 
     public ScrollPane getTimeLineBlock(){
         ScrollPane timelineContainer = new ScrollPane();
+        VBox myBox = new VBox();
+        myBox.setAlignment(Pos.CENTER);
+        Label title = new Label(monthTimeline.getTitle());
         AnchorPane myAnchorPane;
         timelineContainer.setPrefHeight(300);
-        timelineContainer.setPrefWidth((monthTimeline.getEndYear() - monthTimeline.getStartYear()) * 50);
+        timelineContainer.setPrefWidth((monthTimeline.getEndYear1() - monthTimeline.getStartYear1()) * 50);
 
-        timelineContainer.setMinWidth((monthTimeline.getEndYear() - monthTimeline.getStartYear()) * 50);
+        timelineContainer.setMinWidth((monthTimeline.getEndYear1() - monthTimeline.getStartYear1()) * 50);
         timelineContainer.setMinHeight(300);
         timelineContainer.setVisible(true);
 
@@ -84,8 +97,9 @@ public class MonthTimelineGrid
         AnchorPane.setLeftAnchor(topAndColumns, 0.0);
         AnchorPane.setTopAnchor(topAndColumns, 0.0);
         AnchorPane.setRightAnchor(topAndColumns, 0.0);
-        timelineContainer.setContent(myAnchorPane);
-        //timelineContainer.getChildren().add(myAnchorPane);
+        myBox.getChildren().add(title);
+        myBox.getChildren().add(myAnchorPane);
+        timelineContainer.setContent(myBox);
 
         return timelineContainer;
     }
@@ -121,6 +135,8 @@ public class MonthTimelineGrid
         columns.getChildren().addAll(rectCols);
     }
 
+
+
     public VBox drawTopPart(MonthTimeline in)
     {
         //HBox with rectangles for the years
@@ -131,11 +147,11 @@ public class MonthTimelineGrid
         HBox columns = new HBox();
 
         //Selfexplanatory variables
-        int startYear = in.getStartYear();
-        int endYear = in.getEndYear();
+        int startYear = in.getStartYear1();
+        int endYear = in.getEndYear1();
         /* Minus 1 because dateformat returns the month number n + 1*/
-        int startMonth = in.getStartMonth() - 1;
-        int endMonth = in.getEndMonth();
+        int startMonth = in.getStartMonth1() - 1;
+        int endMonth = in.getEndMonth1();
 
         //Number of years the timeline is spanning over, including the start and end year
         int noYears = endYear - startYear + 1;

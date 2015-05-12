@@ -1,6 +1,13 @@
 package view;
 
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -35,6 +42,9 @@ public class YearTimelineGrid
     /* The rectangle width of all the rectangles*/
     static int rectangleWidth = 100;
 
+    private NewEventPopOver newEventPopOver;
+
+
     public YearTimelineGrid(YearTimeline in)
     {
         yearTimeline = in;
@@ -47,10 +57,43 @@ public class YearTimelineGrid
 
     public ScrollPane getTimeLineBlock(){
         ScrollPane timelineContainer = new ScrollPane();
+
+        /*
+        timelineContainer.setOnMouseClicked(openContextMenu -> {
+            MouseButton button = openContextMenu.getButton();
+            if(button == MouseButton.SECONDARY) {
+                ContextMenu cm = new ContextMenu();
+                MenuItem mi = new MenuItem();
+                cm.getItems().add(new MenuItem("Remove"));
+                cm.getItems().add(new MenuItem("Edit"));
+                cm.getItems().add(new MenuItem("Add Event"));
+
+                cm.getItems().get(0).setOnAction(removeTimeline -> {
+
+                });
+
+                cm.getItems().get(1).setOnAction(editTimeline -> {
+
+                });
+
+                cm.getItems().get(2).setOnAction(addEvent -> {
+                    if (newEventPopOver != null && newEventPopOver.isShowing()) {
+                        newEventPopOver.hide();
+                        newEventPopOver = null;
+                    } else {
+                        newEventPopOver = new NewEventPopOver();
+                        newEventPopOver.show(timelineContainer);
+                    }
+                });
+            }
+            });
+            */
+        VBox myBox = new VBox();
+        myBox.setAlignment(Pos.CENTER);
+        Label title = new Label(yearTimeline.getTitle());
         AnchorPane myAnchorPane;
         timelineContainer.setPrefHeight(300);
         timelineContainer.setPrefWidth((yearTimeline.getEndYear() - yearTimeline.getStartYear()) * 50);
-
         timelineContainer.setMinWidth((yearTimeline.getEndYear() - yearTimeline.getStartYear()) * 50);
         timelineContainer.setMinHeight(300);
         timelineContainer.setVisible(true);
@@ -68,11 +111,15 @@ public class YearTimelineGrid
         AnchorPane.setLeftAnchor(topAndColumns, 0.0);
         AnchorPane.setTopAnchor(topAndColumns, 0.0);
         AnchorPane.setRightAnchor(topAndColumns, 0.0);
-        timelineContainer.setContent(myAnchorPane);
-        //timelineContainer.getChildren().add(myAnchorPane);
+
+        myBox.getChildren().add(title);
+        myBox.getChildren().add(myAnchorPane);
+        timelineContainer.setContent(myBox);
 
         return timelineContainer;
     }
+
+
 
     public void expandColumns()
     {
@@ -119,5 +166,13 @@ public class YearTimelineGrid
         }
         out.getChildren().addAll(rectCols);
         return out;
+    }
+
+    public YearTimeline getYearTimeline() {
+        return yearTimeline;
+    }
+
+    public void setYearTimeline(YearTimeline yearTimeline) {
+        this.yearTimeline = yearTimeline;
     }
 }

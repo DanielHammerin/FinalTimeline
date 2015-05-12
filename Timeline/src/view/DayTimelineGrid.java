@@ -1,7 +1,11 @@
 package view;
 
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -24,8 +28,12 @@ import java.util.TreeSet;
  * Class for a day time line grid.
  * Created by Jakob on 2015-04-23.
  */
-public class DayTimelineGrid
-{
+public class DayTimelineGrid{
+
+    NewEventPopOver newEventPopOver;
+
+    ContextMenu cm;
+
     private DayTimeline dayTimeline;
     /* topAndColumns are the entire time line stacked.*/
     private VBox topAndColumns;
@@ -69,6 +77,7 @@ public class DayTimelineGrid
         dayTimeline = in;
         top = drawTopPart(in);
         columns = drawColumns(daysToDraw);
+        
         System.out.println("column");
         columns.setOnMouseClicked(event -> {
             System.out.println("X: " + event.getX() + "    Y: " + event.getY());
@@ -82,9 +91,50 @@ public class DayTimelineGrid
      */
     public VBox getGrid() { return topAndColumns; }
 
-
+    /**
+     * Method for creating and returning the graphical container for the dayTimeline
+     * @return a ScrollPane which will be added to the mainVbox
+     */
     public ScrollPane getTimeLineBlock(){
         ScrollPane timelineContainer = new ScrollPane();
+/*
+        timelineContainer.setOnMouseClicked(openContextMenu -> {
+            if(cm != null && cm.isShowing()){
+                cm.hide();
+                cm = null;
+            }else {
+                MouseButton button = openContextMenu.getButton();
+                if (button == MouseButton.SECONDARY) {
+                    cm = new ContextMenu();
+                    ContextMenu cm = new ContextMenu();
+                    cm.getItems().add(new MenuItem("Remove Event"));
+                    cm.getItems().add(new MenuItem("Add Event"));
+                    cm.getItems().add(new MenuItem("Edit event"));
+
+                    cm.getItems().get(0).setOnAction(removeTimeline -> {
+                        //  removeTimeline(dayTimeline.getTitle());
+                    });
+
+                    cm.getItems().get(1).setOnAction(newTimeline -> {
+                        if (newEventPopOver != null && newEventPopOver.isShowing()) {
+                            newEventPopOver.hide();
+                            newEventPopOver = null;
+                        }
+                        newEventPopOver = new NewEventPopOver();
+                        newEventPopOver.show(timelineContainer);
+
+                    });
+                    cm.getItems().get(2).setOnAction(editEvent -> {
+
+                    });
+                    cm.show(topAndColumns, Side.RIGHT, openContextMenu.getX(), openContextMenu.getY());
+                }
+            }
+        });
+*/
+        VBox myBox = new VBox();
+        myBox.setAlignment(Pos.CENTER);
+        Label title = new Label(dayTimeline.getTitle());
         AnchorPane myAnchorPane;
         timelineContainer.setPrefHeight(500);
 		long diff = dayTimeline.getEndDate().getTime().getTime() -dayTimeline.getStartDate().getTime().getTime();
@@ -98,12 +148,14 @@ public class DayTimelineGrid
 		myAnchorPane.prefWidthProperty().bind(timelineContainer.widthProperty());
 
 		myAnchorPane.getChildren().add(topAndColumns);
-		AnchorPane.setBottomAnchor(topAndColumns, 0.0);
-	    AnchorPane.setLeftAnchor(topAndColumns, 0.0);
+        AnchorPane.setBottomAnchor(topAndColumns, 0.0);
+        AnchorPane.setLeftAnchor(topAndColumns, 0.0);
 		AnchorPane.setTopAnchor(topAndColumns, 0.0);
 		AnchorPane.setRightAnchor(topAndColumns, 0.0);
-        timelineContainer.setContent(myAnchorPane);
 
+        myBox.getChildren().add(title);
+        myBox.getChildren().add(myAnchorPane);
+        timelineContainer.setContent(myBox);
         return timelineContainer;
     }
     /**
@@ -454,5 +506,13 @@ public class DayTimelineGrid
         rectangles.getChildren().addAll(rectCols);
         out.getChildren().add(rectangles);
         return out;
+    }
+
+    public DayTimeline getDayTimeline() {
+        return dayTimeline;
+    }
+
+    public void setDayTimeline(DayTimeline dayTimeline) {
+        this.dayTimeline = dayTimeline;
     }
 }
