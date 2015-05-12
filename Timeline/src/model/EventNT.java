@@ -33,8 +33,7 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		else { return this.getDescription().compareTo(toCompare.getDescription()); }
 	}
 
-	public boolean areSimultaneousEvents(EventTime in)
-	{
+	public boolean areSimultaneousEvents(EventTime in){
 		int afterStartOfThisEvt = dateOfEvent.compareTo(in.getStartTime());
 		int beforeEndOfThisEvt = dateOfEvent.compareTo(in.getFinishTime());
 		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
