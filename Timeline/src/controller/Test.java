@@ -17,11 +17,12 @@ public class Test {
 		dao.clearDatabase();
 		dao.saveToDataBase(month);
 		
-		dao.getTimeline("hello");
-		
+		dao.getTimeline("hello"); 
+				
 		dao.updateTimelineV2(month, year);
-		//System.out.println(dao.getTimeline("hello"));
-		System.out.println(dao.getTimeline("yo"));
+		
+		System.out.println(dao.getTimeline("hello"));
+		System.out.println(dao.getTimeline("yo").getTitle());
 	}
 
 }
