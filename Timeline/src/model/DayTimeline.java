@@ -2,6 +2,8 @@ package model;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class DayTimeline extends Timeline
 {
@@ -78,6 +80,12 @@ public class DayTimeline extends Timeline
 		super(title, description, "d");
 		if (start.compareTo(end) >= 0)
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The start date has to be before the end date.");
+
+			alert.showAndWait();
 			throw new IllegalArgumentException("The start date has to be before the end date.");
 		}
 		int startYear = Integer.parseInt(yearF.format(start.getTime()));
@@ -95,6 +103,13 @@ public class DayTimeline extends Timeline
 		startCopy.set(year, month, day);
 		if (startCopy.compareTo(end) < 0)
 		{
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The time line can maximum be " + MAX_DAYS
+					+ " days long.");
+
+			alert.showAndWait();
 			throw new IllegalArgumentException("The time line can maximum be " + MAX_DAYS
 					+ " days long.");
 		}
@@ -120,6 +135,16 @@ public class DayTimeline extends Timeline
 		}
 		else
 		{
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
@@ -140,6 +165,14 @@ public class DayTimeline extends Timeline
 		}
 		else
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
