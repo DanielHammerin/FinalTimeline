@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import model.DayTimeline;
@@ -53,24 +54,20 @@ public class DAO implements daoInterface {
 		}
 	}
 
-	public void SaveV2(Timeline timeline) throws Exception{
+	public void saveV2(Timeline timeline) throws Exception{
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
-			/*if(timeline.isDayTimeline()) {
+			if(timeline.isDayTimeline()) {
 				DayTimeline day = (DayTimeline) timeline;
-				int startYear = day.getStartDate().YEAR;
-				int startMonth = day.getStartDate().MONTH-1;
-				int startDay = day.getStartDate().DAY_OF_MONTH;
-				day.getStartArray().add(startYear);
-				day.getStartArray().add(startMonth);
-				day.getStartArray().add(startDay);
-				int endYear = day.getEndDate().YEAR;
-				int endMonth = day.getEndDate().MONTH-1;
-				int endDay = day.getEndDate().DAY_OF_MONTH;
-				day.getEndArray().add(endYear);
-				day.getEndArray().add(endMonth);
-				day.getEndArray().add(endDay);
-				ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class);
+
+				day.setStartYear(day.getStartDate().get(Calendar.YEAR));
+				day.setStartMonth(day.getStartDate().get(Calendar.MONTH));
+				day.setStartDay(day.getStartDate().get(Calendar.DAY_OF_MONTH));
+				day.setEndYear(day.getEndDate().get(Calendar.YEAR));
+				day.setEndMonth(day.getEndDate().get(Calendar.MONTH));
+				day.setEndDay(day.getEndDate().get(Calendar.DAY_OF_MONTH));
+
+			/*	ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class);
 				while (retriever.hasNext()){
 					if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
 						throw new Exception("A timeline with the same title already exists! Please change your "
@@ -78,28 +75,39 @@ public class DAO implements daoInterface {
 					}
 				}
 				db.store(timeline);
-				db.commit();	
-				System.out.println ("\nMessage: Day timeline is succesfully saved in the database!");
-			}*/
+				db.commit();
+				System.out.println ("\nMessage: Day timeline is succesfully saved in the database!");*/
+			}
 			if(timeline.isMonthTimeline()){
 				MonthTimeline month = (MonthTimeline) timeline;
-				
+
 				month.setStartYear(month.getStartYear());
 				month.setStartMonth(month.getStartMonth() - 1);
 				month.setEndYear(month.getEndYear());
 				month.setEndMonth(month.getEndMonth() - 1);
-				
-				ObjectSet<MonthTimeline> retriever = db.query(MonthTimeline.class);
+
+				/*ObjectSet<MonthTimeline> retriever = db.query(MonthTimeline.class);
 				while (retriever.hasNext()){
 					if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
 						throw new Exception("A timeline with the same title already exists! Please change your "
 								+ "timeline title.");
 					}
 				}
-				db.store(timeline);
-				db.commit();	
-				System.out.println ("\nMessage: Timeline is succesfully saved in the database!");
+				db.store(month);
+				db.commit();
+				System.out.println ("\nMessage: Timeline is succesfully saved in the database!");*/
 			}
+			else if (timeline.isYearTimeline()) {}
+			ObjectSet<Timeline> retriever = db.query(Timeline.class);
+			while (retriever.hasNext()){
+				if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
+					throw new Exception("A timeline with the same title already exists! Please change your "
+							+ "timeline title.");
+				}
+			}
+			db.store(timeline);
+			db.commit();
+			System.out.println ("\nMessage: Day timeline is succesfully saved in the database!");
 		}
 		finally {
 			db.close();
@@ -342,11 +350,7 @@ public class DAO implements daoInterface {
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");	 
 		try{
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
-			if (retriever.hasNext()){ // check if the database is empty
-				return false; 
-			} else {
-				return true;
-			}
+			return !retriever.hasNext();
 		}
 		finally {
 			db.close();

@@ -1,13 +1,17 @@
 package controller;
 
 import java.net.URL;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import model.DAO;
 import model.DayTimeline;
 import model.MonthTimeline;
+import model.Timeline;
 import model.YearTimeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,72 +19,102 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import view.*;
 
+/**
+ * Created by Alexander on 27/04/2015.
+ * This is the controller class of the mainWindow
+ */
 public class MainWindowController implements Initializable{
 
-	MyPopOver popOverLoad;
+	LoadTimelinePopOver popOverLoad;
 	CreateTimelinePopOver popOverNew;
+	NewEventPopOver popOverNewEvent;
+	ArrayList<Timeline> allTheTimelines = new ArrayList<Timeline>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		vBoxModules.prefWidthProperty().bind(mainScrollPane.widthProperty());
-		vBoxModules.prefHeightProperty().bind(mainScrollPane.heightProperty());
+		//mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
 		DAO d = new DAO();
-
-		d.clearDatabase();
-		YearTimeline y = new YearTimeline("Hello", "Description", new GregorianCalendar(2015, 04, 12), new GregorianCalendar(2025, 04, 12));
-		y.setIsYearTimeline(true);
 		try {
-			d.saveToDataBase(y);
+			d.clearDatabase();
+			d.saveV2(new YearTimeline("a", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
+			d.saveV2(new DayTimeline("aaa", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2015, 12, 30)));
+			d.saveV2(new MonthTimeline("m","description",new GregorianCalendar(2015, 4, 01), new GregorianCalendar(2015, 9, 15)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		//YearTimelineGrid y = new YearTimelineGrid(new YearTimeline("Hello", "Description", new GregorianCalendar(2015, 04, 12), new GregorianCalendar(2025, 04, 12)));
+		vBoxModules.prefWidthProperty().bind(mainScrollPane.widthProperty());
+		vBoxModules.prefHeightProperty().bind(mainScrollPane.heightProperty());
 
-		//MonthTimelineGrid m = new MonthTimelineGrid(new MonthTimeline("Hello", "Description", new GregorianCalendar(2015, 04, 12), new GregorianCalendar(2016, 04, 12)));
 
-		//DayTimelineGrid d = new DayTimelineGrid(new DayTimeline("Hello","Description",new GregorianCalendar(2015,04,12),new GregorianCalendar(2015,07,19)));
-
-/*
-		vBoxModules.getChildren().add(d.getTimeLineBlock());
-		vBoxModules.getChildren().add(m.getTimeLineBlock());
-		vBoxModules.getChildren().add(y.getTimeLineBlock());
-*/
-
-		//WORK ON !!!
+		//This event opens the popOver to create a new timeline
 		newTimelineRect.setOnMouseClicked(openPopOverNew -> {
 			if (popOverNew != null && popOverNew.isShowing()) {
 				popOverNew.hide();
 				popOverNew = null;
 			} else {
-				popOverNew = new CreateTimelinePopOver(vBoxModules);
+				if(popOverLoad != null && popOverLoad.isShowing()) {
+					popOverLoad.hide();
+					popOverLoad = null;
+				}
+				popOverNew = new CreateTimelinePopOver(vBoxModules,allTheTimelines);
 				popOverNew.show(newTimelineRect);
 			}
 		});
 
+		//This event opens the popOver to load an existing timeline from the database
 		loadimelineRect.setOnMouseClicked(openPopOverLoad -> {
 			if(popOverLoad != null && popOverLoad.isShowing()){
 				popOverLoad.hide();
 				popOverLoad = null;
 			}else{
-				popOverLoad = new MyPopOver(vBoxModules);
+				if(popOverNew !=null && popOverNew.isShowing()) {
+					popOverNew.hide();
+					popOverNew = null;
+				}
+				popOverLoad = new LoadTimelinePopOver(vBoxModules,allTheTimelines);
 				popOverLoad.show(loadimelineRect);
 			}
+	});
+
+
+		addEventRect.setOnMouseClicked(openAddEvent -> {
+			if(popOverNewEvent != null && popOverNewEvent.isShowing()){
+				popOverNewEvent.hide();
+				popOverNewEvent = null;
+			}else{
+				if(popOverNew !=null && popOverNew.isShowing()) {
+					popOverNew.hide();
+					popOverNew = null;
+				}
+				if(popOverLoad != null && popOverLoad.isShowing()){
+					popOverLoad.hide();
+					popOverLoad = null;
+				}
+				popOverNewEvent = new NewEventPopOver(allTheTimelines);
+				popOverNewEvent.show(addEventRect);
+			}
+
 		});
-}
+	}
 
 	@FXML
 	private Rectangle newTimelineRect;
 
 	@FXML
-	private VBox vBoxModules;
+	private  VBox vBoxModules;
 
 	@FXML
 	private ScrollPane mainScrollPane;
 
 	@FXML
 	private Rectangle loadimelineRect;
+
+	@FXML
+	private AnchorPane mainAnchorPane;
+
+	@FXML
+	private Rectangle addEventRect;
 
 }
