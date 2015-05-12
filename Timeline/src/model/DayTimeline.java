@@ -7,10 +7,65 @@ public class DayTimeline extends Timeline
 {
 	private GregorianCalendar startDate;
 	private GregorianCalendar endDate;
+	private int startYear;
+	private int startMonth;
+	private int startDay;
+	private int endYear;
+	private int endMonth;
+	private int endDay;
+
+	public int getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public int getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+
+	public int getEndYear() {
+		return endYear;
+	}
+
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+
+	public int getEndMonth() {
+		return endMonth;
+	}
+
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+
+	public int getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
+
 	/* monthF can be used to get a numerical value from an gregorian calendar
-	 * object. When you use a gregorian calendar as argument it returns a string
-	 * representing the month. You have to parse it to an int to use it as a 
-	 * number.*/
+         * object. When you use a gregorian calendar as argument it returns a string
+         * representing the month. You have to parse it to an int to use it as a
+         * number.*/
 	SimpleDateFormat monthF = new SimpleDateFormat("MM");
 	/* Same as monthF.*/
 	SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyyyy");

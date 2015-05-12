@@ -94,7 +94,7 @@ public class YearTimeline extends Timeline
 		int endYearOfEvent = Integer.parseInt(yearF.format(in.getFinishTime()));
 		if (startYear <= startYearOfEvent && endYearOfEvent <= endYear)
 		{
-			super.addEventTime(in);;
+			super.addEventTime(in);
 		}
 		else
 		{
