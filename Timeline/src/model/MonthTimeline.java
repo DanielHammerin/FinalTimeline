@@ -3,6 +3,9 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * A class for creating a monthly timeline
  * @author Jakob
@@ -35,6 +38,14 @@ public class MonthTimeline extends Timeline
 		 * only take the absolute value |1-5| == 4*/
 		if (Math.round(Math.abs(endYear-startYear))  > MAX_YEARS_DIFFERENCE - 1)
 		{
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("A monthly timeline can span over maximum "
+					+ MAX_YEARS_DIFFERENCE + " years.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("A monthly timeline can span over maximum "
 					+ MAX_YEARS_DIFFERENCE + " years.");
 		}
@@ -99,6 +110,14 @@ public class MonthTimeline extends Timeline
 		}
 		else
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
@@ -119,6 +138,14 @@ public class MonthTimeline extends Timeline
 		}
 		else
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}

@@ -3,6 +3,9 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public class YearTimeline extends Timeline
 {
 	private int startYear;
@@ -35,16 +38,40 @@ public class YearTimeline extends Timeline
 	{
 		if (start >= end)
 		{
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The start year has to be before or the same year as"
+					+ " the end year");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The start year has to be before or the same year as"
 					+ " the end year");
 		}
 		if (start < MIN_VALUE || start > MAX_VALUE)
 		{
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The start year x has to be " + MIN_VALUE + " <= x "
+					+ MAX_VALUE);
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The start year x has to be " + MIN_VALUE + " <= x "
 					+ MAX_VALUE);
 		}
 		if (end < MIN_VALUE || end > MAX_VALUE)
 		{
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The end year x has to be " + MIN_VALUE + " <= x "
+					+ MAX_VALUE);
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The end year x has to be " + MIN_VALUE + " <= x "
 					+ MAX_VALUE);
 		}
@@ -77,6 +104,14 @@ public class YearTimeline extends Timeline
 		}
 		else
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
@@ -98,6 +133,14 @@ public class YearTimeline extends Timeline
 		}
 		else
 		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Error");
+			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
+					" the timelines start or end date.");
+
+			alert.showAndWait();
+			
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}

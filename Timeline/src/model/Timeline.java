@@ -2,6 +2,9 @@ package model;
 
 import java.util.TreeSet;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * Super class for the different kinds of timelines. Holds a string
  * for description of a timeline, a string for the title of the of
@@ -36,7 +39,16 @@ public abstract class Timeline
 	 *                       a daily time line.
      */
 	public Timeline(String t, String d, String typeOfTimeline)	{
-		if (t.length() > MAX_CHARS_TITLE) {throw new IllegalArgumentException("The title "
+		if (t.length() > MAX_CHARS_TITLE) {
+			
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The title "
+					+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");
+			alert.showAndWait();
+		
+			throw new IllegalArgumentException("The title "
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
 		description = d;
@@ -63,7 +75,16 @@ public abstract class Timeline
 	 */
 	public void setTitle(String title)
 	{
-		if (title.length() > MAX_CHARS_TITLE) {throw new IllegalArgumentException("The title "
+		if (title.length() > MAX_CHARS_TITLE) {
+			
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Warning");
+			alert.setContentText("The title "
+					+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");
+			alert.showAndWait();
+			
+			throw new IllegalArgumentException("The title "
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		this.title = title;
 	}
