@@ -32,7 +32,14 @@ public class MainWindowController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+		NewTimelineGrid a = new NewTimelineGrid(new DayTimeline("Day  Timline ", "Description", new GregorianCalendar(2015, 12, 1), new GregorianCalendar(2015, 12, 30)));
+		NewTimelineGrid b = new NewTimelineGrid(new MonthTimeline("Month Timline","description",new GregorianCalendar(2015, 4, 1), new GregorianCalendar(2016, 9, 15)));
+		NewTimelineGrid c = new NewTimelineGrid(new YearTimeline("Year Timeline", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
+		vBoxModules.getChildren().add(a);
+		vBoxModules.getChildren().add(b);
+		vBoxModules.getChildren().add(c);
 
 		DAO d = new DAO();
 		try {
@@ -44,8 +51,8 @@ public class MainWindowController implements Initializable{
 			e.printStackTrace();
 		}
 
-		vBoxModules.prefWidthProperty().bind(mainScrollPane.widthProperty());
-		vBoxModules.prefHeightProperty().bind(mainScrollPane.heightProperty());
+		vBoxModules.prefWidthProperty().bind(mainAnchorPane.widthProperty());
+		vBoxModules.prefHeightProperty().bind(mainAnchorPane.heightProperty());
 
 
 		//This event opens the popOver to create a new timeline
@@ -106,9 +113,6 @@ public class MainWindowController implements Initializable{
 	private  VBox vBoxModules;
 
 	@FXML
-	private ScrollPane mainScrollPane;
-
-	@FXML
 	private Rectangle loadimelineRect;
 
 	@FXML
@@ -116,5 +120,8 @@ public class MainWindowController implements Initializable{
 
 	@FXML
 	private Rectangle addEventRect;
+
+	@FXML
+	private ScrollPane mainScrollPane;
 
 }
