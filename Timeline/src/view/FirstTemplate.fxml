@@ -23,10 +23,14 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                           <VBox fx:id="vBoxModules" GridPane.columnIndex="1">
+                  <ScrollPane fx:id="mainScrollPane" GridPane.columnIndex="1">
+                       <content>
+                           <VBox fx:id="vBoxModules">
                                <children>
                                </children>
                            </VBox>
+                       </content>
+                  </ScrollPane>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                          <Rectangle fx:id="newTimelineRect" fill="#6161da" height="75.0" width="75.0">
