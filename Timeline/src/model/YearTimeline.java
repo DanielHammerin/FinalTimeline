@@ -1,13 +1,21 @@
 package model;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 public class YearTimeline extends Timeline
 {
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+
 	private int startYear;
 	private int endYear;
 	SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyyyy");

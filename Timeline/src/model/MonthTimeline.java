@@ -13,6 +13,22 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class MonthTimeline extends Timeline
 {
+	public GregorianCalendar getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(GregorianCalendar startDate) {
+		this.startDate = startDate;
+	}
+
+	public GregorianCalendar getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(GregorianCalendar endDate) {
+		this.endDate = endDate;
+	}
+
 	private GregorianCalendar startDate;
 	private GregorianCalendar endDate;
 	/* monthF can be used to get a numerical value from an gregorian calendar

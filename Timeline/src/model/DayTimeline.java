@@ -7,6 +7,14 @@ import javafx.scene.control.Alert.AlertType;
 
 public class DayTimeline extends Timeline
 {
+	public void setEndDate(GregorianCalendar endDate) {
+		this.endDate = endDate;
+	}
+
+	public void setStartDate(GregorianCalendar startDate) {
+		this.startDate = startDate;
+	}
+
 	private GregorianCalendar startDate;
 	private GregorianCalendar endDate;
 	private int startYear;
