@@ -1,17 +1,37 @@
 package model;
 
 import java.util.GregorianCalendar;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import view.EditEventPopover;
 
 public class EventNT extends MyEvent implements Comparable<EventNT> {
 	
 	private GregorianCalendar dateOfEvent;
 	private Circle circle;
-		
+	Pane eventPane;
+	EditEventPopover editEventPopover;
+	
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
 		circle = new Circle(20);
+	    eventPane = new Pane();
+		eventPane.setPrefHeight(50);
+		eventPane.setOnMouseClicked(rightClick ->{
+			if(editEventPopover != null){
+				editEventPopover.hide();
+				editEventPopover = null;
+			}
+			else{
+				if(rightClick.getButton() == MouseButton.SECONDARY){
+					editEventPopover = new EditEventPopover(this);
+					editEventPopover.show(eventPane);
+				}
+			}
+		});
+				
 	}
 
 	public Circle getCircle() { return  circle; }
