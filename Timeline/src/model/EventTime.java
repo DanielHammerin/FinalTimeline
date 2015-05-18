@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javafx.scene.layout.StackPane;
@@ -11,6 +12,13 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 
 	private GregorianCalendar startTime;
 	private GregorianCalendar finishTime;
+	/* monthF can be used to get a numerical value from an gregorian calendar
+	 * object. When you use a gregorian calendar as argument it returns a string
+	 * representing the month. You have to parse it to an int to use it as a
+	 * number.*/
+	SimpleDateFormat monthF = new SimpleDateFormat("MM");
+	/* Same as monthF.*/
+	SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyyyy");
 	Rectangle evRect;
 	
 	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft) {
@@ -19,6 +27,44 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 		startTime = st;
 		finishTime = ft;
 		evRect = new Rectangle(20,20);
+	}
+
+	/**
+	 * Method for getting the numerical value of the start month of
+	 * the monthly scaled timeline.
+	 * @return an int 1 <= x <= 12
+	 */
+	public int getStartMonth()
+	{
+		return Integer.parseInt(monthF.format(startTime.getTime()));
+	}
+
+	/**
+	 * Method for getting the numerical value of the end month of
+	 * the monthly scaled timeline.
+	 * @return an int 1 <= x <= 12
+	 */
+	public int getEndMonth()
+	{
+		return Integer.parseInt(monthF.format(finishTime.getTime()));
+	}
+
+	/**
+	 * Method that returns the start year of the timeline
+	 * @return the start year
+	 */
+	public int getStartYear()
+	{
+		return Integer.parseInt(yearF.format(startTime.getTime()));
+	}
+
+	/**
+	 * Method that returns the end year of the timeline
+	 * @return the end year
+	 */
+	public int getEndYear()
+	{
+		return Integer.parseInt(yearF.format(finishTime.getTime()));
 	}
 
 	 public void setStartTime (GregorianCalendar date) {

@@ -10,6 +10,7 @@ import model.MonthTimeline;
 import model.Timeline;
 import model.YearTimeline;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
@@ -27,6 +28,7 @@ public class NewTimelineGrid extends ScrollPane {
     YearTimeline yearTimeline;
     AnchorPane myAnchorPane;
     Label title;
+    SimpleDateFormat dayF = new SimpleDateFormat("dd");
     public String[] monthArray = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
             , "October", "November", "December"};
 
@@ -76,22 +78,39 @@ public class NewTimelineGrid extends ScrollPane {
     }
 
 
-    private void drawDays(){
+    private void drawDays()
+    {
         ColumnConstraints c = new ColumnConstraints(50,50,Double.MAX_VALUE);
         c.setPercentWidth(100);
         c.setHalignment(HPos.CENTER);
 
+        GregorianCalendar startCopy = (GregorianCalendar) dayTimeline.getStartDate().clone();
+        GregorianCalendar end = (GregorianCalendar) dayTimeline.getEndDate().clone();
+
         Date d = dayTimeline.getEndDate().getTime();
         Date d1 = dayTimeline.getStartDate().getTime();
         int daysBetween= daysBetween(d,d1);
-        for(int i =1;i<=daysBetween;i++){
+        int k = 0;
+        while (startCopy.compareTo(dayTimeline.getEndDate()) <= 0)
+        {
             gp.getColumnConstraints().addAll(c);
-            Label l = new Label(""+i);
-            gp.add(l,i-1,0);
+
+            Label day = new Label(startCopy.get(Calendar.DAY_OF_MONTH) + "");
+            startCopy.add(5,1);
+            gp.add(day, k, 0);
+            k++;
         }
+
+//        for(int i =1;i<=daysBetween;i++)
+//        {
+//            gp.getColumnConstraints().addAll(c);
+//            Label l = new Label(""+i);
+//            gp.add(l,i-1,0);
+//        }
     }
 
-    public void drawMonths(){
+    public void drawMonths()
+    {
         ColumnConstraints c = new ColumnConstraints(50,50,Double.MAX_VALUE);
         c.setPercentWidth(100);
         c.setHalignment(HPos.CENTER);
@@ -108,7 +127,8 @@ public class NewTimelineGrid extends ScrollPane {
         }
     }
 
-    private void drawYears(){
+    private void drawYears()
+    {
         ColumnConstraints c = new ColumnConstraints(50,50,Double.MAX_VALUE);
         c.setPercentWidth(100);
         c.setHalignment(HPos.CENTER);

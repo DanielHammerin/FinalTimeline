@@ -1,10 +1,11 @@
 package model;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 /**
  * A class for creating a monthly timeline
