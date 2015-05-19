@@ -1,5 +1,8 @@
 package view;
 
+import controller.DAO;
+import controller.MainWindowController;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -11,10 +14,12 @@ import org.controlsfx.control.PopOver;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+
 /**
  * Created by Alexander on 08/05/2015.
  */
-public class NewEventPopOver extends PopOver{
+public class EditTimelinePopOver extends PopOver{
     private VBox vbox = new VBox();
     private ComboBox  myComboBox;
     private TextField titleTextField = new TextField();
@@ -23,12 +28,14 @@ public class NewEventPopOver extends PopOver{
     private DatePicker endDatePicker = new DatePicker();
     private Rectangle addBtn = new Rectangle();
 
-    public NewEventPopOver(ArrayList<Timeline> timelines){
+    public EditTimelinePopOver(MainWindowController mwc){
+        DAO myDao = new DAO();
 
         myComboBox = new ComboBox();
 
-        for(Timeline t : timelines){
-            myComboBox.getItems().add(t);
+        LinkedList<Timeline> allTimlines = myDao.getAllTimelines();
+        for(Timeline t : allTimlines){
+            myComboBox.getItems().addAll(t.getTitle());
         }
         myComboBox.setPromptText("Choose the timeline you dickhead!");
 
@@ -40,16 +47,22 @@ public class NewEventPopOver extends PopOver{
         this.setHeight(200);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
-        titleTextField.setPromptText("Title");
-        descriptionTextArea.setPromptText("Description");
-
+        String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
+        titleTextField.setText(timelineTitle);
+        try {
+            descriptionTextArea.setText(myDao.getTimeline(timelineTitle).getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
         startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
         endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
 
         addBtn.setWidth(100);
         addBtn.setHeight(100);
 
-        addBtn.setOnMouseClicked(addEvent -> {
+        addBtn.setOnMouseClicked(editTimeline -> {
+
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
 
@@ -57,17 +70,14 @@ public class NewEventPopOver extends PopOver{
             gregorianStart.set(localStart.getYear(), localStart.getMonthValue(), localStart.getDayOfMonth());
             GregorianCalendar gregorianEnd = new GregorianCalendar();
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
-
-            if (endDatePicker.getValue() == null) {
-                EventNT newEvent = new EventNT(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart);
-                Timeline selectedTimeline  = (Timeline)myComboBox.getSelectionModel().getSelectedItem();
-                selectedTimeline.addEventNT(newEvent);
-                //yt.addEventNT(newEvent);
-            } else {
-                EventTime newEvent = new EventTime(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
-                Timeline selectedTimeline  = (Timeline)myComboBox.getSelectionModel().getSelectedItem();
-                selectedTimeline.addEventTime(newEvent);
-                //yt.addEventTime(newEvent);
+            String a = (String) myComboBox.getSelectionModel().getSelectedItem();
+            DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
+            DAO dao = new DAO();
+            try {
+                dao.updateTimelineV2(dao.getTimeline(timelineTitle), dayTimeline);
+                mwc.redrawTimelines();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             this.hide();
         });
