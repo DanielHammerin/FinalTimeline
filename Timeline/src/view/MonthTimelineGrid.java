@@ -73,6 +73,7 @@ public class MonthTimelineGrid
 
     public ScrollPane getTimeLineBlock(){
         ScrollPane timelineContainer = new ScrollPane();
+        timelineContainer.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         VBox myBox = new VBox();
         myBox.setAlignment(Pos.CENTER);
         Label title = new Label(monthTimeline.getTitle());

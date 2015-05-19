@@ -28,14 +28,13 @@ public class EditTimelinePopOver extends PopOver{
     private DatePicker endDatePicker = new DatePicker();
     private Rectangle addBtn = new Rectangle();
 
+
     public EditTimelinePopOver(MainWindowController mwc){
         DAO myDao = new DAO();
-
         myComboBox = new ComboBox();
 
-        LinkedList<Timeline> allTimlines = myDao.getAllTimelines();
-        for(Timeline t : allTimlines){
-            myComboBox.getItems().addAll(t.getTitle());
+        for(Timeline t : myDao.getAllTimelines()){
+            myComboBox.getItems().add(t.getTitle());
         }
         myComboBox.setPromptText("Choose the timeline you dickhead!");
 
@@ -54,6 +53,8 @@ public class EditTimelinePopOver extends PopOver{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        titleTextField.setPromptText("Title");
+        descriptionTextArea.setPromptText("Description");
         myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
         startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
         endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
@@ -76,11 +77,27 @@ public class EditTimelinePopOver extends PopOver{
             try {
                 dao.updateTimelineV2(dao.getTimeline(timelineTitle), dayTimeline);
                 mwc.redrawTimelines();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            if (endDatePicker.getValue() == null) {
+                try {
+                    EventNT newEvent = new EventNT(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart);
+                    Timeline selectedTimeline  = myDao.getTimeline(a);
+                    selectedTimeline.addEventNT(newEvent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                EventTime newEvent = new EventTime(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
+                try {
+                    Timeline selectedTimeline  = myDao.getTimeline(a);
+                    selectedTimeline.addEventTime(newEvent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             this.hide();
-        });
+        }});
 
         vbox.getChildren().add(myComboBox);
         vbox.getChildren().add(titleTextField);
@@ -91,4 +108,6 @@ public class EditTimelinePopOver extends PopOver{
 
         this.setContentNode(vbox);
     }
-}
+    }
+
+

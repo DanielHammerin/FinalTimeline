@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class YearTimeline extends Timeline
@@ -133,8 +134,10 @@ public class YearTimeline extends Timeline
 	 */
 	public void addEventTime(EventTime in)
 	{
-		int startYearOfEvent = Integer.parseInt(yearF.format(in.getStartTime()));
-		int endYearOfEvent = Integer.parseInt(yearF.format(in.getFinishTime()));
+		//int startYearOfEvent = Integer.parseInt(yearF.format(in.getStartTime()));
+		int startYearOfEvent = in.getStartTime().get(Calendar.YEAR);
+		//int endYearOfEvent = Integer.parseInt(yearF.format(in.getFinishTime()));
+		int endYearOfEvent = in.getFinishTime().get(Calendar.YEAR);
 		if (startYear <= startYearOfEvent && endYearOfEvent <= endYear)
 		{
 			super.addEventTime(in);

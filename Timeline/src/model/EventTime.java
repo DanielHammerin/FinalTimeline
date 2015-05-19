@@ -1,13 +1,9 @@
 package model;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import view.EditEventPopover;
 
 

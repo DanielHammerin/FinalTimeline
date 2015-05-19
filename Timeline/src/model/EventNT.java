@@ -9,15 +9,15 @@ import view.EditEventPopover;
 public class EventNT extends MyEvent implements Comparable<EventNT> {
 	
 	private GregorianCalendar dateOfEvent;
-	private Circle circle;
 	Pane eventPane;
 	EditEventPopover editEventPopover;
 	
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
-		circle = new Circle(20);
+
 	    eventPane = new Pane();
+		eventPane.setPrefWidth(50);
 		eventPane.setPrefHeight(50);
 		eventPane.setOnMouseClicked(rightClick ->{
 			if(editEventPopover != null){
@@ -33,8 +33,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		});
 				
 	}
-
-	public Circle getCircle() { return  circle; }
 
 	@Override
 	public String toString (){

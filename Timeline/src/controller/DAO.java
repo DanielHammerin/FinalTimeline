@@ -191,7 +191,6 @@ public class DAO implements daoInterface {
 	 */
 	@Override
 	public void clearDatabase() {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
 
 		try {
