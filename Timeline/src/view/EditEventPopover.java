@@ -4,8 +4,11 @@ import controller.DAO;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import model.EventNT;
 import model.EventTime;
+
 import org.controlsfx.control.PopOver;
+
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -62,4 +65,8 @@ public class EditEventPopover extends PopOver {
             this.hide();
         });
     }
+
+	public EditEventPopover(EventNT eventNT) {
+		
+	}
 }
