@@ -26,7 +26,7 @@ public class DAO implements daoInterface {
 
 	/**
 	 * Saves the timeline in the database.
-	 * @param newTimeline timeline to be added.
+	 * @param The timeline to be added.
 	 * @exception Exception for opening or creating the database file.
 	 */
 	public void saveToDataBase(Timeline newTimeline) throws Exception {
@@ -67,23 +67,23 @@ public class DAO implements daoInterface {
 				day.setEndYear(day.getEndDate().get(Calendar.YEAR));
 				day.setEndMonth(day.getEndDate().get(Calendar.MONTH));
 				day.setEndDay(day.getEndDate().get(Calendar.DAY_OF_MONTH));
-			}
-			if(timeline.isMonthTimeline()){
-				MonthTimeline month = (MonthTimeline) timeline;
-
-				month.setStartYear(month.getStartYear());
-				month.setStartMonth(month.getStartMonth() - 1);
-				month.setEndYear(month.getEndYear());
-				month.setEndMonth(month.getEndMonth() - 1);
-
-			}
-			else if (timeline.isYearTimeline()) {}
-			ObjectSet<Timeline> retriever = db.query(Timeline.class);
-			while (retriever.hasNext()){
-				if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
-					throw new Exception("A timeline with the same title already exists! Please change your "
-							+ "timeline title.");
-				}
+//			}
+//			if(timeline.isMonthTimeline()){
+//				MonthTimeline month = (MonthTimeline) timeline;
+//
+//				month.setStartYear(month.getStartYear());
+//				month.setStartMonth(month.getStartMonth() - 1);
+//				month.setEndYear(month.getEndYear());
+//				month.setEndMonth(month.getEndMonth() - 1);
+//
+//			}
+//			else if (timeline.isYearTimeline()) {}
+//			ObjectSet<Timeline> retriever = db.query(Timeline.class);
+//			while (retriever.hasNext()){
+//				if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
+//					throw new Exception("A timeline with the same title already exists! Please change your "
+//							+ "timeline title.");
+//				}
 			}
 			db.store(timeline);
 			db.commit();
@@ -96,9 +96,9 @@ public class DAO implements daoInterface {
 
 	/**
 	 * Gets the timeline from the database.
-	 * @param title title of the timeline to be retrieved.
+	 * @param The title of the timeline to be retrieved.
 	 * @return The required timeline.
-	 * @throws Exception
+	 * @throws Exception 
 	 */
 	public Timeline getTimeline(String title) throws Exception {
 
@@ -145,7 +145,7 @@ public class DAO implements daoInterface {
 
 	/**
 	 * Searches the database for a specific timeline.
-	 * @param title title of the timeline to be retrieved.
+	 * @param The title of the timeline to be retrieved.
 	 * @return true if the timeline exists in the database.
 	 */
 	@Override
@@ -169,7 +169,7 @@ public class DAO implements daoInterface {
 
 	/**
 	 * Deletes a specific timeline from the database.
-	 * @param myTimeline timeline to be deleted.
+	 * @param The timeline to be deleted.
 	 */
 	@Override
 	public void deleteFromDatabase(Timeline myTimeline) {
@@ -213,8 +213,8 @@ public class DAO implements daoInterface {
 
 	/**
 	 * Updates a specific timeline.
-	 * @param newTitle timeline to be updated, its title and description.
-	 * @throws Exception
+	 * @param The timeline to be updated, its title and description. 
+	 * @throws Exception 
 	 */
 	@Override
 	public void updateTimeline (Timeline myTimeline, String newTitle, String newDescription, String typeOfTimeline) throws Exception {

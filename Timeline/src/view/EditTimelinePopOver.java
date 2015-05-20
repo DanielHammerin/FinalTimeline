@@ -28,18 +28,15 @@ public class EditTimelinePopOver extends PopOver{
     private DatePicker endDatePicker = new DatePicker();
     private Rectangle addBtn = new Rectangle();
 
+
     public EditTimelinePopOver(MainWindowController mwc){
         DAO myDao = new DAO();
-
         myComboBox = new ComboBox();
-
         LinkedList<DayTimeline> allDayTimelines = myDao.getAllTimelines();
         for(Timeline t : allDayTimelines){
             myComboBox.getItems().addAll(t.getTitle());
         }
         myComboBox.setPromptText("Choose the timeline you dickhead!");
-        //String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
-        //titleTextField.setPromptText(timelineTitle);
 
         this.setHideOnEscape(true);
         this.autoHideProperty().setValue(true);
@@ -49,9 +46,13 @@ public class EditTimelinePopOver extends PopOver{
         this.setHeight(200);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
-
-       // titleTextField.setText(timelineTitle);
-
+        String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
+        titleTextField.setText(timelineTitle);
+        try {
+            descriptionTextArea.setText(myDao.getTimeline(timelineTitle).getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
         startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
         endDatePicker.prefWidthProperty().bind(vbox.widthProperty());

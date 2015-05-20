@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import model.EventNT;
 import model.EventTime;
 
+import model.MyEvent;
 import org.controlsfx.control.PopOver;
 
 import java.time.LocalDate;
@@ -61,12 +62,38 @@ public class EditEventPopover extends PopOver {
             this.hide();
         });
 
-        abortRect.setOnMouseClicked(abort -> {
-            this.hide();
+        abortRect.setOnMouseClicked(abort -> {            this.hide();
         });
     }
 
-	public EditEventPopover(EventNT eventNT) {
-		
-	}
+    public EditEventPopover(EventNT event){
+        titleField.setText(event.getTitle());
+        descriptionField.setText(event.getDescription());
+
+        int monthStart = event.getDate().get((Calendar.MONTH)+1) % 12;
+        LocalDate startDate = LocalDate.of(event.getDate().get(Calendar.YEAR), monthStart, event.getDate().get(Calendar.DAY_OF_MONTH));
+
+        startDatePicker.setValue(startDate);
+
+        vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, endDatePicker, saveRect, abortRect);
+        this.setContentNode(vbox);
+
+        //Saves the changes from the GUI in the event
+        saveRect.setOnMouseClicked(saveChanges -> {
+            event.setTitle(titleField.getText());
+            event.setDescription(descriptionField.getText());
+
+            LocalDate start = startDatePicker.getValue();
+            LocalDate end = endDatePicker.getValue();
+
+            GregorianCalendar gregorianStart = new GregorianCalendar();
+            gregorianStart.set(start.getYear(), start.getMonthValue(), start.getDayOfMonth());
+            GregorianCalendar gregorianEnd = new GregorianCalendar();
+            gregorianEnd.set(end.getYear(), end.getMonthValue(), end.getDayOfMonth());
+            this.hide();
+        });
+
+        abortRect.setOnMouseClicked(abort -> {            this.hide();
+        });
+    }
 }

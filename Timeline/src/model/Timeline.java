@@ -22,10 +22,18 @@ public abstract class Timeline
 	private boolean isMonthTimeline = false;
 	private boolean isDayTimeline = false;
 
+	public void setEventTimes(TreeSet<EventTime> eventTimes) {
+		this.eventTimes = eventTimes;
+	}
+
+	public void setEventNTs(TreeSet<EventNT> eventNTs) {
+		this.eventNTs = eventNTs;
+	}
+
 	//For the different types of events
 	private TreeSet<EventNT> eventNTs;
-	private TreeSet<EventTime> eventTimes;
-	private TreeSet<MyEvent> myEvents;
+	protected TreeSet<EventTime> eventTimes;
+	protected TreeSet<MyEvent> myEvents;
 	public Timeline () { // Note: I need this constructor for the DAO ;) puss puss Mauro <3
     }
 

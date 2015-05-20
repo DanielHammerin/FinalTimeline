@@ -77,31 +77,31 @@ public class CreateTimelinePopOver extends PopOver{
 
             //This if-statement handles the choice of an annual,monthly or daily timeline
             if(tg.getSelectedToggle() == annualBtn){
-                YearTimelineGrid y = new YearTimelineGrid(new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                NewTimelineGrid y = new NewTimelineGrid(new YearTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
                 try {
                     dao.saveV2(y.getYearTimeline());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                vBoxMain.getChildren().add(y.getTimeLineBlock());
+                vBoxMain.getChildren().add(y);
                 timelines.add(y.getYearTimeline());
             }else if(tg.getSelectedToggle() == monthlyBtn){
-                MonthTimelineGrid m = new MonthTimelineGrid(new MonthTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                NewTimelineGrid m = new NewTimelineGrid(new MonthTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
                 try {
                     dao.saveV2(m.getMonthTimeline());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                vBoxMain.getChildren().add(m.getTimeLineBlock());
+                vBoxMain.getChildren().add(m);
                 timelines.add(m.getMonthTimeline());
             }else{
-                DayTimelineGrid d = new DayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+                NewTimelineGrid d = new NewTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
                 try {
                     dao.saveV2(d.getDayTimeline());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                vBoxMain.getChildren().add(d.getTimeLineBlock());
+                vBoxMain.getChildren().add(d);
                 timelines.add(d.getDayTimeline());
             }
             this.hide();
