@@ -1,6 +1,7 @@
 package model;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -82,7 +83,10 @@ public class DayTimeline extends Timeline
 	/* Same as previous*/
 	SimpleDateFormat dayF = new SimpleDateFormat("dd");
 	private static final int MAX_DAYS = 365;
-	
+	//Constructor for the database
+	public DayTimeline(String title) {
+		this.setTitle(title);
+	}
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
 		super(title, description, "d");
@@ -96,10 +100,16 @@ public class DayTimeline extends Timeline
 			alert.showAndWait();
 			throw new IllegalArgumentException("The start date has to be before the end date.");
 		}
-		int startYear = Integer.parseInt(yearF.format(start.getTime()));
-		validateDates(startYear ,start, end);
+		int startYear1 = Integer.parseInt(yearF.format(start.getTime()));
+		validateDates(startYear1 ,start, end);
 		startDate = start;
 		endDate = end;
+		startYear = start.get(Calendar.YEAR);
+		startMonth = start.get(Calendar.MONTH);
+		startDay = start.get(Calendar.DAY_OF_MONTH);
+		endYear = end.get(Calendar.YEAR);
+		endMonth = end.get(Calendar.MONTH);
+		endDay = end.get(Calendar.DAY_OF_MONTH);
 	}
 
 	private void validateDates(int startYear, GregorianCalendar start, GregorianCalendar end) 

@@ -4,9 +4,9 @@ import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import model.DayTimeline;
@@ -27,7 +27,7 @@ public class MainWindowController implements Initializable{
 
 	LoadTimelinePopOver popOverLoad;
 	CreateTimelinePopOver popOverNew;
-	NewEventPopOver popOverNewEvent;
+	EditTimelinePopOver popOverEditTimeline;
 	ArrayList<Timeline> allTheTimelines = new ArrayList<Timeline>();
 
 	@Override
@@ -44,9 +44,10 @@ public class MainWindowController implements Initializable{
 		DAO d = new DAO();
 		try {
 			d.clearDatabase();
-			d.saveV2(new YearTimeline("a", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
-			d.saveV2(new DayTimeline("aaa", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2015, 12, 30)));
-			d.saveV2(new MonthTimeline("m","description",new GregorianCalendar(2015, 4, 01), new GregorianCalendar(2015, 9, 15)));
+//			d.saveV2(new YearTimeline("a", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
+			DayTimeline day = new DayTimeline("aaa", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2015, 12, 30));
+			d.saveV2(day);
+//			d.saveV2(new MonthTimeline("m","description",new GregorianCalendar(2015, 4, 01), new GregorianCalendar(2015, 9, 15)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,9 +88,9 @@ public class MainWindowController implements Initializable{
 
 
 		addEventRect.setOnMouseClicked(openAddEvent -> {
-			if(popOverNewEvent != null && popOverNewEvent.isShowing()){
-				popOverNewEvent.hide();
-				popOverNewEvent = null;
+			if(popOverEditTimeline != null && popOverEditTimeline.isShowing()){
+				popOverEditTimeline.hide();
+				popOverEditTimeline = null;
 			}else{
 				if(popOverNew !=null && popOverNew.isShowing()) {
 					popOverNew.hide();
@@ -99,11 +100,24 @@ public class MainWindowController implements Initializable{
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
-				popOverNewEvent = new NewEventPopOver(allTheTimelines);
-				popOverNewEvent.show(addEventRect);
+				DAO dao = new DAO();
+				for(DayTimeline timeline : dao.getAllTimelines()) {
+					allTheTimelines.add(timeline);
+				}
+				popOverEditTimeline = new EditTimelinePopOver(this);
+				popOverEditTimeline.show(addEventRect);
 			}
 
 		});
+	}
+
+	public void redrawTimelines(){
+		DAO dao = new DAO();
+		vBoxModules.getChildren().clear();
+		LinkedList<DayTimeline> allTheMothaFuckinTimelines = dao.getAllTimelines();
+		for(Timeline t : allTheMothaFuckinTimelines){
+			vBoxModules.getChildren().add(new NewTimelineGrid(t));
+		}
 	}
 
 	@FXML

@@ -33,11 +33,13 @@ public class EditTimelinePopOver extends PopOver{
 
         myComboBox = new ComboBox();
 
-        LinkedList<Timeline> allTimlines = myDao.getAllTimelines();
-        for(Timeline t : allTimlines){
+        LinkedList<DayTimeline> allDayTimelines = myDao.getAllTimelines();
+        for(Timeline t : allDayTimelines){
             myComboBox.getItems().addAll(t.getTitle());
         }
         myComboBox.setPromptText("Choose the timeline you dickhead!");
+        //String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
+        //titleTextField.setPromptText(timelineTitle);
 
         this.setHideOnEscape(true);
         this.autoHideProperty().setValue(true);
@@ -47,13 +49,9 @@ public class EditTimelinePopOver extends PopOver{
         this.setHeight(200);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
-        String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
-        titleTextField.setText(timelineTitle);
-        try {
-            descriptionTextArea.setText(myDao.getTimeline(timelineTitle).getDescription());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+       // titleTextField.setText(timelineTitle);
+
         myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
         startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
         endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
@@ -70,11 +68,11 @@ public class EditTimelinePopOver extends PopOver{
             gregorianStart.set(localStart.getYear(), localStart.getMonthValue(), localStart.getDayOfMonth());
             GregorianCalendar gregorianEnd = new GregorianCalendar();
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
-            String a = (String) myComboBox.getSelectionModel().getSelectedItem();
-            DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
+            String timelineTitle = (String)myComboBox.getSelectionModel().getSelectedItem();
+            DayTimeline dayTimeline = new DayTimeline(timelineTitle, descriptionTextArea.getText(), gregorianStart, gregorianEnd);
             DAO dao = new DAO();
             try {
-                dao.updateTimelineV2(dao.getTimeline(timelineTitle), dayTimeline);
+                dao.updateTimelineV2(dao.getDayTimeline(timelineTitle), dayTimeline);
                 mwc.redrawTimelines();
             } catch (Exception e) {
                 e.printStackTrace();
