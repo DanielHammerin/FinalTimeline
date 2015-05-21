@@ -23,23 +23,26 @@ import view.*;
 public class MainWindowController implements Initializable{
 	LoadTimelinePopOver popOverLoad;
 	CreateTimelinePopOver popOverNew;
-	EditTimelinePopOver popOverNewEvent;
+	EditTimelinePopOver popOverEditTimeline;
+	AddNewEventPopOver popOverAddNewEvent;
+
 	ArrayList<Timeline> allTheTimelines = new ArrayList<Timeline>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		mainScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		NewTimelineGrid a = new NewTimelineGrid(new DayTimeline("Day  Timline ", "Description", new GregorianCalendar(2015, 12, 1), new GregorianCalendar(2015, 12, 30)));
-		NewTimelineGrid b = new NewTimelineGrid(new MonthTimeline("Month Timline","description",new GregorianCalendar(2015, 4, 1), new GregorianCalendar(2016, 9, 15)));
-		NewTimelineGrid c = new NewTimelineGrid(new YearTimeline("Year Timeline", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
+		NewTimelineGrid a = new NewTimelineGrid(new DayTimeline("Day  Timline ", "Description", new GregorianCalendar(2015, 5, 20), new GregorianCalendar(2015, 6, 30)));
+		//NewTimelineGrid b = new NewTimelineGrid(new MonthTimeline("Month Timline","description",new GregorianCalendar(2015, 4, 1), new GregorianCalendar(2016, 9, 15)));
+		//NewTimelineGrid c = new NewTimelineGrid(new YearTimeline("Year Timeline", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
+		//vBoxModules.getChildren().add(a);
 		vBoxModules.getChildren().add(a);
-		vBoxModules.getChildren().add(b);
-		vBoxModules.getChildren().add(c);
+		//vBoxModules.getChildren().add(c);
 		DAO d = new DAO();
 		try {
 			d.clearDatabase();
-			d.saveV2(new YearTimeline("a", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)));
-			d.saveV2(new DayTimeline("aaa", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2015, 12, 30)));
-			d.saveV2(new MonthTimeline("m","description",new GregorianCalendar(2015, 4, 01), new GregorianCalendar(2015, 9, 15)));
+			d.saveV2(a.getDayTimeline());
+//       d.saveV2(new YearTimeline("a", "Description", new GregorianCalendar(2015, 12, 01), new GregorianCalendar(2030, 12, 01)
+//       d.saveV2(new MonthTimeline("m","description",new GregorianCalendar(2015, 4, 01), new GregorianCalendar(2015, 9, 15)));
+			d.saveV2(new DayTimeline("MothafuckinTamelane ", "Description", new GregorianCalendar(2015, 12, 2), new GregorianCalendar(2015, 12, 30)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +59,7 @@ public class MainWindowController implements Initializable{
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
-				popOverNew = new CreateTimelinePopOver(vBoxModules,allTheTimelines);
+				popOverNew = new CreateTimelinePopOver(vBoxModules);
 				popOverNew.show(newTimelineRect);
 			}
 		});
@@ -76,9 +79,9 @@ public class MainWindowController implements Initializable{
 		});
 
 		addEventRect.setOnMouseClicked(openAddEvent -> {
-			if(popOverNewEvent != null && popOverNewEvent.isShowing()){
-				popOverNewEvent.hide();
-				popOverNewEvent = null;
+			if(popOverEditTimeline != null && popOverEditTimeline.isShowing()){
+				popOverEditTimeline.hide();
+				popOverEditTimeline = null;
 			}else{
 				if(popOverNew !=null && popOverNew.isShowing()) {
 					popOverNew.hide();
@@ -89,22 +92,52 @@ public class MainWindowController implements Initializable{
 					popOverLoad = null;
 				}
 				DAO dao = new DAO();
-				for(Timeline timeline : dao.getAllTimelines()) {
+				for(DayTimeline timeline : dao.getAllTimelines()) {
 					allTheTimelines.add(timeline);
 				}
-				popOverNewEvent = new EditTimelinePopOver(this);
-				popOverNewEvent.show(addEventRect);
+				popOverEditTimeline = new EditTimelinePopOver(this);
+				popOverEditTimeline.show(addEventRect);
 			}
 		});
+
+
+		addNewEventRect.setOnMouseClicked(openAddEvent -> {
+			if(popOverAddNewEvent != null && popOverAddNewEvent.isShowing()){
+				popOverAddNewEvent.hide();
+				popOverAddNewEvent = null;
+			}else{
+				if(popOverNew !=null && popOverNew.isShowing()) {
+					popOverNew.hide();
+					popOverNew = null;
+				}
+				if(popOverLoad != null && popOverLoad.isShowing()){
+					popOverLoad.hide();
+					popOverLoad = null;
+				}
+				try {
+					popOverAddNewEvent = new AddNewEventPopOver(this);
+
+					popOverAddNewEvent.show(addEventRect);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+
 	}
+
 	public void redrawTimelines(){
 		DAO dao = new DAO();
 		vBoxModules.getChildren().clear();
-		LinkedList<Timeline> allTheMothaFuckinTimelines = dao.getAllTimelines();
+		LinkedList<DayTimeline> allTheMothaFuckinTimelines = dao.getAllTimelines();
 		for(Timeline t : allTheMothaFuckinTimelines){
 			vBoxModules.getChildren().add(new NewTimelineGrid(t));
 		}
 	}
+	@FXML
+	private Rectangle addNewEventRect;
+
 	@FXML
 	private Rectangle newTimelineRect;
 	@FXML
