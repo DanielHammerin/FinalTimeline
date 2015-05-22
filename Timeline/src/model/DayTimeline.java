@@ -1,21 +1,17 @@
 package model;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
 public class DayTimeline extends Timeline
 {
 	public void setEndDate(GregorianCalendar endDate) {
 		this.endDate = endDate;
 	}
-
 	public void setStartDate(GregorianCalendar startDate) {
 		this.startDate = startDate;
 	}
-
 	private GregorianCalendar startDate;
 	private GregorianCalendar endDate;
 	private int startYear;
@@ -25,58 +21,10 @@ public class DayTimeline extends Timeline
 	private int endMonth;
 	private int endDay;
 
-	public int getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-
-	public int getStartMonth() {
-		return startMonth;
-	}
-
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-
-	public int getStartDay() {
-		return startDay;
-	}
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-
-	public int getEndYear() {
-		return endYear;
-	}
-
-	public void setEndYear(int endYear) {
-		this.endYear = endYear;
-	}
-
-	public int getEndMonth() {
-		return endMonth;
-	}
-
-	public void setEndMonth(int endMonth) {
-		this.endMonth = endMonth;
-	}
-
-	public int getEndDay() {
-		return endDay;
-	}
-
-	public void setEndDay(int endDay) {
-		this.endDay = endDay;
-	}
-
 	/* monthF can be used to get a numerical value from an gregorian calendar
-         * object. When you use a gregorian calendar as argument it returns a string
-         * representing the month. You have to parse it to an int to use it as a
-         * number.*/
+             * object. When you use a gregorian calendar as argument it returns a string
+             * representing the month. You have to parse it to an int to use it as a
+             * number.*/
 	SimpleDateFormat monthF = new SimpleDateFormat("MM");
 	/* Same as monthF.*/
 	SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyyyy");
@@ -87,6 +35,7 @@ public class DayTimeline extends Timeline
 	public DayTimeline(String title) {
 		this.setTitle(title);
 	}
+
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
 		super(title, description, "d");
@@ -96,7 +45,6 @@ public class DayTimeline extends Timeline
 			alert.setTitle("Error Dialog");
 			alert.setHeaderText("Error");
 			alert.setContentText("The start date has to be before the end date.");
-
 			alert.showAndWait();
 			throw new IllegalArgumentException("The start date has to be before the end date.");
 		}
@@ -111,8 +59,7 @@ public class DayTimeline extends Timeline
 		endMonth = end.get(Calendar.MONTH);
 		endDay = end.get(Calendar.DAY_OF_MONTH);
 	}
-
-	private void validateDates(int startYear, GregorianCalendar start, GregorianCalendar end) 
+	private void validateDates(int startYear, GregorianCalendar start, GregorianCalendar end)
 	{
 		GregorianCalendar startCopy = (GregorianCalendar) start.clone();
 		int year = startYear + 1;
@@ -126,17 +73,13 @@ public class DayTimeline extends Timeline
 			alert.setHeaderText("Warning");
 			alert.setContentText("The time line can maximum be " + MAX_DAYS
 					+ " days long.");
-
 			alert.showAndWait();
 			throw new IllegalArgumentException("The time line can maximum be " + MAX_DAYS
 					+ " days long.");
 		}
 	}
-
 	public GregorianCalendar getStartDate() { return startDate; }
-
 	public GregorianCalendar getEndDate() { return endDate; }
-
 
 	/**
 	 * Method for adding an event without duration to the treeset of the time line containing
@@ -153,21 +96,19 @@ public class DayTimeline extends Timeline
 		}
 		else
 		{
-			
+
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error Dialog");
 			alert.setHeaderText("Error");
 			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
-
 			alert.showAndWait();
-			
-			
+
+
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
 	}
-
 	/**
 	 * Method for adding an event with duration to the treeset of the time line containing
 	 * the events with duration.
@@ -188,13 +129,48 @@ public class DayTimeline extends Timeline
 			alert.setHeaderText("Error");
 			alert.setContentText("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
-
 			alert.showAndWait();
-			
+
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
 	}
 
+	public int getStartYear() {
+		return startYear;
+	}
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+	public int getStartMonth() {
+		return startMonth;
+	}
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+	public int getStartDay() {
+		return startDay;
+	}
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+	public int getEndYear() {
+		return endYear;
+	}
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+	public int getEndMonth() {
+		return endMonth;
+	}
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+	public int getEndDay() {
+		return endDay;
+	}
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
 
 }

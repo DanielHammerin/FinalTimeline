@@ -1,16 +1,11 @@
 package controller;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.TreeSet;
 
-import model.DayTimeline;
-import model.MonthTimeline;
-import model.Timeline;
-import model.YearTimeline;
-
+import model.*;
 import com.db4o.*;
-
 
 /**
  * A database access object class to connect between the view, controller and database.
@@ -18,19 +13,16 @@ import com.db4o.*;
  *
  */
 public class DAO implements daoInterface {
-
 	/**
 	 * Database access object constructor.
 	 */
 	public DAO() {}
-
 	/**
 	 * Saves the timeline in the database.
-	 * @param The timeline to be added.
+	 * @param newTimeline timeline to be added.
 	 * @exception Exception for opening or creating the database file.
 	 */
 	public void saveToDataBase(Timeline newTimeline) throws Exception {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
@@ -54,37 +46,27 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
-	public void saveV2(Timeline timeline) throws Exception{
+	public void saveV2(DayTimeline timeline) throws Exception{
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
-			if(timeline.isDayTimeline()) {
-				DayTimeline day = (DayTimeline) timeline;
+				if(timeline.getEventNTs().size() != 0) {
+					for (EventNT eventNT : timeline.getEventNTs()) {
+						eventNT.setStartDay((eventNT.getDate().get(Calendar.DAY_OF_MONTH)));
+						eventNT.setStartMonth((eventNT.getDate().get(Calendar.MONTH)));
+						eventNT.setStartYear(((eventNT.getDate().get(Calendar.YEAR))));
+					}
+				}
+				if(timeline.getEventTimes().size() != 0) {
+					for (EventTime eventTime : timeline.getEventTimes()) {
+						eventTime.setStartDay((eventTime.getStartTime().get(Calendar.DAY_OF_MONTH)));
+						eventTime.setStartMonth((eventTime.getStartTime().get(Calendar.MONTH)));
+						eventTime.setStartYear(((eventTime.getStartTime().get(Calendar.YEAR))));
+						eventTime.setEndDay((eventTime.getFinishTime().get(Calendar.DAY_OF_MONTH)));
+						eventTime.setEndMonth((eventTime.getFinishTime().get(Calendar.MONTH)));
+						eventTime.setEndYear(((eventTime.getFinishTime().get(Calendar.YEAR))));
+					}
+				}
 
-				day.setStartYear(day.getStartDate().get(Calendar.YEAR));
-				day.setStartMonth(day.getStartDate().get(Calendar.MONTH));
-				day.setStartDay(day.getStartDate().get(Calendar.DAY_OF_MONTH));
-				day.setEndYear(day.getEndDate().get(Calendar.YEAR));
-				day.setEndMonth(day.getEndDate().get(Calendar.MONTH));
-				day.setEndDay(day.getEndDate().get(Calendar.DAY_OF_MONTH));
-//			}
-//			if(timeline.isMonthTimeline()){
-//				MonthTimeline month = (MonthTimeline) timeline;
-//
-//				month.setStartYear(month.getStartYear());
-//				month.setStartMonth(month.getStartMonth() - 1);
-//				month.setEndYear(month.getEndYear());
-//				month.setEndMonth(month.getEndMonth() - 1);
-//
-//			}
-//			else if (timeline.isYearTimeline()) {}
-//			ObjectSet<Timeline> retriever = db.query(Timeline.class);
-//			while (retriever.hasNext()){
-//				if (timeline.getTitle().equalsIgnoreCase(retriever.next().getTitle())){
-//					throw new Exception("A timeline with the same title already exists! Please change your "
-//							+ "timeline title.");
-//				}
-			}
 			db.store(timeline);
 			db.commit();
 			System.out.println ("\nMessage: The timeline is succesfully saved in the database!");
@@ -93,18 +75,16 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	/**
 	 * Gets the timeline from the database.
-	 * @param The title of the timeline to be retrieved.
+	 * @param title title of the timeline to be retrieved.
 	 * @return The required timeline.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public Timeline getTimeline(String title) throws Exception {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try{
-			Timeline aux = new Timeline(title, "", ""){};	//Creates an auxiliary timeline with the required title.
+			Timeline aux = new Timeline(title, "", ""){};  //Creates an auxiliary timeline with the required title.
 			ObjectSet<Timeline> retriever = db.query(Timeline.class); //Puts all the timelines from the database in an ObjectSet.
 			//Searches in the ObjectSet for the timeline with the same title.
 			for(int i = 0; i<retriever.size(); i++) {
@@ -118,12 +98,10 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	public DayTimeline getDayTimeline(String title) throws Exception {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try{
-			DayTimeline aux = new DayTimeline(title);	//Creates an auxiliary timeline with the required title.
+			DayTimeline aux = new DayTimeline(title);  //Creates an auxiliary timeline with the required title.
 			ObjectSet<DayTimeline> retriever = db.queryByExample(DayTimeline.class); //Puts all the timelines from the database in an ObjectSet.
 			//Searches in the ObjectSet for the timeline with the same title.
 			for(int i = 0; i<retriever.size(); i++) {
@@ -133,6 +111,17 @@ public class DAO implements daoInterface {
 					GregorianCalendar gregorianStart = new GregorianCalendar(day.getStartYear(), day.getStartMonth(), day.getStartDay());
 					GregorianCalendar gregorianEnd = new GregorianCalendar(day.getEndYear(), day.getEndMonth(), day.getEndDay());
 					DayTimeline newDay = new DayTimeline(day.getTitle(), day.getDescription(), gregorianStart, gregorianEnd);
+					if(retriever.get(i).getEventNTs().size() != 0) {
+						for (EventNT eventNT : retriever.get(i).getEventNTs()) {
+							eventNT.setDateOfEvent(new GregorianCalendar(eventNT.getStartYear(), eventNT.getStartMonth(), eventNT.getStartDay()));
+						}
+					}
+					if(retriever.get(i).getEventTimes().size() != 0) {
+						for (EventTime eventTime : retriever.get(i).getEventTimes()) {
+							eventTime.setStartTime(new GregorianCalendar(eventTime.getStartYear(), eventTime.getStartMonth(), eventTime.getStartDay()));
+							eventTime.setFinishTime(new GregorianCalendar(eventTime.getEndYear(), eventTime.getEndMonth(), eventTime.getEndDay()));
+						}
+					}
 					return newDay;
 				}
 			}
@@ -142,15 +131,14 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	/**
 	 * Searches the database for a specific timeline.
-	 * @param The title of the timeline to be retrieved.
+	 * @param title title of the timeline to be retrieved.
 	 * @return true if the timeline exists in the database.
 	 */
 	@Override
-	public boolean lookUp(String title) { 
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");	
+	public boolean lookUp(String title) {
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
 			ObjectSet <Timeline> retriever = db.query(Timeline.class); //Puts all the timelines from the database in an ObjectSet.
 			boolean flag = false;
@@ -166,16 +154,13 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	/**
 	 * Deletes a specific timeline from the database.
-	 * @param The timeline to be deleted.
+	 * @param myTimeline timeline to be deleted.
 	 */
 	@Override
 	public void deleteFromDatabase(Timeline myTimeline) {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
-
 		try {
 			ObjectSet <Timeline> retriever = db.queryByExample(myTimeline);
 			if (retriever.hasNext()){ // check if the Timeline is in the database
@@ -185,66 +170,55 @@ public class DAO implements daoInterface {
 			} else {
 				System.out.println ("\nError!: Timeline not found in the database!.");
 			}
-		}	finally {
+		}  finally {
 			db.close();
 		}
 	}
-
 	/**
 	 * Clears the database completely.
 	 */
 	@Override
 	public void clearDatabase() {
-
-		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");		
-
+		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		try {
-			ObjectSet <Timeline> retriever = db.query(Timeline.class);
-
+			ObjectSet <DayTimeline> retriever = db.queryByExample(DayTimeline.class);
 			while (retriever.hasNext()){
 				db.delete(retriever.next());
 			}
+			db.commit();
 			System.out.println ("\nMessage: All timelines have been deleted from the database!");
 		}
 		finally {
 			db.close();
 		}
 	}
-
 	/**
 	 * Updates a specific timeline.
-	 * @param The timeline to be updated, its title and description. 
-	 * @throws Exception 
+	 * @param newTitle timeline to be updated, its title and description.
+	 * @throws Exception
 	 */
 	@Override
 	public void updateTimeline (Timeline myTimeline, String newTitle, String newDescription, String typeOfTimeline) throws Exception {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 		boolean flag = false;
-
 		try {
 			ObjectSet <Timeline> retriever = db.queryByExample(myTimeline);
-
 			if (retriever.hasNext()){
 				Timeline updatedTimeline = new Timeline(newTitle, newDescription, typeOfTimeline) {};
 				retriever = db.queryByExample(updatedTimeline);
-
 				if (!retriever.hasNext()){
 					System.out.println ("\nMessage: " + myTimeline.getTitle() + " updated to " + newTitle +
 							" by " + newDescription);
 					db.store(updatedTimeline);
 					db.commit();
 					flag = true;
-
 				} else {
 					throw new Exception(newTitle + " is already in the the database!");
 				}
 			} else {
 				throw new Exception(myTimeline.getTitle() + " not found in the database!");
 			}
-
 			if (flag){
-
 			}
 			retriever = db.queryByExample(myTimeline);
 			if (retriever.hasNext()){ // check if the Timeline is in the database
@@ -259,12 +233,32 @@ public class DAO implements daoInterface {
 
 	public void updateTimelineV2(DayTimeline oldTimeline, DayTimeline newTimeline) {
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
-
 		try {
-			ObjectSet<Timeline> retriever = db.queryByExample(oldTimeline);
-			if(retriever.hasNext()) {
-				db.delete(retriever.next());
-				db.commit();
+			ObjectSet<DayTimeline> retriever = db.queryByExample(DayTimeline.class);
+			//Searches in the ObjectSet for the timeline with the same title.
+			for(int i = 0; i<retriever.size(); i++) {
+				if (retriever.get(i).getTitle().equalsIgnoreCase(oldTimeline.getTitle())) {
+
+					db.delete(retriever.next());
+					db.commit();
+				}
+				if (newTimeline.getEventNTs().size() != 0) {
+					for (EventNT eventNT : newTimeline.getEventNTs()) {
+						eventNT.setStartDay((eventNT.getDate().get(Calendar.DAY_OF_MONTH)));
+						eventNT.setStartMonth((eventNT.getDate().get(Calendar.MONTH)));
+						eventNT.setStartYear(((eventNT.getDate().get(Calendar.YEAR))));
+					}
+				}
+				if (newTimeline.getEventTimes().size() != 0) {
+					for (EventTime eventTime : newTimeline.getEventTimes()) {
+						eventTime.setStartDay((eventTime.getStartTime().get(Calendar.DAY_OF_MONTH)));
+						eventTime.setStartMonth((eventTime.getStartTime().get(Calendar.MONTH)));
+						eventTime.setStartYear(((eventTime.getStartTime().get(Calendar.YEAR))));
+						eventTime.setEndDay((eventTime.getFinishTime().get(Calendar.DAY_OF_MONTH)));
+						eventTime.setEndMonth((eventTime.getFinishTime().get(Calendar.MONTH)));
+						eventTime.setEndYear(((eventTime.getFinishTime().get(Calendar.YEAR))));
+					}
+				}
 			}
 			db.store(newTimeline);
 			db.commit();
@@ -274,25 +268,19 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	/**
 	 * Prints out all the timelines in the database.
 	 */
 	@Override
 	public void printDatabase() {
-
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
-
 		try {
 			ObjectSet <Timeline> retriever = db.query(Timeline.class);
-
 			Timeline aux = new Timeline() {};
-
 			if (!retriever.hasNext()){
 				System.out.println ("\nMessage: The database is currently empty!");
 			} else {
 				System.out.println ("\nLIST OF TIMELINES IN THE DATABASE");
-
 				while (retriever.hasNext()){
 					aux = retriever.next();
 					if(aux.isDayTimeline()){
@@ -317,65 +305,70 @@ public class DAO implements daoInterface {
 			db.close();
 		}
 	}
-
 	/**
 	 * Returns all the timelines in the database.
 	 * @return a linked list of timelines.
 	 */
-//	public LinkedList <DayTimeline> getAllTimelines() {
+// public LinkedList <DayTimeline> getAllTimelines() {
 //
-//		LinkedList <DayTimeline> findAll = new LinkedList <DayTimeline> ();
-//		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
+//    LinkedList <DayTimeline> findAll = new LinkedList <DayTimeline> ();
+//    ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
 //
-//		try{
-//			ObjectSet <DayTimeline> retriever = db.query(DayTimeline.class);
-//			if (retriever.hasNext()){ // check if there're any Timelines to retrieve
-//				while (retriever.hasNext()){ // retrieves all Timelines in the database
-//						findAll.add(retriever.next());
-//				}
-//				return findAll;
+//    try{
+//       ObjectSet <DayTimeline> retriever = db.query(DayTimeline.class);
+//       if (retriever.hasNext()){ // check if there're any Timelines to retrieve
+//          while (retriever.hasNext()){ // retrieves all Timelines in the database
+//                findAll.add(retriever.next());
+//          }
+//          return findAll;
 //
-//			} else {
-//				System.out.println ("\nMessage: " + "The database is currently empty!.");
-//				return null;
-//			}
-//		}
-//		finally {
-//			db.close();
-//		}
-//	}
-
+//       } else {
+//          System.out.println ("\nMessage: " + "The database is currently empty!.");
+//          return null;
+//       }
+//    }
+//    finally {
+//       db.close();
+//    }
+// }
 	public LinkedList<DayTimeline> getAllTimelines() {
-
 		LinkedList <DayTimeline> findAll = new LinkedList <DayTimeline> ();
 		ObjectContainer db = Db4o.openFile(Db4o.newConfiguration(), "timelineDatabase.data");
-
-		try{
-			ObjectSet <DayTimeline> retriever = db.query(DayTimeline.class);
-
-			if (retriever.hasNext()){ // check if there're any Timelines to retrieve
-				while (retriever.hasNext()){ // retrieves all Timelines in the database
+		try {
+			ObjectSet<DayTimeline> retriever = db.query(DayTimeline.class);
+			if (retriever.hasNext()) { // check if there're any Timelines to retrieve
+				while (retriever.hasNext()) { // retrieves all Timelines in the database
 
 					DayTimeline day = retriever.next();
+					if (day.getEventNTs().size() != 0) {
+						for (EventNT eventNT : day.getEventNTs()) {
+							eventNT.setDateOfEvent(new GregorianCalendar(eventNT.getStartYear(), eventNT.getStartMonth(), eventNT.getStartDay()));
+						}
+					}
 
+					if (day.getEventTimes().size() != 0) {
+						for (EventTime eventTime : day.getEventTimes()) {
+							eventTime.setStartTime(new GregorianCalendar(eventTime.getStartYear(), eventTime.getStartMonth(), eventTime.getStartDay()));
+							eventTime.setFinishTime(new GregorianCalendar(eventTime.getEndYear(), eventTime.getEndMonth(), eventTime.getEndDay()));
+						}
+					}
 					GregorianCalendar gregorianStart = new GregorianCalendar(day.getStartYear(), day.getStartMonth(), day.getStartDay());
 					GregorianCalendar gregorianEnd = new GregorianCalendar(day.getEndYear(), day.getEndMonth(), day.getEndDay());
 					DayTimeline newDay = new DayTimeline(day.getTitle(), day.getDescription(), gregorianStart, gregorianEnd);
 					findAll.add(newDay);
-
 				}
-				return findAll;
+					return findAll;
+				}else{
+					System.out.println("\nMessage: " + "The database is currently empty!.");
+					return null;
+				}
 
-			} else {
-				System.out.println ("\nMessage: " + "The database is currently empty!.");
-				return null;
-			}
 		}
 		finally {
 			db.close();
 		}
-	}
 
+	}
 	/**
 	 * Checks whether the database is empty.
 	 * @return true if the database is empty.
@@ -391,5 +384,3 @@ public class DAO implements daoInterface {
 		}
 	}
 }
-
-

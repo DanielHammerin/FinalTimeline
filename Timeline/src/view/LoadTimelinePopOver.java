@@ -2,6 +2,7 @@
 package view;
 
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -55,7 +56,7 @@ public class LoadTimelinePopOver extends PopOver {
         c2.setPercentWidth(50);
 
 
-        myGridPane.getColumnConstraints().addAll(c1, c2);
+        myGridPane.getColumnConstraints().addAll(c1,c2);
 
 
         loadRect = new myRectangleButtons("Load",Color.DARKGREEN);
@@ -71,7 +72,7 @@ public class LoadTimelinePopOver extends PopOver {
 
 
         messageLabel.setTextFill(Color.DARKRED);
-        LinkedList<Timeline> allTimelines = dao.getAllTimelines();
+        LinkedList<DayTimeline> allTimelines = dao.getAllTimelines();
 
         for (int i = 0; i < allTimelines.size(); i++){ // add timeline titles to the list view
             timelinesLV.add(allTimelines.get(i).getTitle());
@@ -93,18 +94,6 @@ public class LoadTimelinePopOver extends PopOver {
                 if (dao.getTimeline(duda).isDayTimeline() == true && dao.getTimeline(duda).isMonthTimeline() == false && dao.getTimeline(duda).isYearTimeline() == false) {
                     NewTimelineGrid d = new NewTimelineGrid((DayTimeline) dao.getTimeline(duda));
                     mainVBox.getChildren().add(d);
-                    timelines.add(d.getDayTimeline());
-                    this.hide();
-                } else if (dao.getTimeline(duda).isMonthTimeline() == true && dao.getTimeline(duda).isDayTimeline() == false && dao.getTimeline(duda).isYearTimeline() == false) {
-                    //dao.printDatabase();
-                    NewTimelineGrid m = new NewTimelineGrid((MonthTimeline) dao.getTimeline(duda));
-                    mainVBox.getChildren().add(m);
-                    timelines.add(m.getMonthTimeline());
-                    this.hide();
-                } else if (dao.getTimeline(duda).isYearTimeline() == true && dao.getTimeline(duda).isMonthTimeline() == false && dao.getTimeline(duda).isDayTimeline() == false) {
-                    NewTimelineGrid y = new NewTimelineGrid((YearTimeline) dao.getTimeline(duda));
-                    mainVBox.getChildren().add(y);
-                    timelines.add(y.getYearTimeline());
                     this.hide();
                 }
             } catch (Exception e) {
