@@ -11,6 +11,13 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 
 	private GregorianCalendar startTime;
 	private GregorianCalendar finishTime;
+
+	private int startYear;
+	private int startMonth;
+	private int startDay;
+	private int endYear;
+	private int endMonth;
+	private int endDay;
 	Pane eventPane;
 	EditEventPopover editEventPopover;
 	
@@ -81,5 +88,55 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 		}
 		return isOverlapping;
 	}
+
+
+	public int getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public int getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+
+	public int getEndYear() {
+		return endYear;
+	}
+
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+
+	public int getEndMonth() {
+		return endMonth;
+	}
+
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+
+	public int getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
+
 
 }

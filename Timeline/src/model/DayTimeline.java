@@ -20,42 +20,7 @@ public class DayTimeline extends Timeline
 	private int endYear;
 	private int endMonth;
 	private int endDay;
-	public int getStartYear() {
-		return startYear;
-	}
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-	public int getStartMonth() {
-		return startMonth;
-	}
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-	public int getStartDay() {
-		return startDay;
-	}
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-	public int getEndYear() {
-		return endYear;
-	}
-	public void setEndYear(int endYear) {
-		this.endYear = endYear;
-	}
-	public int getEndMonth() {
-		return endMonth;
-	}
-	public void setEndMonth(int endMonth) {
-		this.endMonth = endMonth;
-	}
-	public int getEndDay() {
-		return endDay;
-	}
-	public void setEndDay(int endDay) {
-		this.endDay = endDay;
-	}
+
 	/* monthF can be used to get a numerical value from an gregorian calendar
              * object. When you use a gregorian calendar as argument it returns a string
              * representing the month. You have to parse it to an int to use it as a
@@ -70,6 +35,7 @@ public class DayTimeline extends Timeline
 	public DayTimeline(String title) {
 		this.setTitle(title);
 	}
+
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
 		super(title, description, "d");
@@ -168,6 +134,43 @@ public class DayTimeline extends Timeline
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
+	}
+
+	public int getStartYear() {
+		return startYear;
+	}
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+	public int getStartMonth() {
+		return startMonth;
+	}
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+	public int getStartDay() {
+		return startDay;
+	}
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+	public int getEndYear() {
+		return endYear;
+	}
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+	public int getEndMonth() {
+		return endMonth;
+	}
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+	public int getEndDay() {
+		return endDay;
+	}
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
 	}
 
 }
