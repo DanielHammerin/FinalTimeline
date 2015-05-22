@@ -48,6 +48,11 @@
                               <Insets left="20.0" top="20.0" />
                            </VBox.margin>
                         </Rectangle>
+                         <Rectangle fx:id="addNewEventRect" fill="#06ab50" height="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="75.0">
+                             <VBox.margin>
+                                 <Insets left="20.0" top="20.0" />
+                             </VBox.margin>
+                         </Rectangle>
                      </children>
                   </VBox>
                </children>
