@@ -9,11 +9,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 public class EventNT extends MyEvent implements Comparable<EventNT> {
-	
+
 	private GregorianCalendar dateOfEvent;
 	private Circle circle;
 	Pane backGroundPane;
 	StackPane eventPane;
+
+
+	private int startYear;
+	private int startMonth;
+	private int startDay;
 		
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
@@ -59,6 +64,39 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 				+ beforeEndOfThisEvt);
 		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
 	}
+
+	public int getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+
+	public int getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+
+	public GregorianCalendar getDateOfEvent() {
+		return dateOfEvent;
+	}
+
+	public void setDateOfEvent(GregorianCalendar dateOfEvent) {
+		this.dateOfEvent = dateOfEvent;
+	}
+
 
 }
 
