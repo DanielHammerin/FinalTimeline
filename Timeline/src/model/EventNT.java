@@ -1,48 +1,36 @@
 package model;
 
 import java.util.GregorianCalendar;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
+
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import view.EditEventPopover;
+import javafx.scene.text.Text;
 
 public class EventNT extends MyEvent implements Comparable<EventNT> {
-
-	public GregorianCalendar getDateOfEvent() {
-		return dateOfEvent;
-	}
-
-	public void setDateOfEvent(GregorianCalendar dateOfEvent) {
-		this.dateOfEvent = dateOfEvent;
-	}
-
-	private GregorianCalendar dateOfEvent;
-	private int startYear;
-	private int startMonth;
-	private int startDay;
-	Pane eventPane;
-	EditEventPopover editEventPopover;
 	
+	private GregorianCalendar dateOfEvent;
+	private Circle circle;
+	Pane backGroundPane;
+	StackPane eventPane;
+		
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
-
-	    eventPane = new Pane();
-		eventPane.setPrefWidth(50);
+		circle = new Circle(20);
+		backGroundPane = new Pane();
+		backGroundPane.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		Text title = new Text(t);
+		title.setWrappingWidth(backGroundPane.getWidth());
+		eventPane = new StackPane(backGroundPane, title);
 		eventPane.setPrefHeight(50);
-		eventPane.setOnMouseClicked(rightClick ->{
-			if(editEventPopover != null){
-				editEventPopover.hide();
-				editEventPopover = null;
-			}
-			else{
-				if(rightClick.getButton() == MouseButton.SECONDARY){
-					editEventPopover = new EditEventPopover(this);
-					editEventPopover.show(eventPane);
-				}
-			}
-		});
+
 	}
+
+	public StackPane getStackPane(){return eventPane; }
+
+	public Circle getCircle() { return  circle; }
 
 	@Override
 	public String toString (){
@@ -61,34 +49,16 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		else { return this.getDescription().compareTo(toCompare.getDescription()); }
 	}
 
-	public boolean areSimultaneousEvents(EventTime in){
+	public boolean areSimultaneousEvents(EventTime in)
+	{
 		int afterStartOfThisEvt = dateOfEvent.compareTo(in.getStartTime());
 		int beforeEndOfThisEvt = dateOfEvent.compareTo(in.getFinishTime());
+		System.out.println("Compareto för eventNTs datum med event med durations startdatum: "
+				+ afterStartOfThisEvt);
+		System.out.println("Compareto för eventNTs datum med event med durations slutdatum: "
+				+ beforeEndOfThisEvt);
 		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
 	}
 
-	public int getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-
-	public int getStartMonth() {
-		return startMonth;
-	}
-
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-
-	public int getStartDay() {
-		return startDay;
-	}
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
 }
 
