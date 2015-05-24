@@ -58,10 +58,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 	{
 		int afterStartOfThisEvt = dateOfEvent.compareTo(in.getStartTime());
 		int beforeEndOfThisEvt = dateOfEvent.compareTo(in.getFinishTime());
-		System.out.println("Compareto för eventNTs datum med event med durations startdatum: "
-				+ afterStartOfThisEvt);
-		System.out.println("Compareto för eventNTs datum med event med durations slutdatum: "
-				+ beforeEndOfThisEvt);
 		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
 	}
 

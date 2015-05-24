@@ -106,8 +106,6 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 				return true;
 			}
 		}
-		System.out.println(startTime.compareTo(in.getStartTime()) + "   " + startTime.compareTo(in.getFinishTime()));
-		System.out.println(finishTime.compareTo(in.getStartTime()) + "    " + finishTime.compareTo(in.getFinishTime()));
 		return isOverlapping;
 	}
 

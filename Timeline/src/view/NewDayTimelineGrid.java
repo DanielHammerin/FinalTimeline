@@ -10,10 +10,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.*;
-
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -21,148 +18,169 @@ import java.util.*;
  */
 public class NewDayTimelineGrid extends ScrollPane{
 
-        private GridPane gp = new GridPane();
-        private DayTimeline dayTimeline;
-        private AnchorPane myAnchorPane;
-        /* Simple date formats for the dates.*/
-        SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyy");
-        SimpleDateFormat monthF = new SimpleDateFormat("MM");
-        SimpleDateFormat dayF = new SimpleDateFormat("dd");
-        public String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
+    private GridPane gp = new GridPane();
+    private DayTimeline dayTimeline;
+    private AnchorPane myAnchorPane;
+    /* Simple date formats for the dates.*/
+    SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyy");
+    SimpleDateFormat monthF = new SimpleDateFormat("MM");
+    SimpleDateFormat dayF = new SimpleDateFormat("dd");
+    public String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
             , "October", "November", "December"};
 
-        Label title;
-        public String[] monthArray = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
-                , "October", "November", "December"};
-        private double aDouble;
+    Label title;
+    public String[] monthArray = {"January", "February", "March", "April", "May", "June", "July", "August", "September"
+            , "October", "November", "December"};
+    private double aDouble;
 
-        public NewDayTimelineGrid(Timeline timeline) {
-            this.setPrefHeight(450);
-            this.setVbarPolicy(ScrollBarPolicy.NEVER);
-            title = new Label();
-            Font titleSize = new Font(20);
-            title.setFont(titleSize);
+    /**
+     * The main constructor for creating the grid of the daytimeline
+     * @param timeline the timeline to be drawn
+     */
+    public NewDayTimelineGrid(Timeline timeline)
+    {
+        this.setPrefHeight(450);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        title = new Label();
+        Font titleSize = new Font(20);
+        title.setFont(titleSize);
 
-            title.setMinHeight(40);
-            VBox myBox = new VBox();
-            myBox.setAlignment(Pos.CENTER);
-
-
-            dayTimeline = (DayTimeline) timeline;
-            title.setText(dayTimeline.getTitle());
-            drawDays();
-
-            gp.setGridLinesVisible(false);
-            gp.prefWidthProperty().bind(this.widthProperty());
-            gp.prefHeightProperty().bind(this.heightProperty());
-
-            myAnchorPane = new AnchorPane();
-            myAnchorPane.setPrefWidth(this.getWidth()-this.getWidth()*0.1);
-            myAnchorPane.getChildren().add(gp);
-
-            myBox.getChildren().add(title);
-            myBox.getChildren().add(myAnchorPane);
-            this.setContent(myBox);
-        }
+        title.setMinHeight(40);
+        VBox myBox = new VBox();
+        myBox.setAlignment(Pos.CENTER);
 
 
-        private void drawDays() {
-            
-            int compareDay = dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH);
-            int currentMonth = dayTimeline.getStartDate().get(Calendar.MONTH);
-            int currentYear = dayTimeline.getStartYear();
-            int daysSinceLastMonth = 0;
-            int daysPassedSinceYear = 0;
-            int daysPassed = 0;
-            int fontSizeYears = 16;
-            ColumnConstraints c = new ColumnConstraints(50,50,Double.MAX_VALUE);
-            c.setPercentWidth(100);
-            c.setHalignment(HPos.CENTER);
-            RowConstraints r1 = new RowConstraints(50, 50, 100);
-            gp.getRowConstraints().add(r1);
-            RowConstraints r2 = new RowConstraints(30, 35, 100);
-            gp.getRowConstraints().add(r2);
-            RowConstraints r3 = new RowConstraints(30, 35, 100);
-            gp.getRowConstraints().add(2, r3);
-            gp.getRowConstraints().add(3, r3);
-            gp.getRowConstraints().add(4, r3);
-            gp.getRowConstraints().add(5, r3);
-            gp.getRowConstraints().add(6, r3);
-            gp.getRowConstraints().add(7, r3);
+        dayTimeline = (DayTimeline) timeline;
+        title.setText(dayTimeline.getTitle());
+        drawDays();
 
-            boolean moreThanOneMonth = false;
+        gp.setGridLinesVisible(false);
+        gp.prefWidthProperty().bind(this.widthProperty());
+        gp.prefHeightProperty().bind(this.heightProperty());
+
+        myAnchorPane = new AnchorPane();
+        myAnchorPane.setPrefWidth(this.getWidth()-this.getWidth()*0.1);
+        myAnchorPane.getChildren().add(gp);
+
+        myBox.getChildren().add(title);
+        myBox.getChildren().add(myAnchorPane);
+        this.setContent(myBox);
+    }
+
+    /**
+     * The method for drawing the top part of the grid with which year
+     * month and day that is.
+     */
+    private void drawDays()
+    {
+        /* Variables needed for the top part*/
+        int compareDay = dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH);
+        int currentMonth = dayTimeline.getStartDate().get(Calendar.MONTH);
+        int currentYear = dayTimeline.getStartYear();
+        int daysSinceLastMonth = 0;
+        int daysPassedSinceYear = 0;
+        int daysPassed = 0;
+        int fontSizeYears = 16;
+
+        /* The columns constraints for the grid*/
+        ColumnConstraints c = new ColumnConstraints(50,35,Double.MAX_VALUE);
+        c.setPercentWidth(100);
+        c.setHalignment(HPos.CENTER);
+        RowConstraints r1 = new RowConstraints(50, 50, 100);
+        gp.getRowConstraints().add(r1);
+        RowConstraints r2 = new RowConstraints(30, 35, 100);
+        gp.getRowConstraints().add(r2);
+        RowConstraints r3 = new RowConstraints(30, 35, 100);
+        gp.getRowConstraints().add(2, r3);
+        gp.getRowConstraints().add(3, r3);
+        gp.getRowConstraints().add(4, r3);
+        gp.getRowConstraints().add(5, r3);
+        gp.getRowConstraints().add(6, r3);
+        gp.getRowConstraints().add(7, r3);
+
+        /* This is needed for drawing the right amount of months*/
+        boolean moreThanOneMonth = false;
+
+        /* This can be considered as the iterator index of the loop for drawing grid.
+        * It will consistently add a day to the startCopy variable until it's at the
+        * end date of the dayTimeline.*/
+        GregorianCalendar startCopy = (GregorianCalendar) dayTimeline.getStartDate().clone();
+
+        /* Looping through all days and drawing them*/
+        while (startCopy.compareTo(dayTimeline.getEndDate()) <= 0)
+        {
+            gp.getColumnConstraints().addAll(c);
 
 
-            GregorianCalendar startCopy = (GregorianCalendar) dayTimeline.getStartDate().clone();
-            GregorianCalendar end = (GregorianCalendar) dayTimeline.getEndDate().clone();
-
-            while (startCopy.compareTo(dayTimeline.getEndDate()) <= 0)
+            int currentDay = startCopy.get(Calendar.DAY_OF_MONTH);
+            /* If the compareDay is larger than the current day than it's a new month*/
+            if (compareDay > currentDay)
             {
-                gp.getColumnConstraints().addAll(c);
-
-
-                int currentDay = startCopy.get(Calendar.DAY_OF_MONTH);
-                /* New month*/
-                if (compareDay > currentDay)
+                moreThanOneMonth = true;
+                /* The name of the month*/
+                Label month = new Label(months[currentMonth % 12]);
+                month.setEffect(new DropShadow(50,Color.BLACK));
+                /* Adding the month label to the grid*/
+                gp.add(month, daysPassed - daysSinceLastMonth, 1, daysSinceLastMonth, 1);
+                /* Resetting the daysSinceLastMonth variable so that the right column
+                * span is for the next month*/
+                daysSinceLastMonth = 0;
+                currentMonth = startCopy.get(Calendar.MONTH);
+                /* If the current month is 0 than we have a new year */
+                if (currentMonth == 0)
                 {
-                    moreThanOneMonth = true;
-                    System.out.println("compareDay = " + compareDay + "    currentDay = " + currentDay);
-                    Label month = new Label(months[currentMonth % 12]);
-                    month.setEffect(new DropShadow(50,Color.BLACK));
-                    gp.add(month, daysPassed - daysSinceLastMonth, 1, daysSinceLastMonth, 1);
-                    daysSinceLastMonth = 0;
-                    currentMonth = startCopy.get(Calendar.MONTH);
-                    System.out.println(currentMonth);
-                    /* New year */
-                    if (currentMonth == 0)
-                    {
-                        /* Minus one because the year have passed and it needs to subtract one year*/
-                        Label year = new Label(startCopy.get(Calendar.YEAR) - 1 + "");
-                        Font yearSize = new Font(fontSizeYears);
-                        year.setFont(yearSize);
-                        gp.add(year, daysPassed - daysPassedSinceYear, 0, daysPassedSinceYear, 1);
-                        daysPassedSinceYear = 0;
-                    }
+                    /* Minus one because the year have passed and it needs to subtract one year*/
+                    Label year = new Label(startCopy.get(Calendar.YEAR) - 1 + "");
+                    Font yearSize = new Font(fontSizeYears);
+                    year.setFont(yearSize);
+                    gp.add(year, daysPassed - daysPassedSinceYear, 0, daysPassedSinceYear, 1);
+                    daysPassedSinceYear = 0;
                 }
-
-                Label day = new Label(startCopy.get(Calendar.DAY_OF_MONTH) + "");
-                startCopy.add(5,1);
-                gp.add(day, daysPassed, 2);
-                daysPassed++;
-                daysSinceLastMonth++;
-                daysPassedSinceYear++;
-                compareDay = currentDay;
             }
-            if (moreThanOneMonth) { daysPassed--; }
-            /*Adding the last month*/
-            Label month = new Label(months[currentMonth % 12]);
-            gp.add(month, daysPassed - daysSinceLastMonth, 1, daysSinceLastMonth, 1);
-            /* Adding the last year*/
-            if (daysPassedSinceYear != 0)
-            {
-                currentYear = startCopy.get(Calendar.YEAR);
-                Label year = new Label(startCopy.get(Calendar.YEAR) + "");
-                Font yearSize = new Font(fontSizeYears);
-                year.setFont(yearSize);
-                gp.add(year, daysPassed - daysPassedSinceYear, 0, daysPassedSinceYear, 1);
-            }
-            System.out.println(daysPassed - daysSinceLastMonth);
-            drawEvents();
-
-//            Pane p = new Pane();
-//            p.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-//            gp.add(p,5,3,7,1);
-
+            /* This part just add the months numbers */
+            Label day = new Label(startCopy.get(Calendar.DAY_OF_MONTH) + "");
+            /* Increasing the iterator index*/
+            startCopy.add(5,1);
+            gp.add(day, daysPassed, 2);
+            daysPassed++;
+            daysSinceLastMonth++;
+            daysPassedSinceYear++;
+            compareDay = currentDay;
         }
+        if (moreThanOneMonth) { daysPassed--; }
+        /*Adding the last month*/
+        Label month = new Label(months[currentMonth % 12]);
+        gp.add(month, daysPassed - daysSinceLastMonth, 1, daysSinceLastMonth, 1);
+        /* Adding the last year*/
+        if (daysPassedSinceYear != 0)
+        {
+            currentYear = startCopy.get(Calendar.YEAR);
+            Label year = new Label(currentYear + "");
+            Font yearSize = new Font(fontSizeYears);
+            year.setFont(yearSize);
+            gp.add(year, daysPassed - daysPassedSinceYear, 0, daysPassedSinceYear, 1);
+        }
+        /* Calling the method drawEvents to draw out the events in the grid pane*/
+        drawEvents();
+    }
 
+    /**
+     * Method for removing an event and redrawing the
+     * event from the time line
+     * @param toBeRemoved the event to be removed
+     */
     public void redrawEventsRemoveEvent(EventTime toBeRemoved)
     {
-        removeStackPanes();
         //Removing the event from the dayTimeline
+        removeStackPanes();
         dayTimeline.removeEventTime(toBeRemoved);
         drawEvents();
     }
 
+    /**
+     * Adding an event and redrawing the grid
+     * @param toBeAdded the event to be added
+     */
     public void redrawEventsAddEvent(EventTime toBeAdded)
     {
         removeStackPanes();
@@ -170,6 +188,11 @@ public class NewDayTimelineGrid extends ScrollPane{
         drawEvents();
     }
 
+    /**
+     * Method for removing an event and redrawing the
+     * event from the time line
+     * @param toBeRemoved the event to be removed
+     */
     public void redrawEventsRemoveEvent(EventNT toBeRemoved)
     {
         removeStackPanes();
@@ -178,6 +201,10 @@ public class NewDayTimelineGrid extends ScrollPane{
         drawEvents();
     }
 
+    /**
+     * Adding an event and redrawing the grid
+     * @param toBeAdded the event to be added
+     */
     public void redrawEventsAddEvent(EventNT toBeAdded)
     {
         removeStackPanes();
@@ -185,6 +212,10 @@ public class NewDayTimelineGrid extends ScrollPane{
         drawEvents();
     }
 
+    /**
+     * Private help method for clearing the grid pane from stackpanes
+     * before redrawing them
+     */
     private void removeStackPanes()
     {
         //Removing all eventspanes with duration and without duration
@@ -201,6 +232,10 @@ public class NewDayTimelineGrid extends ScrollPane{
     }
 
     /*------------------------------------Drawing events------------------------------------*/
+
+    /**
+     * This method draws out the events of a day timeline
+     */
     public void drawEvents()
     {
         /* Get all */
@@ -221,15 +256,19 @@ public class NewDayTimelineGrid extends ScrollPane{
 
 
         /* This part draws the timelines events with duration*/
-        if (eventTimeIterator.hasNext()) {
+        if (eventTimeIterator.hasNext())
+        {
             currentEventTime = eventTimeIterator.next();
             boolean done = false;
-            while (!done) {
+            while (!done)
+            {
+                /* Setting the margins for the events*/
                 gp.setMargin(currentEventTime.getStackPane(), new Insets(5));
                 /* If compareTo == 0 than its time to draw the event. */
-                if (currentEventTime.getStartTime().compareTo(compareCal) == 0) {
+                if (currentEventTime.getStartTime().compareTo(compareCal) == 0)
+                {
                     /*Length of the event, necessary for how broad the rectangles
-                    * should be.*/
+                    * should be for the events with duration.*/
                     GregorianCalendar EVTcopy = (GregorianCalendar) currentEventTime.getStartTime().clone();
                     int days = 0;
                     while (EVTcopy.compareTo(currentEventTime.getFinishTime()) <= 0)
@@ -238,9 +277,10 @@ public class NewDayTimelineGrid extends ScrollPane{
                         days++;
                     }
 
+                    /* The stack pane to be drawn*/
                     StackPane eventPane = currentEventTime.getStackPane();
 
-
+                    /* An iterator for going through all events*/
                     Iterator<EventTime> iterator = eventTimes.iterator();
                     /* The AList simEvents stores all events in the timeline that are simultaneous
                     * to the currentEventTime, this is to be able to draw everything as high as
@@ -260,39 +300,37 @@ public class NewDayTimelineGrid extends ScrollPane{
                             simEvents.add(compareEvent);
                         }
                     }
-                    System.out.println("För event " + currentEventTime.getTitle() + " finns det " +
-                           simEvents.size() + " simultana event");
+//                    System.out.println("För event " + currentEventTime.getTitle() + " finns det " +
+//                           simEvents.size() + " simultana event");
                     boolean bigEnoughGapFound = false;
                     int rowIndex = 3;
                     gp.add(eventPane, daysPassed, rowIndex, days, 1);
 
                     TreeSet<Integer> rowIndexes = new TreeSet<Integer>();
+                    /* Getting the rowindexes of the events panes to find the first free
+                    * spot to insert the event.*/
                     for (EventTime compareEvent: simEvents)
                     {
                         int rowIndexOfCEvent = GridPane.getRowIndex(compareEvent.getStackPane());
                         rowIndexes.add(rowIndexOfCEvent);
                     }
 
-                    System.out.println(rowIndexes.toString());
-
                     Iterator<Integer> rowIterator = rowIndexes.iterator();
 
                     if (!rowIndexes.isEmpty())
                     {
-                        /* If rowIndexes first element is equal to three there's no need to
-                        * change the row index och the pane because it means there's an open
-                        * spot at the top*/
-                        System.out.println("rowindexes är inte tom");
                         int previousRowIndex = -1;
+                        /* If the first rowindex is 3 then we need to look for
+                        * the first available row index.*/
                         if (rowIndexes.first() == 3)
                         {
-                            System.out.println("Första index är 3");
                             while (!bigEnoughGapFound && rowIterator.hasNext())
                             {
-                                System.out.println();
                                 int tempRowIndex = rowIterator.next();
                                 if (previousRowIndex != -1)
                                 {
+                                    /* If the difference is larger than 1 than it means
+                                    * there is an open spot, hence bigEnoughGap = true*/
                                     if (tempRowIndex - previousRowIndex > 1)
                                     {
                                         bigEnoughGapFound = true;
@@ -302,17 +340,17 @@ public class NewDayTimelineGrid extends ScrollPane{
                                 previousRowIndex = tempRowIndex;
                             }
 
-
+                            /* If previousRowIndex == -1 than it means that the
+                            * row index 3 is occupied. */
                             if (previousRowIndex == -1) {rowIndex = 4;}
                             else {rowIndex = previousRowIndex + 1;}
-                            System.out.println("previousRowIndex = " + previousRowIndex + "    och rowIndex är = " + rowIndex);
                             if (!bigEnoughGapFound)
                             {
-                                System.out.println("Tillräckliget stort gap har ej funnits");
                                 GridPane.setRowIndex(eventPane, rowIndex);
                             }
                         }
                     }
+                    /* End conditions for the loop*/
                     if (eventTimeIterator.hasNext()) {currentEventTime = eventTimeIterator.next(); }
                     else { done = true; }
                 }
@@ -320,17 +358,19 @@ public class NewDayTimelineGrid extends ScrollPane{
             }
         }
 
+        /* Resetting the variables for the drawing of the events with no duration*/
         compareCal = (GregorianCalendar) dayTimeline.getStartDate().clone();
         daysPassed = 0;
 
         EventNT currentEventNT;
-        /* This part draws the timelines events without duration*/
+        /* This part draws the timelines events without duration, there are almost no comments
+        * since the logic is identical to the part of drawing the events with duration. See the
+        * part before this for explanation of the logic.*/
         if ( eventNTIterator.hasNext()) {
             currentEventNT = eventNTIterator.next();
             boolean done = false;
             while (!done)
             {
-                System.out.println("inne i loopen");
                 /* If compareTo == 0 than its time to draw the event. */
                 if (currentEventNT.getDate().compareTo(compareCal) == 0) {
 
@@ -351,8 +391,6 @@ public class NewDayTimelineGrid extends ScrollPane{
                         }
                     }
 
-                    System.out.println("Det finns " + eventTimes.size() + " event med duration i tidslinjen.");
-
                     ArrayList<EventNT> simEventsNOTime = new ArrayList<EventNT>();
 
                     Iterator<EventNT> iterator1 = eventNTs.iterator();
@@ -369,9 +407,6 @@ public class NewDayTimelineGrid extends ScrollPane{
                         }
                     }
 
-                    System.out.println("För event " + currentEventNT.getTitle() + " finns det " +
-                            simEventsTime.size() + " simultana event med duration och "
-                    + simEventsNOTime.size() + " simultana event utan duration.");
                     boolean bigEnoughGapFound = false;
                     int rowIndex = 3;
                     gp.add(eventPane, daysPassed, rowIndex);
@@ -390,10 +425,6 @@ public class NewDayTimelineGrid extends ScrollPane{
                         rowIndexesEvsNOTime.add(rowIndexOfCEvent);
                     }
 
-                    System.out.println(rowIndexesEvsTime.toString());
-
-                    Iterator<Integer> rowIterator = rowIndexesEvsTime.iterator();
-
                     rowIndex = findFirstFreeRowIndex(rowIndexesEvsTime, rowIndexesEvsNOTime);
                     GridPane.setRowIndex(eventPane, rowIndex);
                     if (eventNTIterator.hasNext()) {currentEventNT = eventNTIterator.next(); }
@@ -404,6 +435,13 @@ public class NewDayTimelineGrid extends ScrollPane{
         }
     }
 
+    /**
+     * Help method for finding the first free row index for the part that
+     * draws events without duration.
+     * @param in1 the treeset with the rowindexes for the simultaneous events with duration
+     * @param in2 the treeset with the rowindexes for the simultaneous events without duration
+     * @return the first free index
+     */
     private int findFirstFreeRowIndex(TreeSet<Integer> in1, TreeSet<Integer> in2)
     {
         TreeSet<Integer> both = new TreeSet<Integer>();
@@ -427,36 +465,14 @@ public class NewDayTimelineGrid extends ScrollPane{
     }
 
 
-//        private void drawEvents() {
-//            if (dayTimeline != null) {
-//                dayTimeline.addEventTime(new EventTime("Dingdong", "dongerino", new GregorianCalendar(2015, 12, 6), new GregorianCalendar(2015, 12, 20)));
-//
-//                for (EventTime et : dayTimeline.getEventTimes()) {
-//                    Date d = et.getFinishTime().getTime();
-//                    Date d1 = et.getStartTime().getTime();
-//                    daysBetween = daysBetween(d, d1);
-//                    Pane p = et.getPane();
-//                    p.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, CornerRadii.EMPTY, Insets.EMPTY)));
-//                    p.setPrefWidth(Double.MAX_VALUE);
-//                    p.maxWidth(Double.MAX_VALUE);
-//                    p.minHeight(USE_COMPUTED_SIZE);
-//                    p.minWidth(USE_COMPUTED_SIZE);
-//                    gp.add(p, et.getStartTime().get(Calendar.DAY_OF_MONTH), 1, daysBetween, 1);
-//
-//                }
-//            }
-//        }
+    public DayTimeline getDayTimeline()
+    {
+        return dayTimeline;
+    }
 
-        public DayTimeline getDayTimeline() {
-            return dayTimeline;
-        }
-
-        public void setDayTimeline(DayTimeline dayTimeline) {
-            this.dayTimeline = dayTimeline;
-        }
-
-
-
-
+    public void setDayTimeline(DayTimeline dayTimeline)
+    {
+        this.dayTimeline = dayTimeline;
+    }
 
 }

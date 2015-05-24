@@ -19,6 +19,15 @@ public class NewDTGMain extends Application
 {
     public void start(Stage stage)
     {
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
         GregorianCalendar startDate = new GregorianCalendar(2012, 10, 20);
         GregorianCalendar endDate = new GregorianCalendar(2012, 12, 30);
         DayTimeline d1 = new DayTimeline("Title", "Description of the timeline", startDate, endDate);
@@ -58,6 +67,7 @@ public class NewDTGMain extends Application
 
         Button removeEvent = new Button("Remove event");
 
+
         NewDayTimelineGrid dtg = new NewDayTimelineGrid(d1);
 
         removeEvent.setOnAction(event -> {
@@ -73,6 +83,7 @@ public class NewDTGMain extends Application
         HBox buttons = new HBox(removeEvent, addEvents);
 
         VBox all = new VBox(dtg, buttons);
+        System.out.println("Almost everything working");
 
         Scene scene = new Scene(all, 1000,500);
         stage.setScene(scene);
