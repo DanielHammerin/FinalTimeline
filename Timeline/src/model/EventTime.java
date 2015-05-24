@@ -20,6 +20,14 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
+
+
+	private int startYear;
+	private int startMonth;
+	private int startDay;
+	private int endYear;
+	private int endMonth;
+	private int endDay;
 	
 	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft) {
 		super(t, d);
@@ -101,6 +109,54 @@ public class EventTime extends MyEvent implements Comparable<EventTime>{
 		System.out.println(startTime.compareTo(in.getStartTime()) + "   " + startTime.compareTo(in.getFinishTime()));
 		System.out.println(finishTime.compareTo(in.getStartTime()) + "    " + finishTime.compareTo(in.getFinishTime()));
 		return isOverlapping;
+	}
+
+	public int getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+
+	public int getEndYear() {
+		return endYear;
+	}
+
+	public void setEndYear(int endYear) {
+		this.endYear = endYear;
+	}
+
+	public int getEndMonth() {
+		return endMonth;
+	}
+
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
+
+	public int getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
+
+	public int getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
 	}
 
 }
