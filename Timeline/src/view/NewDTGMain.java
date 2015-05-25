@@ -72,12 +72,16 @@ public class NewDTGMain extends Application
 
         removeEvent.setOnAction(event -> {
             dtg.redrawEventsRemoveEvent(ev5);
+            dtg.redrawEventsRemoveEvent(evNT2);
+            dtg.redrawEventsRemoveEvent(ev2);
         });
 
         Button addEvents = new Button("Re add the events");
 
         addEvents.setOnAction(event -> {
+            dtg.redrawEventsAddEvent(evNT2);
             dtg.redrawEventsAddEvent(ev5);
+            dtg.redrawEventsAddEvent(ev2);
         });
 
         HBox buttons = new HBox(removeEvent, addEvents);

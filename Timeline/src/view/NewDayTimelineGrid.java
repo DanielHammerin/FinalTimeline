@@ -97,6 +97,9 @@ public class NewDayTimelineGrid extends ScrollPane{
         gp.getRowConstraints().add(5, r3);
         gp.getRowConstraints().add(6, r3);
         gp.getRowConstraints().add(7, r3);
+        gp.getRowConstraints().add(8, r3);
+        gp.getRowConstraints().add(9, r3);
+
 
         /* This is needed for drawing the right amount of months*/
         boolean moreThanOneMonth = false;

@@ -13,7 +13,8 @@ import javafx.scene.text.Text;
 import view.EditEventPopover;
 
 
-public class EventTime extends MyEvent implements Comparable<EventTime>{
+public class EventTime extends MyEvent implements Comparable<EventTime>
+{
 
 	private GregorianCalendar startTime;
 	private GregorianCalendar finishTime;
