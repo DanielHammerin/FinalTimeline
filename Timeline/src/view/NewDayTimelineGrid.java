@@ -161,7 +161,9 @@ public class NewDayTimelineGrid extends ScrollPane{
             Label year = new Label(currentYear + "");
             Font yearSize = new Font(fontSizeYears);
             year.setFont(yearSize);
-            gp.add(year, daysPassed - daysPassedSinceYear, 0, daysPassedSinceYear, 1);
+            int rowIndex = daysPassed - daysPassedSinceYear;
+            if (rowIndex < 0) { rowIndex = 0; }
+            gp.add(year, rowIndex, 0, daysPassedSinceYear, 1);
         }
         /* Calling the method drawEvents to draw out the events in the grid pane*/
         drawEvents();
