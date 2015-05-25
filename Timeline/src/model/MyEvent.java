@@ -48,14 +48,14 @@ public abstract class MyEvent extends Timeline {
 	public java.util.Date getEndDate(){
 		return endDate;
 	}
-	public void addEventNT (){
-		
-		super.addEventNT(this);	
-	}
-	public void removeEventNT (){
-		
-		super.removeEventNT(this);	
-	}
+//	public void addEventNT ()
+//	{
+//		super.addEventNT(this);
+//	}
+//	public void removeEventNT (){
+//
+//		super.removeEventNT(this);
+//	}
 	
 	public boolean equals(Object obj) {
 		if(obj == this){return true;}
