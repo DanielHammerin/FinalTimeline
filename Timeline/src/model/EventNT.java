@@ -9,28 +9,36 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 public class EventNT extends MyEvent implements Comparable<EventNT> {
-
+	
 	private GregorianCalendar dateOfEvent;
-	private Circle circle;
-	Pane backGroundPane;
-	StackPane eventPane;
-
-
 	private int startYear;
 	private int startMonth;
 	private int startDay;
-		
+	Pane backGroundPane;
+	StackPane eventPane;
+	EditEventPopover editEventPopover;
+	
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
-		circle = new Circle(20);
 		backGroundPane = new Pane();
 		backGroundPane.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 		Text title = new Text(t);
 		title.setWrappingWidth(backGroundPane.getWidth());
 		eventPane = new StackPane(backGroundPane, title);
 		eventPane.setPrefHeight(50);
-
+		eventPane.setOnMouseClicked(rightClick ->{
+			if(editEventPopover != null){
+				editEventPopover.hide();
+				editEventPopover = null;
+			}
+			else{
+				if(rightClick.getButton() == MouseButton.SECONDARY){
+					editEventPopover = new EditEventPopover(this);
+					editEventPopover.show(eventPane);
+				}
+			}
+		});
 	}
 
 	public StackPane getStackPane(){return eventPane; }
@@ -69,20 +77,20 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 		this.startYear = startYear;
 	}
 
-	public int getStartDay() {
-		return startDay;
-	}
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-
 	public int getStartMonth() {
 		return startMonth;
 	}
 
 	public void setStartMonth(int startMonth) {
 		this.startMonth = startMonth;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
 	}
 
 	public GregorianCalendar getDateOfEvent() {
@@ -92,7 +100,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 	public void setDateOfEvent(GregorianCalendar dateOfEvent) {
 		this.dateOfEvent = dateOfEvent;
 	}
-
 
 }
 

@@ -2,6 +2,8 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TreeSet;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 public class DayTimeline extends Timeline
@@ -31,10 +33,13 @@ public class DayTimeline extends Timeline
 	/* Same as previous*/
 	SimpleDateFormat dayF = new SimpleDateFormat("dd");
 	private static final int MAX_DAYS = 365;
+
 	//Constructor for the database
 	public DayTimeline(String title) {
 		this.setTitle(title);
 	}
+	//Default constructor for the database
+	public DayTimeline() {	}
 
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
@@ -96,7 +101,6 @@ public class DayTimeline extends Timeline
 		}
 		else
 		{
-
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error Dialog");
 			alert.setHeaderText("Error");
