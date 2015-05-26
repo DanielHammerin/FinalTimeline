@@ -16,11 +16,13 @@ import java.util.*;
 /**
  * Created by Alexander on 18/05/2015.
  */
-public class NewDayTimelineGrid extends ScrollPane{
+public class NewDayTimelineGrid extends VBox
+{
 
     private GridPane gp = new GridPane();
     private DayTimeline dayTimeline;
     private AnchorPane myAnchorPane;
+    private ScrollPane theGrid;
     /* Simple date formats for the dates.*/
     SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyy");
     SimpleDateFormat monthF = new SimpleDateFormat("MM");
@@ -39,32 +41,32 @@ public class NewDayTimelineGrid extends ScrollPane{
      */
     public NewDayTimelineGrid(Timeline timeline)
     {
-        this.setPrefHeight(450);
-        this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        title = new Label();
+        theGrid = new ScrollPane();
+        theGrid.setPrefHeight(450);
+        theGrid.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        title = new Label(timeline.getTitle());
         Font titleSize = new Font(20);
         title.setFont(titleSize);
 
-        title.setMinHeight(40);
-        VBox myBox = new VBox();
-        myBox.setAlignment(Pos.CENTER);
+        HBox titleBox = new HBox();
+        titleBox.getChildren().add(title);
+        titleBox.setAlignment(Pos.CENTER);
 
+        this.getChildren().add(titleBox);
 
         dayTimeline = (DayTimeline) timeline;
-        title.setText(dayTimeline.getTitle());
         drawDays();
 
         gp.setGridLinesVisible(false);
         gp.prefWidthProperty().bind(this.widthProperty());
         gp.prefHeightProperty().bind(this.heightProperty());
 
-        myAnchorPane = new AnchorPane();
-        myAnchorPane.setPrefWidth(this.getWidth()-this.getWidth()*0.1);
-        myAnchorPane.getChildren().add(gp);
+        theGrid.setContent(gp);
 
-        myBox.getChildren().add(title);
-        myBox.getChildren().add(myAnchorPane);
-        this.setContent(myBox);
+        this.setMinHeight(300);
+
+        this.getChildren().add(theGrid);
     }
 
     /**

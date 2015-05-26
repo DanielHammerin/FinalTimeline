@@ -12,7 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import view.*;
+import view;
+import view.AddNewEventPopOver;
+import view.EditTimelinePopOver;
+import view.NewTimelineGrid;
+
 /**
  * Created by Alexander on 27/04/2015.
  * This is the controller class of the mainWindow
