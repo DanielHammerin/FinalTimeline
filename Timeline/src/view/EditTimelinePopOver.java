@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import model.*;
 import org.controlsfx.control.PopOver;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,7 +21,7 @@ import java.util.LinkedList;
  */
 public class EditTimelinePopOver extends PopOver{
     private VBox vbox = new VBox();
-    private ComboBox  myComboBox;
+    private ComboBox  myComboBox = new ComboBox();;
     private TextField titleTextField = new TextField();
     private TextArea descriptionTextArea = new TextArea();
     private DatePicker startDatePicker = new DatePicker();
@@ -31,13 +33,27 @@ public class EditTimelinePopOver extends PopOver{
 
     DayTimeline selectedTimeline = new DayTimeline();
 
-    public EditTimelinePopOver(MainWindowController mwc){
-      SQLDAO sqldao = new SQLDAO();
-        myComboBox = new ComboBox();
+    public EditTimelinePopOver(MainWindowController mwc) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        SQLDAO sqldao = new SQLDAO();
+        this.setHideOnEscape(true);
+        this.autoHideProperty().setValue(true);
+        this.setWidth(400);
+        this.setHeight(200);
+        this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
+
         LinkedList<DayTimeline> allDayTimelines = sqldao.getAllTimelines();
         for(Timeline t : allDayTimelines){
             myComboBox.getItems().addAll(t.getTitle());
         }
+
+        myComboBox.getSelectionModel().selectFirst();
+
+        try {
+            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {
@@ -60,19 +76,7 @@ public class EditTimelinePopOver extends PopOver{
                 System.out.println("In listener");
             }
         });
-        myComboBox.getSelectionModel().selectFirst();
-        try {
-            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        this.setHideOnEscape(true);
-        this.autoHideProperty().setValue(true);
-        this.autoHideProperty().setValue(true);
-        this.setWidth(400);
-        this.setHeight(200);
-        this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
         myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
         startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
@@ -82,29 +86,26 @@ public class EditTimelinePopOver extends PopOver{
         addBtn.setOnMouseClicked(editTimeline -> {
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
+
             GregorianCalendar gregorianStart = new GregorianCalendar();
             gregorianStart.set(localStart.getYear(), localStart.getMonthValue(), localStart.getDayOfMonth());
             GregorianCalendar gregorianEnd = new GregorianCalendar();
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
+
             String timelineTitle = (String) myComboBox.getSelectionModel().getSelectedItem();
             DayTimeline dayTimeline = new DayTimeline(timelineTitle, descriptionTextArea.getText(), gregorianStart, gregorianEnd);
 
             try {
-                DayTimeline timelineToDelete =  sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-               sqldao.deleteTimeline(timelineToDelete.getTitle());
+                DayTimeline timelineToDelete = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                sqldao.deleteTimeline(timelineToDelete.getTitle());
                 sqldao.saveTimeline(dayTimeline);
-                mwc.redrawTimelines();
+                mwc.redrawOneTimeline(new NewDayTimelineGrid(dayTimeline));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             this.hide();
         });
-        vbox.getChildren().add(myComboBox);
-        vbox.getChildren().add(titleTextField);
-        vbox.getChildren().add(descriptionTextArea);
-        vbox.getChildren().add(startDatePicker);
-        vbox.getChildren().add(endDatePicker);
-        vbox.getChildren().add(addBtn);
+        vbox.getChildren().addAll(myComboBox, titleTextField,descriptionTextArea,startDatePicker,endDatePicker,addBtn);
         this.setContentNode(vbox);
     }
 }

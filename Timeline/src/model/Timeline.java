@@ -17,25 +17,10 @@ public abstract class Timeline
 	private String title;
 	private String description;
 	private static final int MAX_CHARS_TITLE = 30;
-    private boolean inEditMode;
-	private boolean isYearTimeline = false;
-	private boolean isMonthTimeline = false;
-	private boolean isDayTimeline = false;
-
-	public void setEventTimes(TreeSet<EventTime> eventTimes) {
-		this.eventTimes = eventTimes;
-	}
-
-	public void setEventNTs(TreeSet<EventNT> eventNTs) {
-		this.eventNTs = eventNTs;
-	}
 
 	//For the different types of events
 	private TreeSet<EventNT> eventNTs;
 	protected TreeSet<EventTime> eventTimes;
-
-	public Timeline () { // Note: I need this constructor for the DAO ;) puss puss Mauro <3
-    }
 
     /**
      * The super constructor for all timelines. Takes a string containing the description
@@ -48,27 +33,17 @@ public abstract class Timeline
      */
 	public Timeline(String t, String d, String typeOfTimeline)	{
 		if (t.length() > MAX_CHARS_TITLE) {
-			
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText("Warning");
-			alert.setContentText("The title "
-					+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");
-			alert.showAndWait();
-		
+			//Mauro: alerts removed
 			throw new IllegalArgumentException("The title "
 				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
 		title = t;
 		description = d;
-        inEditMode = false;
-
-		if (typeOfTimeline.equals("y")) { isYearTimeline = true; }
-		else if (typeOfTimeline.equals("m")) {isMonthTimeline = true; }
-		else {isDayTimeline = true; }
 
 		eventNTs = new TreeSet<EventNT>();
 		eventTimes = new TreeSet<EventTime>();
 	}
+
+	public Timeline(){}
 
 	/**
 	 * Getter for the title of the time-line.
@@ -121,19 +96,16 @@ public abstract class Timeline
 
 	public TreeSet<EventTime> getEventTimes() { return eventTimes; }
 
+	public void setEventTimes(TreeSet<EventTime> eventTimes) {
+		this.eventTimes = eventTimes;
+	}
+
+	public void setEventNTs(TreeSet<EventNT> eventNTs) {
+		this.eventNTs = eventNTs;
+	}
+
 	public void removeEventNT(EventNT toRemove) {eventNTs.remove(toRemove); }
 
 	public void removeEventTime(EventTime toRemove) {eventTimes.remove(toRemove); }
 
-    public void edit() {inEditMode = true; }
-
-    public void stopEditing() { inEditMode = false; }
-
-    public boolean isInEditMode(){return inEditMode; }
-
-	public boolean isMonthTimeline() { return isMonthTimeline; }
-
-	public boolean isYearTimeline() { return isYearTimeline; }
-
-	public boolean isDayTimeline() { return isDayTimeline; }
 }

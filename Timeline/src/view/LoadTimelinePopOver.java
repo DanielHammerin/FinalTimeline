@@ -17,6 +17,8 @@ import model.*;
 
 import org.controlsfx.control.PopOver;
 
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 
@@ -38,7 +40,7 @@ public class LoadTimelinePopOver extends PopOver {
      * @param mainVBox ThThe VBox where the graphical timeline should be added to
      */
 
-    public LoadTimelinePopOver(VBox mainVBox){
+    public LoadTimelinePopOver(VBox mainVBox) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         ColumnConstraints c1 = new ColumnConstraints();
         ColumnConstraints c2 = new ColumnConstraints();
         c1.setPercentWidth(50);
@@ -63,16 +65,16 @@ public class LoadTimelinePopOver extends PopOver {
             timelinesLV.add(allTimelines.get(i).getTitle());
         }
 
-        // seudocode a for statement should be added here that discards all timelines that are currently open in the windows so they don't show in the listview
-
         myListview.getItems().addAll(timelinesLV);
 
-        //This event defines the event which should be executed when a user clicks on the load-button
 
+        /**
+         * Handles the event which occures when the user presses the loadButton
+         */
         loadRect.setOnMouseClicked(loadTimeline -> {
-            String duda = myListview.getSelectionModel().getSelectedItem(); // get the timeline form the title
+            String selectedItem = myListview.getSelectionModel().getSelectedItem(); // get the timeline form the title
             try {
-                NewDayTimelineGrid d = new NewDayTimelineGrid(sqldao.getTimeline(duda));
+                NewDayTimelineGrid d = new NewDayTimelineGrid(sqldao.getTimeline(selectedItem));
                 MainWindowController.allTheTimelines.add(d.getDayTimeline());
                 mainVBox.getChildren().add(d);
                 this.hide();

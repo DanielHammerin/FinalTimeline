@@ -19,15 +19,8 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
 
-
-	private int startYear;
-	private int startMonth;
-	private int startDay;
-	private int endYear;
-	private int endMonth;
-	private int endDay;
-
-	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft) {
+	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft)
+	{
 		super(t, d);
 		if (st.compareTo(ft) > 0) {throw new IllegalArgumentException("The start date has to be before the end date."); }
 		this.startTime = st;
@@ -50,9 +43,7 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		});
 	}
 
-	 public void setStartTime (GregorianCalendar date) {
-		 this.startTime = date;
-	 }
+	 public void setStartTime (GregorianCalendar date) { this.startTime = date; }
 	 
 	 public GregorianCalendar getStartTime (){
 		 return startTime;
@@ -62,13 +53,9 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		 this.finishTime = date;
 	 }
 	 
-	 public GregorianCalendar getFinishTime (){
-		 return finishTime;
-	 }
+	public GregorianCalendar getFinishTime (){ return finishTime; }
 
 	public StackPane getStackPane() { return eventPane ; }
-
-	public Pane getPane(){return eventPane; }
 
 	public int compareTo(EventTime toCompare)
 	{
@@ -90,67 +77,13 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		}
 		else if (startTime.compareTo(in.getStartTime()) > 0)
 		{
-			if (startTime.compareTo(in.getFinishTime()) < 0)
-			{
-				return true;
-			}
+			if (startTime.compareTo(in.getFinishTime()) < 0){ return true;}
 		}
 		else if (finishTime.compareTo(in.getStartTime()) > 0)
 		{
-			if (finishTime.compareTo(in.getFinishTime()) < 0)
-			{
-				return true;
-			}
+			if (finishTime.compareTo(in.getFinishTime()) < 0) { return true; }
 		}
 		return isOverlapping;
-	}
-
-	public int getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-
-	public int getStartDay() {
-		return startDay;
-	}
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-
-	public int getEndYear() {
-		return endYear;
-	}
-
-	public void setEndYear(int endYear) {
-		this.endYear = endYear;
-	}
-
-	public int getEndMonth() {
-		return endMonth;
-	}
-
-	public void setEndMonth(int endMonth) {
-		this.endMonth = endMonth;
-	}
-
-	public int getEndDay() {
-		return endDay;
-	}
-
-	public void setEndDay(int endDay) {
-		this.endDay = endDay;
-	}
-
-	public int getStartMonth() {
-		return startMonth;
-	}
-
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
 	}
 
 }

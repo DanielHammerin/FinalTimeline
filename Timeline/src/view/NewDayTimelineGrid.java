@@ -77,7 +77,7 @@ public class NewDayTimelineGrid extends VBox
         /* Variables needed for the top part*/
         int compareDay = dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH);
         int currentMonth = dayTimeline.getStartDate().get(Calendar.MONTH);
-        int currentYear = dayTimeline.getStartYear();
+        int currentYear = dayTimeline.getStartDate().get(Calendar.YEAR);
         int daysSinceLastMonth = 0;
         int daysPassedSinceYear = 0;
         int daysPassed = 0;

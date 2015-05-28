@@ -11,10 +11,16 @@ import java.sql.Date;
 import java.util.*;
 
 /**
+ * Contains methods to interact with the data base.
  * Created by Alexander on 24/05/2015.
  */
-public class SQLDAO {
+public class SQLDAO
+{
 
+    /**
+     * Saves the passed timeline into the database.
+     * @param dayTimeline the timeline to be saved.
+     */
     public void saveTimeline(DayTimeline dayTimeline) {
         Date startDate = new Date(dayTimeline.getStartDate().getTimeInMillis());
         Date endDate = new Date(dayTimeline.getEndDate().getTimeInMillis());
@@ -82,82 +88,91 @@ public class SQLDAO {
         }
     }
 
-    public LinkedList<DayTimeline> getAllTimelines() {
+    /**
+     * Retrieves all timelines from the day timelines table.
+     * @return
+     */
+    public LinkedList<DayTimeline> getAllTimelines() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException{
         String myQuery = "SELECT * FROM daytimelines";
 
-        Connection c = null;
-        ;
         LinkedList<DayTimeline> allTimelines = new LinkedList<DayTimeline>();
-        try {
-            c = openConnection();
 
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(myQuery);
+        Connection c = openConnection();
 
-            while (rs.next()) {
-                DayTimeline dayTimeline = new DayTimeline();
-                dayTimeline.setTitle(rs.getString("Title"));
-                dayTimeline.setDescription(rs.getString("Description"));
-                GregorianCalendar startDate = new GregorianCalendar();
-                startDate.setTime(rs.getDate(3));
-                dayTimeline.setStartDate(startDate);
-                GregorianCalendar endDate = new GregorianCalendar();
-                endDate.setTime(rs.getDate(4));
-                dayTimeline.setEndDate(endDate);
-                System.out.println(dayTimeline.getTitle() + "\t" + dayTimeline.getDescription() +
-                        "\t" + startDate.toString() + "\t" + endDate.toString());
-                allTimelines.add(dayTimeline);
+        Statement s = c.createStatement();
+        ResultSet rs = s.executeQuery(myQuery);
 
-                dayTimeline.setEventNTs(getEventsNT(dayTimeline));
-                dayTimeline.setEventTimes(getEventsTime(dayTimeline));
-            }
-            c.close();
-        } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            DayTimeline dayTimeline = new DayTimeline();
+            dayTimeline.setTitle(rs.getString("Title"));
+            dayTimeline.setDescription(rs.getString("Description"));
+            GregorianCalendar startDate = new GregorianCalendar();
+            startDate.setTime(rs.getDate(3));
+            dayTimeline.setStartDate(startDate);
+            GregorianCalendar endDate = new GregorianCalendar();
+            endDate.setTime(rs.getDate(4));
+            dayTimeline.setEndDate(endDate);
+            allTimelines.add(dayTimeline);
+
+            dayTimeline.setEventNTs(getEventsNT(dayTimeline));
+            dayTimeline.setEventTimes(getEventsTime(dayTimeline));
         }
+        c.close();
+
         return allTimelines;
     }
 
-
+    /**
+     * This method retieves a time line with the passed title.
+     * @param title
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public DayTimeline getTimeline(String title) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         String myQuery = "SELECT *\n" +
                 "FROM DayTimelines\n" +
                 "WHERE Title = '"+title+"'" ;
         DayTimeline dayTimeline = new DayTimeline();
         Connection c = openConnection();
-        try {
-            c = openConnection();
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(myQuery);
-            while (rs.next()) {
-                dayTimeline.setTitle(rs.getString("Title"));
-                dayTimeline.setDescription(rs.getString("Description"));
-                GregorianCalendar startDate = new GregorianCalendar();
-                GregorianCalendar endDate = new GregorianCalendar();
+        c = openConnection();
+        Statement s = c.createStatement();
+        ResultSet rs = s.executeQuery(myQuery);
+        while (rs.next()) {
+            dayTimeline.setTitle(rs.getString("Title"));
+            dayTimeline.setDescription(rs.getString("Description"));
+            GregorianCalendar startDate = new GregorianCalendar();
+            GregorianCalendar endDate = new GregorianCalendar();
 
-                startDate.setTime(rs.getDate("startdate"));
-                dayTimeline.setStartDate(startDate);
-                endDate.setTime(rs.getDate("enddate"));
-                dayTimeline.setEndDate(endDate);
-                System.out.println(dayTimeline.getTitle() + "\t" + dayTimeline.getDescription() +
-                        "\t" + startDate.toString() + "\t" + endDate.toString());
+            startDate.setTime(rs.getDate("startdate"));
+            dayTimeline.setStartDate(startDate);
+            endDate.setTime(rs.getDate("enddate"));
+            dayTimeline.setEndDate(endDate);
 
-                dayTimeline.setEventNTs(getEventsNT(dayTimeline));
-                dayTimeline.setEventTimes(getEventsTime(dayTimeline));
-            }
-            c.close();
-        }catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+            dayTimeline.setEventNTs(getEventsNT(dayTimeline));
+            dayTimeline.setEventTimes(getEventsTime(dayTimeline));
         }
+        c.close();
+
         return dayTimeline;
     }
 
+    /**
+     * This method returns the events with no duration of a timeline
+     * @param dayTimeline
+     * @return a treeset containing the events
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public TreeSet<EventNT> getEventsNT(DayTimeline dayTimeline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         TreeSet<EventNT> events = new TreeSet<EventNT>();
-        String myQuery;
         Connection conn = openConnection();
 
-        myQuery = "SELECT *\n" +
+        String myQuery = "SELECT *\n" +
                 "FROM eventnotime\n" +
                 "WHERE timeline = '"+dayTimeline.getTitle()+"'" ;
 
@@ -172,6 +187,15 @@ public class SQLDAO {
         return  events;
     }
 
+    /**
+     * Identical method for the events with duration for a timeline
+     * @param dayTimeline
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public TreeSet<EventTime> getEventsTime(DayTimeline dayTimeline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         TreeSet<EventTime> events = new TreeSet<EventTime>();
         String myQuery;
@@ -182,7 +206,6 @@ public class SQLDAO {
                 "WHERE timeline = '"+dayTimeline.getTitle()+"'" ;
 
         ResultSet rs = conn.createStatement().executeQuery(myQuery);
-
 
         GregorianCalendar startDate = new GregorianCalendar() ;
         GregorianCalendar endDate = new GregorianCalendar() ;
@@ -196,10 +219,15 @@ public class SQLDAO {
         return events;
     }
 
-    public boolean isThereADuplicate(DayTimeline dayTimeline){
+    /**
+     * Compares the timelines in the data base looking for duplicate timelines.
+     * @param dayTimeline
+     * @return
+     * @throws Exception
+     */
+    public boolean isThereADuplicate(DayTimeline dayTimeline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         LinkedList<DayTimeline> allTimelines2 = getAllTimelines();
         for(DayTimeline dtl : allTimelines2){
-            System.out.println(dtl.getTitle()+" = "+dayTimeline.getTitle());
             if(Objects.equals(dtl.getTitle(), dayTimeline.getTitle())){
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setTitle("Duplicate Timeline");
@@ -210,6 +238,15 @@ public class SQLDAO {
         return  false;
     }
 
+    /**
+     * This method returns the correct timeline that an event is argument is passed as.
+     * @param eventNT
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public String getTimelineFromEventNT(EventNT eventNT) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
         String dayTimelineTitle = "";
@@ -222,6 +259,15 @@ public class SQLDAO {
         return dayTimelineTitle;
     }
 
+    /**
+     * Identical method to the previous method
+     * @param eventTime
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public String getTimelineFromEventTime(EventTime eventTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
         String dayTimelineTitle = "";
@@ -235,23 +281,29 @@ public class SQLDAO {
         return dayTimelineTitle;
     }
 
-    public void deleteTimeline(String title){
+    /**
+     * Deletes a timeline from the database.
+     * @param title the title of the timeline to be removed
+     */
+    public void deleteTimeline(String title) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException{
         String myQuery = "DELETE from daytimelines where title='"+title+"'";
 
-        Statement s = null;
-        try {
-            Connection c = openConnection();
-            s = c.createStatement();
-            s.executeUpdate(myQuery);
-        }catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
+        Connection c = openConnection();
+        Statement s = c.createStatement();
+        s.executeUpdate(myQuery);
     }
 
+    /**
+     * This method updates an event with no duration
+     * @param oldEventTitle the title of the event to be edited
+     * @param eventNT is the new event that will be stored
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public void updateEventNT(String oldEventTitle, EventNT eventNT) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
-        DayTimeline dayTimeline = new DayTimeline();
-
         String myQuery = "UPDATE eventnotime SET title = ?, description = ? ,startdate = ? WHERE title ='"+oldEventTitle+"'";
 
         PreparedStatement ps = conn.prepareStatement(myQuery);
@@ -261,11 +313,20 @@ public class SQLDAO {
         ps.setDate(3, startDateEventNT);
         ps.executeUpdate();
         ps.close();
+        conn.close();
     }
 
+    /**
+     * Identical method to the method above.
+     * @param oldEventTitle
+     * @param eventTime
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public void updateEventTime(String oldEventTitle ,EventTime eventTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
-        DayTimeline dayTimeline = new DayTimeline();
 
         String myQuery = "UPDATE eventtime SET title = ?, description = ? ,startdate = ?, enddate = ? WHERE title ='"+oldEventTitle+"'";
 
@@ -278,12 +339,11 @@ public class SQLDAO {
         ps.setDate(4, endDateEventTime);
         ps.executeUpdate();
         ps.close();
+        conn.close();
     }
 
 
-
     public Connection openConnection() throws ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException {
-        Properties properties = new Properties();
 
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/timeline","root","");
         Class.forName("com.mysql.jdbc.Driver").newInstance();

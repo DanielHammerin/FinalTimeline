@@ -37,22 +37,30 @@ public class EditEventPopover extends PopOver {
      * @param event
      */
     public EditEventPopover(EventTime event){
+
+        /*
+        Setting of the inital values from the current event, so the user can see what the old values of the event was
+         */
         oldEventName = event.getTitle();
         titleField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
 
-        int monthStart = event.getStartTime().get((Calendar.MONTH)) % 12;
+        /* Plus one because the gregorian calendar objects stores the month value
+        * as the month value plus one, that is june is stored as the month no 5.*/
+        int monthStart = event.getStartTime().get(Calendar.MONTH) + 1;
         LocalDate startDate = LocalDate.of(event.getStartTime().get(Calendar.YEAR), monthStart, event.getStartTime().get(Calendar.DAY_OF_MONTH));
 
-        int monthEnd = event.getFinishTime().get((Calendar.MONTH)) % 12;
+        int monthEnd = event.getFinishTime().get(Calendar.MONTH) + 1;
         LocalDate endDate = LocalDate.of(event.getFinishTime().get(Calendar.YEAR), monthEnd, event.getFinishTime().get(Calendar.DAY_OF_MONTH));
+
         startDatePicker.setValue(startDate);
         endDatePicker.setValue(endDate);
+
 
         vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, endDatePicker, saveRect, abortRect);
         this.setContentNode(vbox);
 
-        //Saves the changes from the GUI in the event
+        //Initialization of the button with routine of saving the changes
         saveRect.setOnMouseClicked(saveChanges -> {
             event.setTitle(titleField.getText());
             event.setDescription(descriptionField.getText());
@@ -69,10 +77,12 @@ public class EditEventPopover extends PopOver {
             Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
             gregorianEnd.setTime(tempEndDate);
             event.setFinishTime(gregorianEnd);
+
             try {
                 sqldao.updateEventTime(oldEventName, event);
                 String daytimelineTitle = sqldao.getTimelineFromEventTime(event);
                 MainWindowController.mainWindowController.redrawOneTimeline(new NewDayTimelineGrid(sqldao.getTimeline(daytimelineTitle)));
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
@@ -89,6 +99,7 @@ public class EditEventPopover extends PopOver {
             this.hide();
         });
     }
+
 
     public EditEventPopover(EventNT event){
         titleField.setText(event.getTitle());
@@ -108,8 +119,8 @@ public class EditEventPopover extends PopOver {
             event.setTitle(titleField.getText());
             event.setDescription(descriptionField.getText());
 
-            LocalDate start = startDatePicker.getValue();
             GregorianCalendar gregorianStart = new GregorianCalendar();
+            LocalDate start = startDatePicker.getValue();
             Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
             gregorianStart.setTime(tempStartDate);
             event.setDateOfEvent(gregorianStart);
@@ -134,4 +145,5 @@ public class EditEventPopover extends PopOver {
             this.hide();
         });
     }
+
 }

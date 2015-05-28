@@ -12,14 +12,9 @@ import view.EditEventPopover;
 public class EventNT extends MyEvent implements Comparable<EventNT>{
 	
 	private GregorianCalendar dateOfEvent;
-	private int startYear;
-	private int startMonth;
-	private int startDay;
 	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
-
-	public EventNT(){}
 
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
@@ -53,7 +48,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 	
 	public GregorianCalendar getDate() { return dateOfEvent; }
 
-
 	public int compareTo(EventNT toCompare)
 	{
 		int dateC = dateOfEvent.compareTo(toCompare.getDate());
@@ -68,30 +62,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 		int afterStartOfThisEvt = dateOfEvent.compareTo(in.getStartTime());
 		int beforeEndOfThisEvt = dateOfEvent.compareTo(in.getFinishTime());
 		return afterStartOfThisEvt >= 0 && beforeEndOfThisEvt <= 0;
-	}
-
-	public int getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
-	}
-
-	public int getStartMonth() {
-		return startMonth;
-	}
-
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-
-	public int getStartDay() {
-		return startDay;
-	}
-
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
 	}
 
 	public GregorianCalendar getDateOfEvent() {

@@ -16,19 +16,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/dll/controlsfx-8.20.8.jar!/" />
+          <root url="jar://$CONTROLS_FX$!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/dll/mysql-connector-java-5.1.31.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../mysql-connector-java-5.1.31.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

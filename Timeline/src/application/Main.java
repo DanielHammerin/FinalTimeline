@@ -6,11 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 
-
+/**
+ * Entry point of the program..
+ */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			/* Loads fxml, necessary for the design of the main window*/
 			Parent root1 = FXMLLoader.load(getClass().getResource("/view/FirstTemplate.fxml"));
 			Scene scene = new Scene(root1, 1200,800);
 			scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());

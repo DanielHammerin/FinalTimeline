@@ -20,9 +20,11 @@ import javafx.scene.layout.VBox;
 import view.*;
 /**
  * Created by Alexander on 27/04/2015.
- * This is the controller class of the mainWindow
+ * This is the controller class of the mainWindow, the main window is the
+ * interface where the user interacts with the program. Initializable because
+ * the Main class needs to initialize this class without a constructor.
  */
-public class MainWindowController implements Initializable{
+public class MainWindowController implements Initializable {
 	LoadTimelinePopOver popOverLoad;
 	CreateTimelinePopOver popOverNew;
 	EditTimelinePopOver popOverEditTimeline;
@@ -38,6 +40,10 @@ public class MainWindowController implements Initializable{
 
 		vBoxModules.prefWidthProperty().bind(mainAnchorPane.widthProperty());
 		vBoxModules.prefHeightProperty().bind(mainAnchorPane.heightProperty());
+
+		/* Popover methods for Hatem to finish, to get rid of redundant code.
+		* The best solution is to have one popover object that changes depending
+		* on which buttons that is clicked but you solve it how you want to.*/
 
 		//This event opens the popOver to create a new timeline
 		newTimelineRect.setOnMouseClicked(openPopOverNew -> {
@@ -63,7 +69,17 @@ public class MainWindowController implements Initializable{
 					popOverNew.hide();
 					popOverNew = null;
 				}
-				popOverLoad = new LoadTimelinePopOver(vBoxModules);
+				try {
+					popOverLoad = new LoadTimelinePopOver(vBoxModules);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 				popOverLoad.show(loadimelineRect);
 			}
 		});
@@ -81,7 +97,17 @@ public class MainWindowController implements Initializable{
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
-				popOverEditTimeline = new EditTimelinePopOver(this);
+				try {
+					popOverEditTimeline = new EditTimelinePopOver(this);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 				popOverEditTimeline.show(editTimelineRect);
 			}
 		});
@@ -104,25 +130,22 @@ public class MainWindowController implements Initializable{
 						popOverAddNewEvent = new AddNewEventPopOver(this);
 						popOverAddNewEvent.show(addNewEventRect);
 					}else{
-						System.out.println("There are not databases to add an event to!");
+						//If error, handle it Mauro, lol
 					}
 				} catch (Exception e) {
+
 					e.printStackTrace();
 				}
 			}
 		});
 	}
 
-	public void redrawTimelines(){
-		SQLDAO sqldao = new SQLDAO();
-		vBoxModules.getChildren().clear();
-		LinkedList<DayTimeline> allTheMothaFuckinTimelines = sqldao.getAllTimelines();
-		for(DayTimeline t : allTheMothaFuckinTimelines){
-			vBoxModules.getChildren().add(new NewDayTimelineGrid(t));
-		}
-	}
-
-	public void redrawOneTimeline(NewDayTimelineGrid dayTimelineGrid){
+	/**
+	 * Redraws the time line passed as an argument.
+	 * @param dayTimelineGrid
+	 */
+	public void redrawOneTimeline(NewDayTimelineGrid dayTimelineGrid)
+	{
 		for(int i=0;i<vBoxModules.getChildren().size();i++){
 			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
 				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
@@ -131,10 +154,11 @@ public class MainWindowController implements Initializable{
 				}
 			}
 		}
-		sqldao.deleteTimeline(dayTimelineGrid.getDayTimeline().getTitle());
-		sqldao.saveTimeline(dayTimelineGrid.getDayTimeline());
 		vBoxModules.getChildren().add(dayTimelineGrid);
 	}
+
+	/* These are auto generated properties created for the FXML, needed for
+	* the GUI to work.*/
 	@FXML
 	private Rectangle addNewEventRect;
 	@FXML
