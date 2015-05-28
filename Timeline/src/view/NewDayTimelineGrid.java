@@ -18,7 +18,6 @@ import java.util.*;
  */
 public class NewDayTimelineGrid extends VBox
 {
-
     private GridPane gp = new GridPane();
     private DayTimeline dayTimeline;
     private AnchorPane myAnchorPane;
