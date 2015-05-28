@@ -2,29 +2,18 @@ package view;
 
 import controller.MainWindowController;
 import controller.SQLDAO;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import controller.DAO;
 import model.DayTimeline;
-import model.Timeline;
 import org.controlsfx.control.PopOver;
 
-import java.awt.*;
-import java.awt.TextArea;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 
 /**
  * Created by Alexander on 29/04/2015.
@@ -34,7 +23,6 @@ public class CreateTimelinePopOver extends PopOver{
 
     private VBox vbox;
     private TextField searchField = new TextField();
-    private DAO dao = new DAO();
     private SQLDAO sqldao = new SQLDAO();
     private TextField titleTxt = new TextField();
     private Button cancelBtn = new Button();
