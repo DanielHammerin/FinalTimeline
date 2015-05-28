@@ -17,7 +17,6 @@ import model.*;
 
 import org.controlsfx.control.PopOver;
 
-
 import java.util.LinkedList;
 
 
