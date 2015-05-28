@@ -16,13 +16,11 @@ import java.util.*;
 /**
  * Created by Alexander on 18/05/2015.
  */
-public class NewDayTimelineGrid extends VBox
-{
+public class NewDayTimelineGrid extends ScrollPane{
 
     private GridPane gp = new GridPane();
     private DayTimeline dayTimeline;
     private AnchorPane myAnchorPane;
-    private ScrollPane theGrid;
     /* Simple date formats for the dates.*/
     SimpleDateFormat yearF = new SimpleDateFormat("yyyyyyy");
     SimpleDateFormat monthF = new SimpleDateFormat("MM");
@@ -39,34 +37,33 @@ public class NewDayTimelineGrid extends VBox
      * The main constructor for creating the grid of the daytimeline
      * @param timeline the timeline to be drawn
      */
-    public NewDayTimelineGrid(Timeline timeline)
+    public NewDayTimelineGrid(DayTimeline timeline)
     {
-        theGrid = new ScrollPane();
-        theGrid.setPrefHeight(450);
-        theGrid.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-        title = new Label(timeline.getTitle());
+        dayTimeline = timeline;
+        this.setPrefHeight(450);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        title = new Label();
         Font titleSize = new Font(20);
         title.setFont(titleSize);
 
-        HBox titleBox = new HBox();
-        titleBox.getChildren().add(title);
-        titleBox.setAlignment(Pos.CENTER);
+        title.setMinHeight(40);
+        VBox myBox = new VBox();
+        myBox.setAlignment(Pos.CENTER);
 
-        this.getChildren().add(titleBox);
-
-        dayTimeline = (DayTimeline) timeline;
+        title.setText(dayTimeline.getTitle());
         drawDays();
 
         gp.setGridLinesVisible(false);
         gp.prefWidthProperty().bind(this.widthProperty());
         gp.prefHeightProperty().bind(this.heightProperty());
 
-        theGrid.setContent(gp);
+        myAnchorPane = new AnchorPane();
+        myAnchorPane.setPrefWidth(this.getWidth()-this.getWidth()*0.1);
+        myAnchorPane.getChildren().add(gp);
 
-        this.setMinHeight(300);
-
-        this.getChildren().add(theGrid);
+        myBox.getChildren().add(title);
+        myBox.getChildren().add(myAnchorPane);
+        this.setContent(myBox);
     }
 
     /**
@@ -78,7 +75,7 @@ public class NewDayTimelineGrid extends VBox
         /* Variables needed for the top part*/
         int compareDay = dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH);
         int currentMonth = dayTimeline.getStartDate().get(Calendar.MONTH);
-        int currentYear = dayTimeline.getStartYear();
+        int currentYear = dayTimeline.getStartDate().get(Calendar.YEAR);
         int daysSinceLastMonth = 0;
         int daysPassedSinceYear = 0;
         int daysPassed = 0;
@@ -168,15 +165,6 @@ public class NewDayTimelineGrid extends VBox
             gp.add(year, rowIndex, 0, daysPassedSinceYear, 1);
         }
         /* Calling the method drawEvents to draw out the events in the grid pane*/
-        drawEvents();
-    }
-
-    /**
-     * This method is to be used for update a grid in the gui
-     */
-    public void updateGrid()
-    {
-        removeStackPanes();
         drawEvents();
     }
 

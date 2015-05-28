@@ -2,11 +2,13 @@ package model;
 import java.util.Date;
 
 public abstract class MyEvent {
-	private java.util.Date startDate;
-	private java.util.Date endDate;
+	private Date startDate;
+	private Date endDate;
 	private String title;
 	private String description;
-	
+
+	public MyEvent(){}
+
 	public MyEvent (String t, String d){ // Constructor
 		title = t;
 		description = d;
@@ -25,14 +27,14 @@ public abstract class MyEvent {
 		this.description = description;
 	}
 
-    public void setDate(java.util.Date startDate,java.util.Date endDate){
+    public void setDate(Date startDate,Date endDate){
 		this.startDate=startDate;
-		this. endDate= endDate;
+		this.endDate= endDate;
 	}
-    public java.util.Date getStartDate(){
+    public Date getStartDate(){
 		return startDate;
     }
-	public java.util.Date getEndDate(){
+	public Date getEndDate(){
 		return endDate;
 	}
 }

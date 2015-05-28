@@ -3,12 +3,13 @@ package model;
 import java.util.GregorianCalendar;
 
 import javafx.geometry.Insets;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import view.EditEventPopover;
 
-public class EventNT extends MyEvent implements Comparable<EventNT> {
+public class EventNT extends MyEvent implements Comparable<EventNT>{
 	
 	private GregorianCalendar dateOfEvent;
 	private int startYear;
@@ -17,7 +18,9 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
-	
+
+	public EventNT(){}
+
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
@@ -42,8 +45,6 @@ public class EventNT extends MyEvent implements Comparable<EventNT> {
 	}
 
 	public StackPane getStackPane(){return eventPane; }
-
-	public Circle getCircle() { return  circle; }
 
 	@Override
 	public String toString (){

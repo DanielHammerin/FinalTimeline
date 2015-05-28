@@ -21,5 +21,5 @@ public interface daoInterface {
 	public void clearDatabase(); // deletes all Timelines in the database
 	public boolean isEmpty(); // returns true is the database is currently empty
 	public LinkedList<DayTimeline> getAllTimelines(); // Retrieves LInkedList containing all Timelines in the database
-	public void updateTimelineV2(DayTimeline oldTimeline, DayTimeline newTimeline); //Updates a specific timeline.
+	public void updateTimelineV2(DayTimeline oldTimeline, DayTimeline newTimeline) throws Exception; //Updates a specific timeline.
 }

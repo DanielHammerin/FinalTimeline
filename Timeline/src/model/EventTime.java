@@ -1,14 +1,11 @@
 package model;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javafx.geometry.Insets;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.EditEventPopover;
 
@@ -29,7 +26,7 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 	private int endYear;
 	private int endMonth;
 	private int endDay;
-	
+
 	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft) {
 		super(t, d);
 		if (st.compareTo(ft) > 0) {throw new IllegalArgumentException("The start date has to be before the end date."); }
@@ -39,8 +36,6 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		backGroundPane.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		eventPane = new StackPane(backGroundPane, new Text(t));
 		eventPane.setPrefHeight(50);
-
-
 		eventPane.setOnMouseClicked(rightClick ->{
 			if(editEventPopover != null){
 				editEventPopover.hide();

@@ -1,15 +1,20 @@
 package view;
 import controller.DAO;
 import controller.MainWindowController;
+import controller.SQLDAO;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Callback;
 import model.*;
 import org.controlsfx.control.PopOver;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 /**
@@ -24,14 +29,47 @@ public class EditTimelinePopOver extends PopOver{
     private DatePicker endDatePicker = new DatePicker();
     private Rectangle addBtn = new Rectangle();
 
+    LocalDate lStart;
+    LocalDate lEnd;
+
+    DayTimeline selectedTimeline = new DayTimeline();
+
     public EditTimelinePopOver(MainWindowController mwc){
-        DAO myDao = new DAO();
+      SQLDAO sqldao = new SQLDAO();
         myComboBox = new ComboBox();
-        LinkedList<DayTimeline> allDayTimelines = myDao.getAllTimelines();
+        LinkedList<DayTimeline> allDayTimelines = sqldao.getAllTimelines();
         for(Timeline t : allDayTimelines){
             myComboBox.getItems().addAll(t.getTitle());
         }
-        myComboBox.setPromptText("Choose the timeline");
+        myComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue ov, String t, String t1) {
+                try {
+                    selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                titleTextField.setText(selectedTimeline.getTitle());
+                descriptionTextArea.setText(selectedTimeline.getDescription());
+
+                int monthStart = selectedTimeline.getStartDate().get((Calendar.MONTH)) % 12;
+                lStart = LocalDate.of(selectedTimeline.getStartDate().get(Calendar.YEAR), monthStart, selectedTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
+
+                int monthEnd = selectedTimeline.getEndDate().get((Calendar.MONTH)) % 12;
+                lEnd = LocalDate.of(selectedTimeline.getEndDate().get(Calendar.YEAR), monthEnd, selectedTimeline.getEndDate().get(Calendar.DAY_OF_MONTH));
+                startDatePicker.setValue(lStart);
+                endDatePicker.setValue(lEnd);
+                System.out.println("In listener");
+            }
+        });
+        myComboBox.getSelectionModel().selectFirst();
+        try {
+            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.setHideOnEscape(true);
         this.autoHideProperty().setValue(true);
         this.autoHideProperty().setValue(true);
@@ -53,9 +91,11 @@ public class EditTimelinePopOver extends PopOver{
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
             String timelineTitle = (String) myComboBox.getSelectionModel().getSelectedItem();
             DayTimeline dayTimeline = new DayTimeline(timelineTitle, descriptionTextArea.getText(), gregorianStart, gregorianEnd);
-            DAO dao = new DAO();
+
             try {
-                dao.updateTimelineV2(dao.getDayTimeline(timelineTitle), dayTimeline);
+                DayTimeline timelineToDelete =  sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+               sqldao.deleteTimeline(timelineToDelete.getTitle());
+                sqldao.saveTimeline(dayTimeline);
                 mwc.redrawTimelines();
             } catch (Exception e) {
                 e.printStackTrace();
