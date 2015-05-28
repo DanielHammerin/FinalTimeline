@@ -1,5 +1,4 @@
 package view;
-import controller.DAO;
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -7,15 +6,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.DayTimeline;
 import model.EventNT;
 import model.EventTime;
-import model.Timeline;
 import org.controlsfx.control.PopOver;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;

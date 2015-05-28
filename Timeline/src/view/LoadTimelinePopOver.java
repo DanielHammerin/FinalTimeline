@@ -2,31 +2,22 @@
 package view;
 
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ListView;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import model.*;
 
 
 import org.controlsfx.control.PopOver;
 
 
-import controller.DAO;
-
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -38,7 +29,6 @@ public class LoadTimelinePopOver extends PopOver {
     private GridPane myGridPane = new GridPane();
     private ListView<String> myListview = new ListView<String>();
     private Label messageLabel = new Label();
-    private DAO dao = new DAO();
     private SQLDAO sqldao = new SQLDAO();
     private myRectangleButtons loadRect;
     private myRectangleButtons refreshRect;
