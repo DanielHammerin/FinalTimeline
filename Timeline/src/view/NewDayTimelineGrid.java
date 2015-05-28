@@ -172,6 +172,15 @@ public class NewDayTimelineGrid extends VBox
     }
 
     /**
+     * This method is to be used for update a grid in the gui
+     */
+    public void updateGrid()
+    {
+        removeStackPanes();
+        drawEvents();
+    }
+
+    /**
      * Method for removing an event and redrawing the
      * event from the time line
      * @param toBeRemoved the event to be removed
