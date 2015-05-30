@@ -35,7 +35,6 @@ public class MainWindowController implements Initializable {
 	AddNewEventPopOver popOverAddNewEvent;
 	SQLDAO sqldao = new SQLDAO();
 	public static MainWindowController mainWindowController;
-
 	public static ArrayList<DayTimeline> allTheTimelines = new ArrayList<DayTimeline>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -58,27 +57,6 @@ public class MainWindowController implements Initializable {
       /* Popover methods for Hatem to finish, to get rid of redundant code.
       * The best solution is to have one popover object that changes depending
       * on which buttons that is clicked but you solve it how you want to.*/
-
-		newTimelineButton.setOnMouseEntered(event -> {
-			newTimelineButton.setTooltip(new Tooltip("Create a timeline"));
-		});
-
-		addNewEventButton.setOnMouseEntered(event -> {
-			addNewEventButton.setTooltip(new Tooltip("Add a new event"));
-		});
-
-		loadimelineButton.setOnMouseEntered(event -> {
-			loadimelineButton.setTooltip(new Tooltip("Load timeline"));
-		});
-
-		editTimelineButton.setOnMouseEntered(event -> {
-			editTimelineButton.setTooltip(new Tooltip("Edit timeline"));
-		});
-
-		/* Popover methods for Hatem to finish, to get rid of redundant code.
-		* The best solution is to have one popover object that changes depending
-		* on which buttons that is clicked but you solve it how you want to.*/
-
 		//This event opens the popOver to create a new timeline
 		newTimelineButton.setOnMouseClicked(openPopOverNew -> {
 			if (popOverNew != null && popOverNew.isShowing()) {
@@ -89,7 +67,11 @@ public class MainWindowController implements Initializable {
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
-				if(popOverEditTimeline != null && popOverLoad.isShowing()){
+				if (popOverAddNewEvent != null && popOverAddNewEvent.isShowing()) {
+					popOverAddNewEvent.hide();
+					popOverAddNewEvent = null;
+				}
+				if (popOverEditTimeline != null && popOverAddNewEvent.isShowing()) {
 					popOverEditTimeline.hide();
 					popOverEditTimeline = null;
 				}
@@ -130,8 +112,6 @@ public class MainWindowController implements Initializable {
 			}
 		});
 		editTimelineButton.setOnMouseClicked(editTimeline -> {
-
-		editTimelineButton.setOnMouseClicked(editTimeline -> {
 			if (popOverEditTimeline != null && popOverEditTimeline.isShowing()) {
 				popOverEditTimeline.hide();
 				popOverEditTimeline = null;
@@ -152,46 +132,16 @@ public class MainWindowController implements Initializable {
 					popOverEditTimeline = new EditTimelinePopOver(this);
 					popOverEditTimeline.show(editTimelineButton);
 				} catch (ClassNotFoundException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Error");
-					alert.setContentText("");
-					alert.showAndWait();
-
 					e.printStackTrace();
-					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (SQLException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Error");
-					alert.setContentText("");
-					alert.showAndWait();
-
 					e.printStackTrace();
-					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (InstantiationException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Error");
-					alert.setContentText("");
-					alert.showAndWait();
-
 					e.printStackTrace();
-					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (IllegalAccessException e) {
-					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText("Error");
-					alert.setContentText("");
-					alert.showAndWait();
-
 					e.printStackTrace();
-					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				}
 			}
 		});
-
-		addNewEventButton.setOnMouseClicked(openAddEvent -> {
 		addNewEventButton.setOnMouseClicked(openAddEvent -> {
 			if(popOverAddNewEvent != null && popOverAddNewEvent.isShowing()){
 				popOverAddNewEvent.hide();
@@ -217,13 +167,11 @@ public class MainWindowController implements Initializable {
 						//If error, handle it Mauro, lol
 					}
 				} catch (Exception e) {
-
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
 	/**
 	 * Redraws the time line passed as an argument.
 	 * @param dayTimeline
@@ -244,7 +192,6 @@ public class MainWindowController implements Initializable {
 			}
 		}
 	}
-
 	public void redrawOneTimeline(DayTimeline timeline){
 		for(int i=0;i<vBoxModules.getChildren().size();i++){
 			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
@@ -254,9 +201,7 @@ public class MainWindowController implements Initializable {
 				vBoxModules.getChildren().add(new NewDayTimelineGrid(timeline));
 			}
 		}
-
 	}
-
 	/* These are auto generated properties created for the FXML, needed for
        * the GUI to work.*/
 	@FXML
