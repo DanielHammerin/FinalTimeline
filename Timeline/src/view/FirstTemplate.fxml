@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
@@ -9,55 +9,83 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.ScrollPane?>
-
-<VBox prefHeight="640.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
     <children>
         <AnchorPane fx:id="mainAnchorPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
-            <GridPane gridLinesVisible="true" layoutY="-5.0" maxWidth="1600.0" prefHeight="550.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" percentWidth="10.0" />
-                <ColumnConstraints percentWidth="90.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <ScrollPane fx:id="mainScrollPane" GridPane.columnIndex="1">
-                       <content>
-                           <VBox fx:id="vBoxModules">
-                               <children>
-                               </children>
-                           </VBox>
-                       </content>
-                  </ScrollPane>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                         <Rectangle fx:id="newTimelineRect" fill="#6161da" height="75.0" width="75.0">
-                           <VBox.margin>
-                              <Insets left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                        </Rectangle>
-                        <Rectangle fx:id="loadimelineRect" fill="DODGERBLUE" height="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="75.0">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </Rectangle>
-                        <Rectangle fx:id="editTimelineRect" fill="#06ab50" height="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="75.0">
-                           <VBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </VBox.margin>
-                        </Rectangle>
-                         <Rectangle fx:id="addNewEventRect" fill="#06ab50" height="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="75.0">
-                             <VBox.margin>
-                                 <Insets left="20.0" top="20.0" />
-                             </VBox.margin>
-                         </Rectangle>
-                     </children>
-                  </VBox>
-               </children>
-            </GridPane>
-
+                <GridPane gridLinesVisible="true" layoutY="-5.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="90.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ScrollPane fx:id="mainScrollPane" fitToWidth="true" hbarPolicy="NEVER" GridPane.columnIndex="1">
+                            <content>
+                                <VBox fx:id="vBoxModules">
+                                    <children>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                                <Button fx:id="newTimelineButton" layoutX="104.0" layoutY="81.0">
+                                    <graphic>
+                                        <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@Icons/AddTimeline.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <VBox.margin>
+                                        <Insets left="20.0" right="20.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button fx:id="loadimelineButton">
+                                    <graphic>
+                                        <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@Icons/Load.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <VBox.margin>
+                                        <Insets left="20.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button fx:id="editTimelineButton">
+                                    <graphic>
+                                        <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@Icons/Edit.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <VBox.margin>
+                                        <Insets left="20.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button fx:id="addNewEventButton">
+                                    <graphic>
+                                        <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@Icons/AddEvent.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <VBox.margin>
+                                        <Insets left="20.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                    </children>
+                </GridPane>
             </children>
         </AnchorPane>
     </children>
