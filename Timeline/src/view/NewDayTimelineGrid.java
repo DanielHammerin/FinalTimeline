@@ -422,7 +422,6 @@ public class NewDayTimelineGrid extends VBox
                         }
                     }
 
-                    boolean bigEnoughGapFound = false;
                     int rowIndex = 3;
                     gp.add(eventPane, daysPassed, rowIndex);
 

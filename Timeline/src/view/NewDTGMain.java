@@ -47,10 +47,10 @@ public class NewDTGMain extends Application
         EventTime ev3 = new EventTime("Title3", "Description", startOfEvent3, endOfEvent3);
         d1.addEventTime(ev3);
 
-        GregorianCalendar startOfEvent4 = new GregorianCalendar(2012, 11, 7);
-        GregorianCalendar endOfEvent4 = new GregorianCalendar(2012, 11, 15);
-        EventTime ev4 = new EventTime("Title4", "Description", startOfEvent4, endOfEvent4);
-        d1.addEventTime(ev4);
+//        GregorianCalendar startOfEvent4 = new GregorianCalendar(2012, 11, 7);
+//        GregorianCalendar endOfEvent4 = new GregorianCalendar(2012, 11, 15);
+//        EventTime ev4 = new EventTime("Title4", "Description", startOfEvent4, endOfEvent4);
+//        d1.addEventTime(ev4);
 
         GregorianCalendar startOfEvent5 = new GregorianCalendar(2012, 10, 24);
         GregorianCalendar endOfEvent5 = new GregorianCalendar(2012, 11, 15);
