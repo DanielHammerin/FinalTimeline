@@ -3,7 +3,10 @@ package view;
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,7 +31,7 @@ public class CreateTimelinePopOver extends PopOver{
     private javafx.scene.control.TextArea descriptionTxt = new javafx.scene.control.TextArea();
     private DatePicker endDatePicker = new DatePicker();
     private DatePicker startDatePicker = new DatePicker();
-    private Rectangle rect = new Rectangle();
+    private Button createButton;
 
     /**
      * Constructor of the pop-over which handles the creation of a new timeline
@@ -38,15 +41,35 @@ public class CreateTimelinePopOver extends PopOver{
         this.setHideOnEscape(true);
         this.setDetachable(false);
         this.hide();
-        this.setWidth(500);
+        this.setWidth(150);
         this.setHeight(300);
 
-        rect.setWidth(50);
-        rect.setHeight(50);
-        rect.setFill(Color.YELLOWGREEN);
+        titleTxt.setPromptText("Timeline title");
+        titleTxt.setPrefWidth(150);
+        descriptionTxt.setPromptText("Timeline description");
+        descriptionTxt.setPrefWidth(150);
+        descriptionTxt.setWrapText(true);
+        startDatePicker.setPromptText("Timeline start date");
+        endDatePicker.setPromptText("Timeline end date");
+
+        Image create = new Image(getClass().getResourceAsStream("Icons/createTimeline.png"));
+        ImageView image = new ImageView(create);
+        image.setFitWidth(40.0);
+        image.setFitHeight(40.0);
+        createButton = new Button("Create Timeline", image);
 
         //Event which initializes the creation of a TimelineGrid and the Timeline
-        rect.setOnMouseClicked(CreateTimeline -> {
+        createButton.setOnMouseClicked(CreateTimeline -> {
+            if(titleTxt.getText().isEmpty()){
+                this.hide();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Insufficient information");
+                alert.setHeaderText("Warning");
+                alert.setContentText("The title, start date and end date fields have to be filled to create a timeline");
+                alert.showAndWait();
+                throw new IllegalArgumentException("The title, start date and end date fields have to be filled to create a timeline");
+            }
+
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
 
@@ -91,8 +114,8 @@ public class CreateTimelinePopOver extends PopOver{
 
         vbox = new VBox();
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
-        vbox.getChildren().addAll(titleTxt,startDatePicker,endDatePicker,descriptionTxt,rect);
-
+        vbox.getChildren().addAll(titleTxt, startDatePicker, endDatePicker, descriptionTxt, createButton);
+        vbox.setPrefHeight(306.0);
         this.setContentNode(vbox);
     }
 

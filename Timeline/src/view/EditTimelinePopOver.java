@@ -1,4 +1,5 @@
 package view;
+
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -6,23 +7,23 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import model.*;
 import org.controlsfx.control.PopOver;
-
 import java.sql.SQLException;
 import java.util.LinkedList;
+
 /**
- * Created by Alexander on 08/05/2015.
+ * Created by Alexander, Hatem and Mauro on 30/05/2015.
  */
 public class EditTimelinePopOver extends PopOver{
     private VBox vbox = new VBox();
-    private ComboBox  myComboBox = new ComboBox();;
+    private ComboBox  myComboBox = new ComboBox();
     private TextField titleTextField = new TextField();
     private TextArea descriptionTextArea = new TextArea();
-    private Rectangle addBtn = new Rectangle();
-
+    private Button addBtn;
 
     DayTimeline selectedTimeline = new DayTimeline();
 
@@ -30,15 +31,18 @@ public class EditTimelinePopOver extends PopOver{
         SQLDAO sqldao = new SQLDAO();
         this.setHideOnEscape(true);
         this.autoHideProperty().setValue(true);
-        this.setWidth(400);
-        this.setHeight(200);
+        this.setWidth(140.0);
+        this.setHeight(100);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
-
-        addBtn.setWidth(100);
-        addBtn.setHeight(100);
+        titleTextField.setPrefWidth(140.0);
+        descriptionTextArea.setPrefWidth(140.0);
+        descriptionTextArea.setPrefHeight(150);
+        descriptionTextArea.setWrapText(true);
+        myComboBox.setPrefWidth(140.0);
 
         LinkedList<DayTimeline> allDayTimelines = sqldao.getAllTimelines();
-        for(Timeline t : allDayTimelines){
+
+        for (Timeline t : allDayTimelines) {
             myComboBox.getItems().addAll(t.getTitle());
         }
 
@@ -79,7 +83,6 @@ public class EditTimelinePopOver extends PopOver{
             alert.setHeaderText("Error!");
             alert.setContentText("Database connection Error");
             alert.showAndWait();
-
             e.printStackTrace();
         } catch (InstantiationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -112,6 +115,11 @@ public class EditTimelinePopOver extends PopOver{
             e.printStackTrace();
         }
 
+        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("Icons/FinishEditing.png")));
+        image.setFitHeight(50);
+        image.setFitWidth(50);
+        addBtn = new Button("Finish editing", image);
+
         addBtn.setOnMouseClicked(editTimeline -> {
             DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), selectedTimeline.getStartDate(), selectedTimeline.getEndDate());
 
@@ -122,17 +130,19 @@ public class EditTimelinePopOver extends PopOver{
                 sqldao.deleteTimeline(timelineToDelete.getTitle());
                 sqldao.saveTimeline(dayTimeline);
                 mwc.redrawOneTimeline(dayTimeline);
-            }catch(Exception e){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                }
-                this.hide();
-            });
-            vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, addBtn);
-            this.setContentNode(vbox);
-        }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
+                e.printStackTrace();
+            }
+            this.hide();
+        });
+        vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, addBtn);
+        vbox.setPrefHeight(260.0);
+        vbox.setPrefWidth(143.2);
+        this.setContentNode(vbox);
     }
+}

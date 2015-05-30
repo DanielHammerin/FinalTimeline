@@ -3,8 +3,11 @@ package view;
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.DayTimeline;
 import model.EventNT;
@@ -25,13 +28,14 @@ import java.util.GregorianCalendar;
 public class EditEventPopover extends PopOver {
 
     private VBox vbox = new VBox();
+    private HBox hbox = new HBox();
     private TextField titleField = new TextField();
     private SQLDAO sqldao = new SQLDAO();
     private TextArea descriptionField = new TextArea();
     private DatePicker endDatePicker = new DatePicker();
     private DatePicker startDatePicker = new DatePicker();
-    private Rectangle saveRect = new Rectangle(50,50);
-    private Rectangle abortRect = new Rectangle(25,25);
+    private Button saveButton;
+    private Button abortButton;
     private String oldEventName;
     /**
      * This pop-over makes it possible for the user to change an event
@@ -41,9 +45,24 @@ public class EditEventPopover extends PopOver {
         /*
         Setting of the inital values from the current event, so the user can see what the old values of the event was
          */
+        Image create1 = new Image(getClass().getResourceAsStream("Icons/FinishEditing.png"));
+        ImageView image1 = new ImageView(create1);
+        Image create2 = new Image(getClass().getResourceAsStream("Icons/Cancel.png"));
+        ImageView image2 = new ImageView(create2);
+        image1.setFitWidth(30);
+        image1.setFitHeight(30);
+        image2.setFitWidth(30);
+        image2.setFitHeight(30);
+        saveButton = new Button("Finish Editing", image1);
+        abortButton = new Button("Cancel", image2);
+
         oldEventName = event.getTitle();
         titleField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
+        descriptionField.setPrefHeight(110.0);
+        descriptionField.setWrapText(true);
+        startDatePicker.setPrefWidth(240.0);
+        endDatePicker.setPrefWidth(240.0);
         DayTimeline dayTimeline = sqldao.getTimelineFromEventTime(event);
 
         LocalDate lStart = LocalDate.of(dayTimeline.getStartDate().get(Calendar.YEAR), dayTimeline.getStartDate().get(Calendar.MONTH) + 1, dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
@@ -80,34 +99,44 @@ public class EditEventPopover extends PopOver {
         startDatePicker.setValue(startDate);
         endDatePicker.setValue(endDate);
 
-
-        vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, endDatePicker, saveRect, abortRect);
+        hbox.getChildren().addAll(saveButton, abortButton);
+        hbox.setSpacing(30.0);
+        vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, endDatePicker, hbox);
+        vbox.setPrefWidth(240.0);
+        vbox.setPrefHeight(227.0);
         this.setContentNode(vbox);
 
         //Initialization of the button with routine of saving the changes
-        saveRect.setOnMouseClicked(saveChanges -> {
+        saveButton.setOnMouseClicked(saveChanges -> {
+
             event.setTitle(titleField.getText());
             event.setDescription(descriptionField.getText());
 
             LocalDate start = startDatePicker.getValue();
             LocalDate end = endDatePicker.getValue();
 
-            GregorianCalendar gregorianStart = new GregorianCalendar();
-            Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            gregorianStart.setTime(tempStartDate);
-            event.setStartTime(gregorianStart);
+            if (end.isBefore(start)) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Impossible dates");
+                alert.setHeaderText("Error!");
+                alert.setContentText("The start date of an event has to be before the end date!");
+                alert.showAndWait();
+            } else {
+                GregorianCalendar gregorianStart = new GregorianCalendar();
+                Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                gregorianStart.setTime(tempStartDate);
+                event.setStartTime(gregorianStart);
 
-            GregorianCalendar gregorianEnd = new GregorianCalendar();
-            Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            gregorianEnd.setTime(tempEndDate);
-            event.setFinishTime(gregorianEnd);
+                GregorianCalendar gregorianEnd = new GregorianCalendar();
+                Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                gregorianEnd.setTime(tempEndDate);
+                event.setFinishTime(gregorianEnd);
 
-            try {
-                sqldao.updateEventTime(oldEventName, event);
-                DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
-                MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
-            }
-                catch (ClassNotFoundException e) {
+                try {
+                    sqldao.updateEventTime(oldEventName, event);
+                    DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
+                    MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
+                } catch (ClassNotFoundException e) {
 
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Database Error Connection");
@@ -145,15 +174,33 @@ public class EditEventPopover extends PopOver {
                     e.printStackTrace();
                 }
                 this.hide();
+            }
+
+
         });
 
-        abortRect.setOnMouseClicked(abort -> {
+        abortButton.setOnMouseClicked(abort -> {
             this.hide();
         });
     }
 
 
     public EditEventPopover(EventNT event) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Image create1 = new Image(getClass().getResourceAsStream("Icons/FinishEditing.png"));
+        ImageView image1 = new ImageView(create1);
+        Image create2 = new Image(getClass().getResourceAsStream("Icons/Cancel.png"));
+        ImageView image2 = new ImageView(create2);
+        image1.setFitWidth(30);
+        image1.setFitHeight(30);
+        image2.setFitWidth(30);
+        image2.setFitHeight(30);
+        saveButton = new Button("Finish Editing", image1);
+        abortButton = new Button("Cancel", image2);
+
+        descriptionField.setPrefHeight(110.0);
+        descriptionField.setWrapText(true);
+        startDatePicker.setPrefWidth(240.0);
+
         DayTimeline dayTimeline = sqldao.getTimelineFromEventNT(event);
         titleField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
@@ -161,7 +208,11 @@ public class EditEventPopover extends PopOver {
         LocalDate startDate = LocalDate.of(event.getDateOfEvent().get(Calendar.YEAR), event.getDateOfEvent().get(Calendar.MONTH) + 1, event.getDateOfEvent().get(Calendar.DAY_OF_MONTH));
         startDatePicker.setValue(startDate);
 
-        vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, saveRect, abortRect);
+        hbox.getChildren().addAll(saveButton, abortButton);
+        hbox.setSpacing(30.0);
+        vbox.getChildren().addAll(titleField, descriptionField, startDatePicker, hbox);
+        vbox.setPrefWidth(240.0);
+        vbox.setPrefHeight(200.0);
         this.setContentNode(vbox);
 
         LocalDate lStart = LocalDate.of(dayTimeline.getStartDate().get(Calendar.YEAR), dayTimeline.getStartDate().get(Calendar.MONTH) + 1, dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
@@ -188,10 +239,9 @@ public class EditEventPopover extends PopOver {
                 };
 
         startDatePicker.setDayCellFactory(dayCellFactory);
-        endDatePicker.setDayCellFactory(dayCellFactory);
 
         //Saves the changes from the GUI in the event
-        saveRect.setOnMouseClicked(saveChanges -> {
+        saveButton.setOnMouseClicked(saveChanges -> {
             oldEventName = event.getTitle();
             event.setTitle(titleField.getText());
             event.setDescription(descriptionField.getText());
@@ -205,47 +255,47 @@ public class EditEventPopover extends PopOver {
                 sqldao.updateEventNT(oldEventName, event);
                 DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
                 MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
-            }catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
 
-                    e.printStackTrace();
-                } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
 
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
 
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
 
-                    e.printStackTrace();
-                }
-                this.hide();
+                e.printStackTrace();
+            }
+            this.hide();
         });
 
-        abortRect.setOnMouseClicked(abort -> {
+        abortButton.setOnMouseClicked(abort -> {
             this.hide();
         });
     }

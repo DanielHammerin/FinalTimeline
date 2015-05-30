@@ -1,15 +1,22 @@
 package controller;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import model.DayTimeline;
+import model.EventNT;
+import model.Timeline;
 import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,26 +46,42 @@ public class MainWindowController implements Initializable {
 		vBoxModules.prefWidthProperty().bind(mainAnchorPane.widthProperty());
 		vBoxModules.prefHeightProperty().bind(mainAnchorPane.heightProperty());
 
+		newTimelineButton.setOnMouseEntered(event -> {
+			newTimelineButton.setTooltip(new Tooltip("Create a timeline"));
+		});
+
+		addNewEventButton.setOnMouseEntered(event -> {
+			addNewEventButton.setTooltip(new Tooltip("Add a new event"));
+		});
+
+		loadimelineButton.setOnMouseEntered(event -> {
+			loadimelineButton.setTooltip(new Tooltip("Load timeline"));
+		});
+
+		editTimelineButton.setOnMouseEntered(event -> {
+			editTimelineButton.setTooltip(new Tooltip("Edit timeline"));
+		});
+
 		/* Popover methods for Hatem to finish, to get rid of redundant code.
 		* The best solution is to have one popover object that changes depending
 		* on which buttons that is clicked but you solve it how you want to.*/
 
 		//This event opens the popOver to create a new timeline
-		newTimelineRect.setOnMouseClicked(openPopOverNew -> {
+		newTimelineButton.setOnMouseClicked(openPopOverNew -> {
 			if (popOverNew != null && popOverNew.isShowing()) {
 				popOverNew.hide();
 				popOverNew = null;
 			} else {
-				if(popOverLoad != null && popOverLoad.isShowing()) {
+				if (popOverLoad != null && popOverLoad.isShowing()) {
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
 				popOverNew = new CreateTimelinePopOver(vBoxModules);
-				popOverNew.show(newTimelineRect);
+				popOverNew.show(newTimelineButton);
 			}
 		});
 		//This event opens the popOver to load an existing timeline from the database
-		loadimelineRect.setOnMouseClicked(openPopOverLoad -> {
+		loadimelineButton.setOnMouseClicked(openPopOverLoad -> {
 			if(popOverLoad != null && popOverLoad.isShowing()){
 				popOverLoad.hide();
 				popOverLoad = null;
@@ -78,11 +101,11 @@ public class MainWindowController implements Initializable {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				popOverLoad.show(loadimelineRect);
+				popOverLoad.show(loadimelineButton);
 			}
 		});
 
-		editTimelineRect.setOnMouseClicked(editTimeline -> {
+		editTimelineButton.setOnMouseClicked(editTimeline -> {
 			if (popOverEditTimeline != null && popOverEditTimeline.isShowing()) {
 				popOverEditTimeline.hide();
 				popOverEditTimeline = null;
@@ -97,7 +120,7 @@ public class MainWindowController implements Initializable {
 				}
 				try {
 					popOverEditTimeline = new EditTimelinePopOver(this);
-					popOverEditTimeline.show(editTimelineRect);
+					popOverEditTimeline.show(editTimelineButton);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
@@ -110,7 +133,7 @@ public class MainWindowController implements Initializable {
 			}
 		});
 
-		addNewEventRect.setOnMouseClicked(openAddEvent -> {
+		addNewEventButton.setOnMouseClicked(openAddEvent -> {
 			if(popOverAddNewEvent != null && popOverAddNewEvent.isShowing()){
 				popOverAddNewEvent.hide();
 				popOverAddNewEvent = null;
@@ -126,12 +149,11 @@ public class MainWindowController implements Initializable {
 				try {
 					if(sqldao.getAllTimelines().size() != 0 || sqldao.getAllTimelines() != null){
 						popOverAddNewEvent = new AddNewEventPopOver(this);
-						popOverAddNewEvent.show(addNewEventRect);
+						popOverAddNewEvent.show(addNewEventButton);
 					}else{
 						//If error, handle it Mauro, lol
 					}
 				} catch (Exception e) {
-
 					e.printStackTrace();
 				}
 			}
@@ -175,17 +197,20 @@ public class MainWindowController implements Initializable {
 	/* These are auto generated properties created for the FXML, needed for
 	* the GUI to work.*/
 	@FXML
-	private Rectangle addNewEventRect;
+	private Button addNewEventButton;
 	@FXML
-	private Rectangle newTimelineRect;
+	private Button newTimelineButton;
 	@FXML
 	private VBox vBoxModules;
 	@FXML
-	private Rectangle loadimelineRect;
+	private Button loadimelineButton;
 	@FXML
 	private AnchorPane mainAnchorPane;
 	@FXML
-	private Rectangle editTimelineRect;
+	private Button editTimelineButton;
 	@FXML
 	private ScrollPane mainScrollPane;
+
+	public Stage mainStage;
+
 }

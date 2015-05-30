@@ -1,9 +1,13 @@
 package view;
+
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -11,7 +15,6 @@ import model.DayTimeline;
 import model.EventNT;
 import model.EventTime;
 import org.controlsfx.control.PopOver;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -20,29 +23,56 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 public class AddNewEventPopOver extends PopOver {
-
+    private HBox hbr = new HBox();
     private HBox hb = new HBox();
     private VBox vb = new VBox();
     private SQLDAO sqldao = new SQLDAO();
     private ComboBox myComboBox = new ComboBox();
+    private ToggleButton eventNT;
+    private ToggleButton eventWT;
+    private ToggleGroup tg = new ToggleGroup();
     private TextField titleField = new TextField();
     private TextArea descriptionField = new TextArea();
     private DatePicker endDatePicker = new DatePicker();
     private DatePicker startDatePicker = new DatePicker();
     private DayTimeline timelineToAddEvent;
-    LocalDate lStart;
-    LocalDate lEnd;
-    private Button saveBtn = new Button("Save");
-    private Button cancelBtn = new Button("Cancel");
+    private LocalDate lStart;
+    private LocalDate lEnd;
+    private Button saveBtn;
+    private Button cancelBtn;
     /**
      * This pop-over is for adding a new event to a timeline.
      * @throws Exception
      */
     public AddNewEventPopOver(MainWindowController mwc) throws Exception{
-        LinkedList<DayTimeline> allTimelines = sqldao.getAllTimelines();
-        for (DayTimeline t : allTimelines) {
-            myComboBox.getItems().add(t.getTitle());
+        SQLDAO sqldao = new SQLDAO();
+        LinkedList<DayTimeline> tmlns = sqldao.getAllTimelines();
+        myComboBox.setPrefWidth(240);
+        for (DayTimeline t : tmlns) {
+            myComboBox.getItems().addAll(t.getTitle());
         }
+
+        Image create1 = new Image(getClass().getResourceAsStream("Icons/FinishEditing.png"));
+        ImageView image1 = new ImageView(create1);
+        Image create2 = new Image(getClass().getResourceAsStream("Icons/Cancel.png"));
+        ImageView image2 = new ImageView(create2);
+        image1.setFitWidth(30);
+        image1.setFitHeight(30);
+        image2.setFitWidth(30);
+        image2.setFitHeight(30);
+        saveBtn = new Button("Add event", image1);
+        cancelBtn = new Button("Cancel", image2);
+
+        startDatePicker.setPrefWidth(240.0);
+        endDatePicker.setPrefWidth(240.0);
+        startDatePicker.setPromptText("Event start date");
+        endDatePicker.setPromptText("Event end date");
+
+        titleField.setPrefWidth(150);
+        titleField.setPromptText("Event title");
+        descriptionField.setPromptText("Event description");
+        eventNT = new ToggleButton("Non-Durated Event");
+        eventWT = new ToggleButton("Durated Event");
 
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -53,6 +83,7 @@ public class AddNewEventPopOver extends PopOver {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+
                 lStart = LocalDate.of(timelineToAddEvent.getStartDate().get(Calendar.YEAR), timelineToAddEvent.getStartDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getStartDate().get(Calendar.DAY_OF_MONTH));
                 lEnd = LocalDate.of(timelineToAddEvent.getEndDate().get(Calendar.YEAR), timelineToAddEvent.getEndDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getEndDate().get(Calendar.DAY_OF_MONTH));
                 System.out.println("In listener");
@@ -185,8 +216,15 @@ public class AddNewEventPopOver extends PopOver {
         cancelBtn.setOnMouseClicked(abort -> {
             this.hide();
         });
+        hb.setSpacing(49.0);
+        hbr.setSpacing(30.0);
         hb.getChildren().addAll(saveBtn, cancelBtn);
-        vb.getChildren().addAll(myComboBox, titleField, descriptionField, startDatePicker, endDatePicker, hb);
+        hbr.getChildren().addAll(eventNT, eventWT);
+        vb.getChildren().addAll(myComboBox, hbr, titleField, descriptionField, startDatePicker, endDatePicker, hb);
+        vb.prefWidthProperty().bind(this.prefWidthProperty());
+        vb.setPrefHeight(190.0);
         this.setContentNode(vb);
+        eventNT.setToggleGroup(tg);
+        eventWT.setToggleGroup(tg);
     }
 }

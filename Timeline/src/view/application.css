@@ -5,11 +5,10 @@
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+
 }
 
-.root {
-    -fx-background-color: lightblue;
-}
+
 
 .scroll-pane{
     -fx-background-color: bisque;
@@ -18,5 +17,6 @@
 .menu-item{
     -fx-font-size: 12;
 }
+
 
 
