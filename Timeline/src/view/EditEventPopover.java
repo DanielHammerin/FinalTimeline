@@ -10,6 +10,7 @@ import model.DayTimeline;
 import model.EventNT;
 import model.EventTime;
 import org.controlsfx.control.PopOver;
+import javafx.scene.control.Alert.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -105,17 +106,45 @@ public class EditEventPopover extends PopOver {
                 sqldao.updateEventTime(oldEventName, event);
                 DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
                 MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
-            this.hide();
+                catch (ClassNotFoundException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (SQLException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                }
+                this.hide();
         });
 
         abortRect.setOnMouseClicked(abort -> {
@@ -176,17 +205,44 @@ public class EditEventPopover extends PopOver {
                 sqldao.updateEventNT(oldEventName, event);
                 DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
                 MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            }catch (ClassNotFoundException e) {
 
-            this.hide();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (SQLException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                }
+                this.hide();
         });
 
         abortRect.setOnMouseClicked(abort -> {

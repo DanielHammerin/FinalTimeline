@@ -1,11 +1,7 @@
 package controller;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import model.*;
-
-import java.applet.Applet;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -82,6 +78,13 @@ public class SQLDAO
                 conn.close();
 
         } catch (ClassNotFoundException| SQLException | IllegalAccessException | InstantiationException e) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Connection Error");
+            alert.setHeaderText("Error!");
+            alert.setContentText("The Timeline was not saved due to a Database Connection Error");
+            alert.showAndWait();
+
             e.printStackTrace();
         }
     }
@@ -238,7 +241,6 @@ public class SQLDAO
 
         ResultSet rs = conn.createStatement().executeQuery(myQuery);
 
-
         while(rs.next()){
             GregorianCalendar startDate = new GregorianCalendar() ;
             GregorianCalendar endDate = new GregorianCalendar() ;
@@ -323,6 +325,19 @@ public class SQLDAO
         Connection c = openConnection();
         Statement s = c.createStatement();
         s.executeUpdate(myQuery);
+    }
+
+    public void deleteEvent(MyEvent event) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+
+        String query;
+        if(event instanceof  EventNT){
+            query= "DELETE from eventnotime where title='"+event.getTitle()+"'";
+        }else{
+            query="DELETE from eventtime where title='"+event.getTitle()+"'";
+        }
+        Connection c = openConnection();
+        Statement s = c.createStatement();
+        s.executeUpdate(query);
     }
 
     /**

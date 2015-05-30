@@ -6,6 +6,7 @@ import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -67,29 +68,31 @@ public class LoadTimelinePopOver extends PopOver {
 
         myListview.getItems().addAll(timelinesLV);
 
-
         /**
          * Handles the event which occures when the user presses the loadButton
          */
         loadRect.setOnMouseClicked(loadTimeline -> {
             String selectedItem = myListview.getSelectionModel().getSelectedItem(); // get the timeline form the title
             try {
-                DayTimeline dayTimeline= sqldao.getTimeline(selectedItem);
+                DayTimeline dayTimeline = sqldao.getTimeline(selectedItem);
                 NewDayTimelineGrid d = new NewDayTimelineGrid(dayTimeline);
                 MainWindowController.allTheTimelines.add(d.getDayTimeline());
                 mainVBox.getChildren().add(d);
                 this.hide();
 
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            }catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait(); e.printStackTrace();
             }
         });
 
         myGridPane.add(myListview,0,0,2,1);
         myGridPane.add(loadRect,0,1);
         myGridPane.add(refreshRect,1,1,1,1);
-        myGridPane.add(messageLabel,0,2,2,1);
+        myGridPane.add(messageLabel, 0, 2, 2, 1);
         this.setContentNode(myGridPane);
     }
 }

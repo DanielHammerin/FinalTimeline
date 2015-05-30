@@ -92,20 +92,43 @@ public class AddNewEventPopOver extends PopOver {
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
 
-                try {
-                    sqldao.saveEvent(timelineToAddEvent,ent);
-                    timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
-                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                this.hide();
+                    try {
+                        sqldao.saveEvent(timelineToAddEvent,ent);
+                        timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                        mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
+                    } catch (ClassNotFoundException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    }
+                    this.hide();
             }
             else{
                 LocalDate start = startDatePicker.getValue();
@@ -125,12 +148,35 @@ public class AddNewEventPopOver extends PopOver {
                     timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
                     mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
                 } catch (ClassNotFoundException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Database connection Error");
+                    alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Database connection Error");
+                    alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (InstantiationException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Database connection Error");
+                    alert.showAndWait();
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Database connection Error");
+                    alert.showAndWait();
+
                     e.printStackTrace();
                 }
                 this.hide();

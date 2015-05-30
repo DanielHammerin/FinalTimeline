@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 import model.DayTimeline;
 import org.controlsfx.control.PopOver;
 
+import javafx.scene.control.Alert.*;
+
 import java.time.LocalDate;
 import java.util.GregorianCalendar;
 
@@ -56,9 +58,8 @@ public class CreateTimelinePopOver extends PopOver{
 
             NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
 
-            try
-            {
-                if(!sqldao.isThereADuplicate(d.getDayTimeline())){
+            try {
+                if (!sqldao.isThereADuplicate(d.getDayTimeline())) {
                     try {
                         sqldao.saveTimeline(d.getDayTimeline());
                     } catch (Exception e) {
@@ -67,9 +68,25 @@ public class CreateTimelinePopOver extends PopOver{
                     MainWindowController.allTheTimelines.add(d.getDayTimeline());
                     vBoxMain.getChildren().add(d);
                     this.hide();
+                } else {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Duplicated Timelines");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There are duplicated Timelines in the Database");
+                    alert.showAndWait();
+
+
                 }
+            } catch (Exception e) {
+
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database, the Timeline could not be saved properly");
+                alert.showAndWait();
+                e.printStackTrace();
             }
-            catch (Exception e) {e.printStackTrace(); }
         });
 
         vbox = new VBox();

@@ -12,9 +12,6 @@ import model.*;
 import org.controlsfx.control.PopOver;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 /**
  * Created by Alexander on 08/05/2015.
@@ -24,12 +21,8 @@ public class EditTimelinePopOver extends PopOver{
     private ComboBox  myComboBox = new ComboBox();;
     private TextField titleTextField = new TextField();
     private TextArea descriptionTextArea = new TextArea();
-    private DatePicker startDatePicker = new DatePicker();
-    private DatePicker endDatePicker = new DatePicker();
     private Rectangle addBtn = new Rectangle();
 
-    LocalDate lStart;
-    LocalDate lEnd;
 
     DayTimeline selectedTimeline = new DayTimeline();
 
@@ -41,9 +34,6 @@ public class EditTimelinePopOver extends PopOver{
         this.setHeight(200);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
-        myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
-        startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
-        endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
         addBtn.setWidth(100);
         addBtn.setHeight(100);
 
@@ -58,20 +48,16 @@ public class EditTimelinePopOver extends PopOver{
                 try {
                     selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Database connection error");
+                    alert.showAndWait();
                     e.printStackTrace();
                 }
+
                 titleTextField.setText(selectedTimeline.getTitle());
                 descriptionTextArea.setText(selectedTimeline.getDescription());
-
-                int monthStart = selectedTimeline.getStartDate().get((Calendar.MONTH));
-                lStart = LocalDate.of(selectedTimeline.getStartDate().get(Calendar.YEAR), monthStart, selectedTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
-
-                int monthEnd = selectedTimeline.getEndDate().get((Calendar.MONTH));
-                lEnd = LocalDate.of(selectedTimeline.getEndDate().get(Calendar.YEAR), monthEnd, selectedTimeline.getEndDate().get(Calendar.DAY_OF_MONTH));
-                startDatePicker.setValue(lStart);
-                endDatePicker.setValue(lEnd);
-                System.out.println("In listener");
             }
         });
 
@@ -79,33 +65,74 @@ public class EditTimelinePopOver extends PopOver{
 
         try {
             selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+        } catch (ClassNotFoundException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Connection");
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection Error");
+            alert.showAndWait();
+
+            e.printStackTrace();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Connection");
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection Error");
+            alert.showAndWait();
+
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Connection");
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection Error");
+            alert.showAndWait();
+
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Connection");
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection Error");
+            alert.showAndWait();
+
+            e.printStackTrace();
+        }
+        this.hide();
+
+        try {
+            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
         } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database connection");
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection error");
+            alert.showAndWait();
+
             e.printStackTrace();
         }
 
         addBtn.setOnMouseClicked(editTimeline -> {
-            LocalDate localStart = startDatePicker.getValue();
-            LocalDate localEnd = endDatePicker.getValue();
-
-            GregorianCalendar gregorianStart = new GregorianCalendar();
-            gregorianStart.set(localStart.getYear(), localStart.getMonthValue(), localStart.getDayOfMonth());
-            GregorianCalendar gregorianEnd = new GregorianCalendar();
-            gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
-
-
-            DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
+            DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), selectedTimeline.getStartDate(), selectedTimeline.getEndDate());
 
             try {
                 DayTimeline timelineToDelete = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                dayTimeline.getEventNTs().addAll(timelineToDelete.getEventNTs());
+                dayTimeline.getEventTimes().addAll(timelineToDelete.getEventTimes());
                 sqldao.deleteTimeline(timelineToDelete.getTitle());
                 sqldao.saveTimeline(dayTimeline);
                 mwc.redrawOneTimeline(dayTimeline);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            this.hide();
-        });
-        vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, startDatePicker, endDatePicker, addBtn);
-        this.setContentNode(vbox);
+            }catch(Exception e){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.showAndWait();
+                    e.printStackTrace();
+                }
+                this.hide();
+            });
+            vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, addBtn);
+            this.setContentNode(vbox);
+        }
     }
-}
