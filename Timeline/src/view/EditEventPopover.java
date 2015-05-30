@@ -14,7 +14,6 @@ import model.EventNT;
 import model.EventTime;
 import org.controlsfx.control.PopOver;
 import javafx.scene.control.Alert.*;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -175,8 +174,6 @@ public class EditEventPopover extends PopOver {
                 }
                 this.hide();
             }
-
-
         });
 
         abortButton.setOnMouseClicked(abort -> {
