@@ -2,7 +2,6 @@ package model;
 
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
-
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -12,7 +11,7 @@ import javafx.scene.text.Text;
 import view.EditEventPopover;
 
 public class EventNT extends MyEvent implements Comparable<EventNT>{
-	
+
 	private GregorianCalendar dateOfEvent;
 	Pane backGroundPane;
 	StackPane eventPane;
@@ -61,7 +60,7 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 	public String toString (){
 		return (this.getTitle() + ": " + this.getDescription());
 	}
-	
+
 	public GregorianCalendar getDate() { return dateOfEvent; }
 
 	public int compareTo(EventNT toCompare)
@@ -89,4 +88,3 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 	}
 
 }
-

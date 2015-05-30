@@ -34,7 +34,7 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 			if(editEventPopover != null){
 				editEventPopover.hide();
 				editEventPopover = null;
-			 }
+			}
 			else{
 				if (rightClick.getButton() == MouseButton.SECONDARY) {
 					try {
@@ -49,21 +49,21 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 						e.printStackTrace();
 					}
 					editEventPopover.show(eventPane);
-			 }
+				}
 			}
 		});
 	}
 
-	 public void setStartTime (GregorianCalendar date) { this.startTime = date; }
-	 
-	 public GregorianCalendar getStartTime (){
-		 return startTime;
-	 }
-	 
-	 public void setFinishTime (GregorianCalendar date) {
-		 this.finishTime = date;
-	 }
-	 
+	public void setStartTime (GregorianCalendar date) { this.startTime = date; }
+
+	public GregorianCalendar getStartTime (){
+		return startTime;
+	}
+
+	public void setFinishTime (GregorianCalendar date) {
+		this.finishTime = date;
+	}
+
 	public GregorianCalendar getFinishTime (){ return finishTime; }
 
 	public StackPane getStackPane() { return eventPane ; }
