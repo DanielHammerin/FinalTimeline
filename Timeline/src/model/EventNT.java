@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import view.EditEventPopover;
 
@@ -16,6 +17,7 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
+	Circle eventCircle;
 
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
@@ -24,7 +26,10 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 		backGroundPane.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 		Text title = new Text(t);
 		title.setWrappingWidth(backGroundPane.getWidth());
-		eventPane = new StackPane(backGroundPane, title);
+		eventCircle = new Circle(13);
+		eventCircle.setFill(Color.LIGHTGREEN);
+
+		eventPane = new StackPane(eventCircle);
 		eventPane.setPrefHeight(50);
 		eventPane.setOnMouseClicked(rightClick ->{
 			if(editEventPopover != null){
