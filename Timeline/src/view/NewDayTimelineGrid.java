@@ -40,6 +40,7 @@ public class NewDayTimelineGrid extends VBox
      */
     public NewDayTimelineGrid(Timeline timeline)
     {
+        this.minHeight(250);
         theGrid = new ScrollPane();
         theGrid.setPrefHeight(450);
         theGrid.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -60,8 +61,9 @@ public class NewDayTimelineGrid extends VBox
         gp.setGridLinesVisible(false);
         gp.prefWidthProperty().bind(this.widthProperty());
         gp.prefHeightProperty().bind(this.heightProperty());
-
+        theGrid.prefWidthProperty().bind(this.prefWidthProperty());
         theGrid.setContent(gp);
+
 
         this.setMinHeight(300);
 
