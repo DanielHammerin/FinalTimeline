@@ -143,7 +143,7 @@ public class EditEventPopover extends PopOver {
 
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
-
+                System.out.println("Ett exception");
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Database Error Connection");
                     alert.setHeaderText("Error!");
@@ -151,6 +151,14 @@ public class EditEventPopover extends PopOver {
                     alert.showAndWait();
 
                     e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+
+                e.printStackTrace();
                 }
                 this.hide();
             }
