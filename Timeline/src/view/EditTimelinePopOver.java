@@ -23,7 +23,6 @@ public class EditTimelinePopOver extends PopOver{
     private TextArea descriptionTextArea = new TextArea();
     private Rectangle addBtn = new Rectangle();
 
-
     DayTimeline selectedTimeline = new DayTimeline();
 
     public EditTimelinePopOver(MainWindowController mwc) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
@@ -100,17 +99,6 @@ public class EditTimelinePopOver extends PopOver{
         }
         this.hide();
 
-        try {
-            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database connection");
-            alert.setHeaderText("Error!");
-            alert.setContentText("Database connection error");
-            alert.showAndWait();
-
-            e.printStackTrace();
-        }
 
         addBtn.setOnMouseClicked(editTimeline -> {
             DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), selectedTimeline.getStartDate(), selectedTimeline.getEndDate());
@@ -123,13 +111,13 @@ public class EditTimelinePopOver extends PopOver{
                 sqldao.saveTimeline(dayTimeline);
                 mwc.redrawOneTimeline(dayTimeline);
             }catch(Exception e){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                }
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Database Error Connection");
+                alert.setHeaderText("Error!");
+                alert.setContentText("There was an error trying to connect to the database");
+                alert.showAndWait();
+                e.printStackTrace();
+            }
                 this.hide();
             });
             vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, addBtn);

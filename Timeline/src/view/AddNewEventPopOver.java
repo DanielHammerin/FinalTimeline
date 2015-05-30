@@ -84,7 +84,7 @@ public class AddNewEventPopOver extends PopOver {
         timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
 
         saveBtn.setOnMouseClicked(saveChanges -> {
-            if(endDatePicker.getValue() == null) {
+            if (endDatePicker.getValue() == null) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
 
@@ -92,61 +92,10 @@ public class AddNewEventPopOver extends PopOver {
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
 
-                    try {
-                        sqldao.saveEvent(timelineToAddEvent,ent);
-                        timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
-                        mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
-                    } catch (ClassNotFoundException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Database Connection");
-                        alert.setHeaderText("Error!");
-                        alert.setContentText("Database connection Error");
-                        alert.showAndWait();
-
-                        e.printStackTrace();
-                    } catch (SQLException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Database Connection");
-                        alert.setHeaderText("Error!");
-                        alert.setContentText("Database connection Error");
-                        alert.showAndWait();
-
-                        e.printStackTrace();
-                    } catch (InstantiationException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Database Connection");
-                        alert.setHeaderText("Error!");
-                        alert.setContentText("Database connection Error");
-                        alert.showAndWait();
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Database Connection");
-                        alert.setHeaderText("Error!");
-                        alert.setContentText("Database connection Error");
-                        alert.showAndWait();
-
-                        e.printStackTrace();
-                    }
-                    this.hide();
-            }
-            else{
-                LocalDate start = startDatePicker.getValue();
-                LocalDate end = endDatePicker.getValue();
-
-                GregorianCalendar gregorianStart = new GregorianCalendar();
-                GregorianCalendar gregorianEnd = new GregorianCalendar();
-
-                Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                gregorianStart.setTime(dStart);
-                gregorianEnd.setTime(dEnd);
-
-                EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
                 try {
-                    sqldao.saveEvent(timelineToAddEvent,ewt);
-                    timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
-                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
+                    sqldao.saveEvent(timelineToAddEvent, ent);
+                    timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
                 } catch (ClassNotFoundException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
@@ -180,13 +129,71 @@ public class AddNewEventPopOver extends PopOver {
                     e.printStackTrace();
                 }
                 this.hide();
+            } else {
+                LocalDate start = startDatePicker.getValue();
+                LocalDate end = endDatePicker.getValue();
+
+                if (end.isBefore(start)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Impossible dates");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("The start date of an event has to be before the end date!");
+                    alert.showAndWait();
+                } else {
+                    GregorianCalendar gregorianStart = new GregorianCalendar();
+                    GregorianCalendar gregorianEnd = new GregorianCalendar();
+
+                    Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    gregorianStart.setTime(dStart);
+                    gregorianEnd.setTime(dEnd);
+
+                    EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
+                    try {
+                        sqldao.saveEvent(timelineToAddEvent, ewt);
+                        timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
+                        mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
+                    } catch (ClassNotFoundException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    }
+                    this.hide();
+                }
             }
-        });
-        cancelBtn.setOnMouseClicked(abort -> {
-            this.hide();
-        });
-        hb.getChildren().addAll(saveBtn, cancelBtn);
-        vb.getChildren().addAll(myComboBox, titleField, descriptionField, startDatePicker, endDatePicker, hb);
-        this.setContentNode(vb);
+            });
+            cancelBtn.setOnMouseClicked(abort -> {
+                this.hide();
+            });
+            hb.getChildren().addAll(saveBtn, cancelBtn);
+            vb.getChildren().addAll(myComboBox, titleField, descriptionField, startDatePicker, endDatePicker, hb);
+            this.setContentNode(vb);
+        }
     }
-}

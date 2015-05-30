@@ -49,51 +49,59 @@ public class CreateTimelinePopOver extends PopOver{
         rect.setOnMouseClicked(CreateTimeline -> {
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
-
-            GregorianCalendar gregorianStart = new GregorianCalendar();
-            gregorianStart.set(localStart.getYear(), localStart.getMonthValue() - 1, localStart.getDayOfMonth());
-
-            GregorianCalendar gregorianEnd = new GregorianCalendar();
-            gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue() - 1, localEnd.getDayOfMonth());
-
-            NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
-
-            try {
-                if (!sqldao.isThereADuplicate(d.getDayTimeline())) {
-                    try {
-                        sqldao.saveTimeline(d.getDayTimeline());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    MainWindowController.allTheTimelines.add(d.getDayTimeline());
-                    vBoxMain.getChildren().add(d);
-                    this.hide();
-                } else {
-
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Duplicated Timelines");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There are duplicated Timelines in the Database");
-                    alert.showAndWait();
-
-
-                }
-            } catch (Exception e) {
-
+            if (localEnd.isBefore(localStart)) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Database Error Connection");
+                alert.setTitle("Impossible dates");
                 alert.setHeaderText("Error!");
-                alert.setContentText("There was an error trying to connect to the database, the Timeline could not be saved properly");
+                alert.setContentText("The start date of an event has to be before the end date!");
                 alert.showAndWait();
-                e.printStackTrace();
+            } else {
+
+                GregorianCalendar gregorianStart = new GregorianCalendar();
+                gregorianStart.set(localStart.getYear(), localStart.getMonthValue() - 1, localStart.getDayOfMonth());
+
+                GregorianCalendar gregorianEnd = new GregorianCalendar();
+                gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue() - 1, localEnd.getDayOfMonth());
+
+                NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
+
+                try {
+                    if (!sqldao.isThereADuplicate(d.getDayTimeline())) {
+                        try {
+                            sqldao.saveTimeline(d.getDayTimeline());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        MainWindowController.allTheTimelines.add(d.getDayTimeline());
+                        vBoxMain.getChildren().add(d);
+                        this.hide();
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Duplicated Timelines");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There are duplicated Timelines in the Database");
+                        alert.showAndWait();
+
+
+                    }
+                } catch (Exception e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database, the Timeline could not be saved properly");
+                    alert.showAndWait();
+                    e.printStackTrace();
+                }
             }
         });
 
-        vbox = new VBox();
-        this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
-        vbox.getChildren().addAll(titleTxt,startDatePicker,endDatePicker,descriptionTxt,rect);
+            vbox = new VBox();
+            this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
+            vbox.getChildren().addAll(titleTxt, startDatePicker, endDatePicker, descriptionTxt, rect);
 
-        this.setContentNode(vbox);
+            this.setContentNode(vbox);
+        }
+
     }
-
-}

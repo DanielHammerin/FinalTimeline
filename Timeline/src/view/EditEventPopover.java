@@ -86,27 +86,35 @@ public class EditEventPopover extends PopOver {
 
         //Initialization of the button with routine of saving the changes
         saveRect.setOnMouseClicked(saveChanges -> {
+
             event.setTitle(titleField.getText());
             event.setDescription(descriptionField.getText());
 
             LocalDate start = startDatePicker.getValue();
             LocalDate end = endDatePicker.getValue();
 
-            GregorianCalendar gregorianStart = new GregorianCalendar();
-            Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            gregorianStart.setTime(tempStartDate);
-            event.setStartTime(gregorianStart);
+            if(end.isBefore(start)){
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Impossible dates");
+                alert.setHeaderText("Error!");
+                alert.setContentText("The start date of an event has to be before the end date!");
+                alert.showAndWait();
+            }else{
+                GregorianCalendar gregorianStart = new GregorianCalendar();
+                Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                gregorianStart.setTime(tempStartDate);
+                event.setStartTime(gregorianStart);
 
-            GregorianCalendar gregorianEnd = new GregorianCalendar();
-            Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            gregorianEnd.setTime(tempEndDate);
-            event.setFinishTime(gregorianEnd);
+                GregorianCalendar gregorianEnd = new GregorianCalendar();
+                Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                gregorianEnd.setTime(tempEndDate);
+                event.setFinishTime(gregorianEnd);
 
-            try {
-                sqldao.updateEventTime(oldEventName, event);
-                DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
-                MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
-            }
+                try {
+                    sqldao.updateEventTime(oldEventName, event);
+                    DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
+                    MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
+                }
                 catch (ClassNotFoundException e) {
 
                     Alert alert = new Alert(AlertType.ERROR);
@@ -145,6 +153,9 @@ public class EditEventPopover extends PopOver {
                     e.printStackTrace();
                 }
                 this.hide();
+            }
+
+
         });
 
         abortRect.setOnMouseClicked(abort -> {

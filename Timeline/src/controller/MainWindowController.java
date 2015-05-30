@@ -3,11 +3,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import model.*;
@@ -16,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import view.*;
+import javafx.scene.control.Alert;
 /**
  * Created by Alexander on 27/04/2015.
  * This is the controller class of the mainWindow, the main window is the
@@ -49,9 +46,13 @@ public class MainWindowController implements Initializable {
 				popOverNew.hide();
 				popOverNew = null;
 			} else {
-				if(popOverLoad != null && popOverLoad.isShowing()) {
+				if(popOverLoad != null && popOverLoad.isShowing()){
 					popOverLoad.hide();
 					popOverLoad = null;
+				}
+				if(popOverEditTimeline != null && popOverLoad.isShowing()){
+					popOverEditTimeline.hide();
+					popOverEditTimeline = null;
 				}
 				popOverNew = new CreateTimelinePopOver(vBoxModules);
 				popOverNew.show(newTimelineRect);
@@ -69,15 +70,46 @@ public class MainWindowController implements Initializable {
 				}
 				try {
 					popOverLoad = new LoadTimelinePopOver(vBoxModules);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
 				}
+					catch (ClassNotFoundException e) {
+
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Error");
+						alert.setContentText("");
+						alert.showAndWait();
+
+						e.printStackTrace();
+						throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
+
+					} catch (SQLException e) {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Error");
+						alert.setContentText("");
+						alert.showAndWait();
+
+						e.printStackTrace();
+						throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
+					} catch (InstantiationException e) {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Error");
+						alert.setContentText("");
+						alert.showAndWait();
+
+						e.printStackTrace();
+						throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
+					} catch (IllegalAccessException e) {
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText("Error");
+						alert.setContentText("");
+						alert.showAndWait();
+
+						e.printStackTrace();
+						throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
+					}
 				popOverLoad.show(loadimelineRect);
 			}
 		});
@@ -99,13 +131,41 @@ public class MainWindowController implements Initializable {
 					popOverEditTimeline = new EditTimelinePopOver(this);
 					popOverEditTimeline.show(editTimelineRect);
 				} catch (ClassNotFoundException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Error");
+					alert.setContentText("");
+					alert.showAndWait();
+
 					e.printStackTrace();
+					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Error");
+					alert.setContentText("");
+					alert.showAndWait();
+
 					e.printStackTrace();
+					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (InstantiationException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Error");
+					alert.setContentText("");
+					alert.showAndWait();
+
 					e.printStackTrace();
+					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				} catch (IllegalAccessException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText("Error");
+					alert.setContentText("");
+					alert.showAndWait();
+
 					e.printStackTrace();
+					throw new IllegalArgumentException("There was en error connecting the database, restart the program!.");
 				}
 			}
 		});
@@ -122,6 +182,10 @@ public class MainWindowController implements Initializable {
 				if(popOverLoad != null && popOverLoad.isShowing()){
 					popOverLoad.hide();
 					popOverLoad = null;
+				}
+				if(popOverEditTimeline != null && popOverLoad.isShowing()){
+					popOverEditTimeline.hide();
+					popOverEditTimeline = null;
 				}
 				try {
 					if(sqldao.getAllTimelines().size() != 0 || sqldao.getAllTimelines() != null){
