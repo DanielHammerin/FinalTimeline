@@ -28,7 +28,7 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		this.finishTime = ft;
 		backGroundPane = new Pane();
 		backGroundPane.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-		eventPane = new StackPane(backGroundPane, new Text(t));
+		eventPane = new StackPane(backGroundPane, new Text(getTitleText(t, st, ft)));
 		eventPane.setPrefHeight(50);
 		eventPane.setOnMouseClicked(rightClick ->{
 			if(editEventPopover != null){
@@ -54,7 +54,40 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		});
 	}
 
-	public void setStartTime (GregorianCalendar date) { this.startTime = date; }
+	private String getTitleText(String title, GregorianCalendar startDate, GregorianCalendar endDate)
+	{
+		if (startDate.compareTo(endDate) == 0)
+		{
+			if (title.length() < 6) { return title; }
+			else { return title.substring(0,3) + "..." ;}
+		}
+		GregorianCalendar startDateCopy = (GregorianCalendar) startDate.clone();
+		startDateCopy.add(5, 1);
+		if (startDateCopy.compareTo(endDate) == 0)
+		{
+			if (title.length() < 12) { return title; }
+			else { return title.substring(0, 9) + "..." ;}
+		}
+		startDateCopy.add(5, 1);
+		if (startDateCopy.compareTo(endDate) == 0)
+		{
+			if (title.length() < 18) { return title; }
+			else { return title.substring(0, 15) + "..." ;}
+		}
+		startDateCopy.add(5, 1);
+		if (startDateCopy.compareTo(endDate) == 0)
+		{
+			if (title.length() < 24) { return title; }
+			else { return title.substring(0, 21) + "..." ;}
+		}
+		return title;
+	}
+
+	public void setStartTime (GregorianCalendar date)
+	{
+		this.startTime = date;
+		updateStackPane();
+	}
 
 	public GregorianCalendar getStartTime (){
 		return startTime;
@@ -62,6 +95,12 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 
 	public void setFinishTime (GregorianCalendar date) {
 		this.finishTime = date;
+		updateStackPane();
+	}
+
+	private void updateStackPane()
+	{
+		eventPane.getChildren().set(1, new Text(getTitleText(this.getTitle(), startTime, finishTime))) ;
 	}
 
 	public GregorianCalendar getFinishTime (){ return finishTime; }
