@@ -19,6 +19,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../controlsfx-8.20.8.jar!/" />
           <root url="jar://$CONTROLS_FX$!/" />
         </CLASSES>
         <JAVADOC />

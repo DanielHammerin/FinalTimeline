@@ -12,6 +12,7 @@ import model.EventNT;
 import model.EventTime;
 import org.controlsfx.control.PopOver;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -20,16 +21,12 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 public class AddNewEventPopOver extends PopOver {
 
-    private HBox hbr = new HBox();
     private HBox hb = new HBox();
     private VBox vb = new VBox();
     private SQLDAO sqldao = new SQLDAO();
     private ComboBox myComboBox = new ComboBox();
-    private RadioButton eventNT = new RadioButton();
-    private RadioButton eventWT = new RadioButton();
-    private ToggleGroup tg = new ToggleGroup();
     private TextField titleField = new TextField();
-    private TextField descriptionField = new TextField();
+    private TextArea descriptionField = new TextArea();
     private DatePicker endDatePicker = new DatePicker();
     private DatePicker startDatePicker = new DatePicker();
     private DayTimeline timelineToAddEvent;
@@ -83,46 +80,34 @@ public class AddNewEventPopOver extends PopOver {
                 endDatePicker.setDayCellFactory(dayCellFactory);
             }
         });
-        final Callback<DatePicker, DateCell> dayCellFactory =
-                new Callback<DatePicker, DateCell>() {
-                    @Override
-                    public DateCell call(final DatePicker datePicker) {
-                        return new DateCell() {
-                            @Override
-                            public void updateItem(LocalDate item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (item.isBefore(lStart)) {
-                                    setDisable(true);
-                                    setStyle("-fx-background-color: #FF3E31;");
-                                }
-                                if(item.isAfter(lEnd)){
-                                    setDisable(true);
-                                    setStyle("-fx-background-color: #FF3E31;");
-                                }
-                            }
-                        };
-                    }
-                };
-
         myComboBox.getSelectionModel().selectFirst();
         timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
 
         saveBtn.setOnMouseClicked(saveChanges -> {
-            if(tg.getSelectedToggle() == eventNT) {
+            if(endDatePicker.getValue() == null) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
-                endDatePicker.setDisable(true);
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
 
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
 
-                NewDayTimelineGrid newDayTimelineGrid = new NewDayTimelineGrid(timelineToAddEvent);
-                newDayTimelineGrid.redrawEventsAddEvent(ent);
-//                mwc.redrawOneTimeline(newDayTimelineGrid);
+                try {
+                    sqldao.saveEvent(timelineToAddEvent,ent);
+                    timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 this.hide();
             }
-            else if(tg.getSelectedToggle() == eventWT) {
+            else{
                 LocalDate start = startDatePicker.getValue();
                 LocalDate end = endDatePicker.getValue();
 
@@ -135,9 +120,19 @@ public class AddNewEventPopOver extends PopOver {
                 gregorianEnd.setTime(dEnd);
 
                 EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
-                NewDayTimelineGrid newDayTimelineGrid = new NewDayTimelineGrid(timelineToAddEvent);
-                newDayTimelineGrid.redrawEventsAddEvent(ewt);
-                mwc.redrawOneTimeline(newDayTimelineGrid);
+                try {
+                    sqldao.saveEvent(timelineToAddEvent,ewt);
+                    timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
+                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 this.hide();
             }
         });
@@ -145,10 +140,7 @@ public class AddNewEventPopOver extends PopOver {
             this.hide();
         });
         hb.getChildren().addAll(saveBtn, cancelBtn);
-        hbr.getChildren().addAll(eventNT, eventWT);
-        vb.getChildren().addAll(myComboBox, hbr, titleField, descriptionField, startDatePicker, endDatePicker, hb);
+        vb.getChildren().addAll(myComboBox, titleField, descriptionField, startDatePicker, endDatePicker, hb);
         this.setContentNode(vb);
-        eventNT.setToggleGroup(tg);
-        eventWT.setToggleGroup(tg);
     }
 }

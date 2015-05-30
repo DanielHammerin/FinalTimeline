@@ -41,17 +41,15 @@ public class EditTimelinePopOver extends PopOver{
         this.setHeight(200);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
 
+        myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
+        startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
+        endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
+        addBtn.setWidth(100);
+        addBtn.setHeight(100);
+
         LinkedList<DayTimeline> allDayTimelines = sqldao.getAllTimelines();
         for(Timeline t : allDayTimelines){
             myComboBox.getItems().addAll(t.getTitle());
-        }
-
-        myComboBox.getSelectionModel().selectFirst();
-
-        try {
-            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -66,10 +64,10 @@ public class EditTimelinePopOver extends PopOver{
                 titleTextField.setText(selectedTimeline.getTitle());
                 descriptionTextArea.setText(selectedTimeline.getDescription());
 
-                int monthStart = selectedTimeline.getStartDate().get((Calendar.MONTH)) % 12;
+                int monthStart = selectedTimeline.getStartDate().get((Calendar.MONTH));
                 lStart = LocalDate.of(selectedTimeline.getStartDate().get(Calendar.YEAR), monthStart, selectedTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
 
-                int monthEnd = selectedTimeline.getEndDate().get((Calendar.MONTH)) % 12;
+                int monthEnd = selectedTimeline.getEndDate().get((Calendar.MONTH));
                 lEnd = LocalDate.of(selectedTimeline.getEndDate().get(Calendar.YEAR), monthEnd, selectedTimeline.getEndDate().get(Calendar.DAY_OF_MONTH));
                 startDatePicker.setValue(lStart);
                 endDatePicker.setValue(lEnd);
@@ -77,12 +75,14 @@ public class EditTimelinePopOver extends PopOver{
             }
         });
 
+        myComboBox.getSelectionModel().selectFirst();
 
-        myComboBox.prefWidthProperty().bind(startDatePicker.widthProperty());
-        startDatePicker.prefWidthProperty().bind(vbox.widthProperty());
-        endDatePicker.prefWidthProperty().bind(vbox.widthProperty());
-        addBtn.setWidth(100);
-        addBtn.setHeight(100);
+        try {
+            selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         addBtn.setOnMouseClicked(editTimeline -> {
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
@@ -92,20 +92,20 @@ public class EditTimelinePopOver extends PopOver{
             GregorianCalendar gregorianEnd = new GregorianCalendar();
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue(), localEnd.getDayOfMonth());
 
-            String timelineTitle = (String) myComboBox.getSelectionModel().getSelectedItem();
-            DayTimeline dayTimeline = new DayTimeline(timelineTitle, descriptionTextArea.getText(), gregorianStart, gregorianEnd);
+
+            DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), gregorianStart, gregorianEnd);
 
             try {
                 DayTimeline timelineToDelete = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
                 sqldao.deleteTimeline(timelineToDelete.getTitle());
                 sqldao.saveTimeline(dayTimeline);
-                mwc.redrawOneTimeline(new NewDayTimelineGrid(dayTimeline));
+                mwc.redrawOneTimeline(dayTimeline);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             this.hide();
         });
-        vbox.getChildren().addAll(myComboBox, titleTextField,descriptionTextArea,startDatePicker,endDatePicker,addBtn);
+        vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, startDatePicker, endDatePicker, addBtn);
         this.setContentNode(vbox);
     }
 }

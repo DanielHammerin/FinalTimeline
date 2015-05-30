@@ -42,7 +42,6 @@ public class SQLDAO
             preparedStmt.executeUpdate();
             preparedStmt.close();
 
-
             Date startDateEventNT;
             for(EventNT eventNT : dayTimeline.getEventNTs()){
 
@@ -64,14 +63,13 @@ public class SQLDAO
             Date startDateEventTime;
             Date endDateEventTime;
             for(EventTime eventTime : dayTimeline.getEventTimes()){
-
                 String queryEventTime = "insert into eventtime(title, description, startDate, endDate, timeline)"
                         + " values (?, ?, ?, ?, ?)";
 
                 startDateEventTime = new Date(eventTime.getStartTime().getTimeInMillis());
                 endDateEventTime = new Date(eventTime.getFinishTime().getTimeInMillis());
-                PreparedStatement pStatementEventTime= conn.prepareStatement(queryEventTime);
 
+                PreparedStatement pStatementEventTime = conn.prepareStatement(queryEventTime);
                 pStatementEventTime.setString(1, eventTime.getTitle());
                 pStatementEventTime.setString(2, eventTime.getDescription());
                 pStatementEventTime.setDate(3, startDateEventTime);
@@ -88,6 +86,41 @@ public class SQLDAO
         }
     }
 
+    public void saveEvent(Timeline timeline,MyEvent event) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+
+        Connection conn = openConnection();
+        if(event instanceof  EventNT){
+            EventNT eventNT = (EventNT)event;
+            Date startDate = new Date(eventNT.getDateOfEvent().getTimeInMillis());
+            String myQuery = "insert into eventnotime(title, description, startDate, timeline)"
+                    + " values (?, ?, ?, ?)";
+
+            PreparedStatement preparedStmt = conn.prepareStatement(myQuery);
+            preparedStmt.setString(1, event.getTitle());
+            preparedStmt.setString(2, event.getDescription());
+            preparedStmt.setDate(3, startDate);
+            preparedStmt.setString(4, timeline.getTitle());
+            preparedStmt.executeUpdate();
+            preparedStmt.close();
+        }else{
+            EventTime eventTime = (EventTime)event;
+            Date startDate = new Date(eventTime.getStartTime().getTimeInMillis());
+            Date endDate = new Date(eventTime.getFinishTime().getTimeInMillis());
+            String myQuery = "insert into eventtime(title, description, startDate, enddate, timeline)"
+                    + " values (?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStmt = conn.prepareStatement(myQuery);
+            preparedStmt.setString(1, event.getTitle());
+            preparedStmt.setString(2, event.getDescription());
+            preparedStmt.setDate(3, startDate);
+            preparedStmt.setDate(4, endDate);
+            preparedStmt.setString(5, timeline.getTitle());
+            preparedStmt.executeUpdate();
+            preparedStmt.close();
+        }
+        conn.close();
+    }
+
     /**
      * Retrieves all timelines from the day timelines table.
      * @return
@@ -98,7 +131,6 @@ public class SQLDAO
         LinkedList<DayTimeline> allTimelines = new LinkedList<DayTimeline>();
 
         Connection c = openConnection();
-
         Statement s = c.createStatement();
         ResultSet rs = s.executeQuery(myQuery);
 
@@ -107,10 +139,10 @@ public class SQLDAO
             dayTimeline.setTitle(rs.getString("Title"));
             dayTimeline.setDescription(rs.getString("Description"));
             GregorianCalendar startDate = new GregorianCalendar();
-            startDate.setTime(rs.getDate(3));
+            startDate.setTime(rs.getDate("startDate"));
             dayTimeline.setStartDate(startDate);
             GregorianCalendar endDate = new GregorianCalendar();
-            endDate.setTime(rs.getDate(4));
+            endDate.setTime(rs.getDate("endDate"));
             dayTimeline.setEndDate(endDate);
             allTimelines.add(dayTimeline);
 
@@ -137,7 +169,6 @@ public class SQLDAO
                 "WHERE Title = '"+title+"'" ;
         DayTimeline dayTimeline = new DayTimeline();
         Connection c = openConnection();
-        c = openConnection();
         Statement s = c.createStatement();
         ResultSet rs = s.executeQuery(myQuery);
         while (rs.next()) {
@@ -207,9 +238,10 @@ public class SQLDAO
 
         ResultSet rs = conn.createStatement().executeQuery(myQuery);
 
-        GregorianCalendar startDate = new GregorianCalendar() ;
-        GregorianCalendar endDate = new GregorianCalendar() ;
+
         while(rs.next()){
+            GregorianCalendar startDate = new GregorianCalendar() ;
+            GregorianCalendar endDate = new GregorianCalendar() ;
             startDate.setTime(rs.getDate("startdate"));
             endDate.setTime(rs.getDate("enddate"));
 
@@ -247,7 +279,7 @@ public class SQLDAO
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    public String getTimelineFromEventNT(EventNT eventNT) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public DayTimeline getTimelineFromEventNT(EventNT eventNT) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
         String dayTimelineTitle = "";
         String myQuery = "SELECT timeline FROM eventnotime WHERE title = '"+eventNT.getTitle()+"'" ;
@@ -256,7 +288,8 @@ public class SQLDAO
         while(rs.next()){
             dayTimelineTitle = rs.getString(1);
         }
-        return dayTimelineTitle;
+
+        return  getTimeline(dayTimelineTitle);
     }
 
     /**
@@ -268,7 +301,7 @@ public class SQLDAO
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    public String getTimelineFromEventTime(EventTime eventTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public DayTimeline getTimelineFromEventTime(EventTime eventTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         Connection conn = openConnection();
         String dayTimelineTitle = "";
         String myQuery = "SELECT timeline FROM eventtime WHERE title = '"+eventTime.getTitle()+"'" ;
@@ -277,8 +310,7 @@ public class SQLDAO
         while(rs.next()){
             dayTimelineTitle = rs.getString(1);
         }
-        //J
-        return dayTimelineTitle;
+        return getTimeline(dayTimelineTitle);
     }
 
     /**

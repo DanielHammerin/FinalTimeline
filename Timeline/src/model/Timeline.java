@@ -35,7 +35,8 @@ public abstract class Timeline
 		if (t.length() > MAX_CHARS_TITLE) {
 			//Mauro: alerts removed
 			throw new IllegalArgumentException("The title "
-				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");}
+				+ " can be maximum " + MAX_CHARS_TITLE + " characters long.");
+		}
 		title = t;
 		description = d;
 

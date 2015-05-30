@@ -10,9 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import model.DayTimeline;
-import model.EventNT;
-import model.Timeline;
+import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
@@ -99,6 +97,7 @@ public class MainWindowController implements Initializable {
 				}
 				try {
 					popOverEditTimeline = new EditTimelinePopOver(this);
+					popOverEditTimeline.show(editTimelineRect);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
@@ -108,7 +107,6 @@ public class MainWindowController implements Initializable {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				popOverEditTimeline.show(editTimelineRect);
 			}
 		});
 
@@ -142,19 +140,36 @@ public class MainWindowController implements Initializable {
 
 	/**
 	 * Redraws the time line passed as an argument.
-	 * @param dayTimelineGrid
+	 * @param dayTimeline
 	 */
-	public void redrawOneTimeline(NewDayTimelineGrid dayTimelineGrid)
-	{
+	public void redrawOneTimelineEvent(DayTimeline dayTimeline, MyEvent myEvent){
 		for(int i=0;i<vBoxModules.getChildren().size();i++){
 			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
 				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
-				if(Objects.equals(newDayTimelineGrid.getDayTimeline().getTitle(), dayTimelineGrid.getDayTimeline().getTitle())){
-					vBoxModules.getChildren().remove(vBoxModules.getChildren().get(i));
+				if(Objects.equals(newDayTimelineGrid.getDayTimeline().getTitle(), dayTimeline.getTitle())){
+					if(myEvent instanceof  EventNT){
+						EventNT eventNT = (EventNT)myEvent;
+						newDayTimelineGrid.redrawEventsAddEvent(eventNT);
+					}else{
+						EventTime eventTime = (EventTime)myEvent;
+						newDayTimelineGrid.redrawEventsAddEvent(eventTime);
+					}
 				}
 			}
 		}
-		vBoxModules.getChildren().add(dayTimelineGrid);
+	}
+
+	public void redrawOneTimeline(DayTimeline timeline){
+		for(int i=0;i<vBoxModules.getChildren().size();i++){
+			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
+				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
+
+					vBoxModules.getChildren().remove(newDayTimelineGrid);
+					//vBoxModules.getChildren().remove(vBoxModules.getChildren().get(i));
+				vBoxModules.getChildren().add(new NewDayTimelineGrid(timeline));
+			}
+		}
+
 	}
 
 	/* These are auto generated properties created for the FXML, needed for

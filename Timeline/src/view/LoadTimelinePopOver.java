@@ -74,7 +74,8 @@ public class LoadTimelinePopOver extends PopOver {
         loadRect.setOnMouseClicked(loadTimeline -> {
             String selectedItem = myListview.getSelectionModel().getSelectedItem(); // get the timeline form the title
             try {
-                NewDayTimelineGrid d = new NewDayTimelineGrid(sqldao.getTimeline(selectedItem));
+                DayTimeline dayTimeline= sqldao.getTimeline(selectedItem);
+                NewDayTimelineGrid d = new NewDayTimelineGrid(dayTimeline);
                 MainWindowController.allTheTimelines.add(d.getDayTimeline());
                 mainVBox.getChildren().add(d);
                 this.hide();

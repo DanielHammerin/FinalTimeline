@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.GregorianCalendar;
 
 import javafx.geometry.Insets;
@@ -32,7 +33,17 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 			}
 			else{
 				if(rightClick.getButton() == MouseButton.SECONDARY){
-					editEventPopover = new EditEventPopover(this);
+					try {
+						editEventPopover = new EditEventPopover(this);
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
 					editEventPopover.show(eventPane);
 				}
 			}
