@@ -181,9 +181,11 @@ public class EditTimelinePopOver extends PopOver{
             try {
                 selectedTimeline = MainWindowController.mainWindowController.getThisTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
                 MainWindowController.mainWindowController.redrawRemoveTimeline(selectedTimeline);
-                for (EventTime ev : selectedTimeline.getEventTimes()) { sqldao.deleteEvent(ev); }
-                for (EventNT ev : selectedTimeline.getEventNTs()) { sqldao.deleteEvent(ev); }
-                sqldao.deleteTimeline(selectedTimeline.getTitle());
+                if (selectedTimeline.getTitle() == null) {
+                    sqldao.deleteTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                } else {
+                    sqldao.deleteTimeline(selectedTimeline.getTitle());
+                }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (SQLException e) {

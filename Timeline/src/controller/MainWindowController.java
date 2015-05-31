@@ -3,23 +3,13 @@ package controller;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.DayTimeline;
 import model.EventNT;
-import model.Timeline;
 import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -274,7 +264,7 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
-	public DayTimeline getThisTimeline(String titleOfTemline) {
+	public DayTimeline getThisTimeline(String titleOfTemline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
 		DayTimeline out = new DayTimeline();
 		for(int i=0; i < vBoxModules.getChildren().size(); i++) {
 			if (vBoxModules.getChildren().get(i) instanceof NewDayTimelineGrid) {

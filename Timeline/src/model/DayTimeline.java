@@ -21,8 +21,10 @@ public class DayTimeline extends Timeline
 	SimpleDateFormat dayF = new SimpleDateFormat("dd");
 	private static final int MAX_DAYS = 365;
 	private boolean isShown = false;
+	boolean imADummy = false;
 
-	public DayTimeline() { }
+	public DayTimeline() { imADummy = true; }
+	public boolean isImADummy() {return imADummy; }
 
 	public DayTimeline(String title, String description, GregorianCalendar start, GregorianCalendar end)
 	{
@@ -32,6 +34,7 @@ public class DayTimeline extends Timeline
 			//Mauro: alerts removed
 			throw new IllegalArgumentException("The start date has to be before the end date.");
 		}
+		imADummy = false;
 		int startYear1 = Integer.parseInt(yearF.format(start.getTime()));
 		validateDates(startYear1 ,start, end);
 		startDate = start;
