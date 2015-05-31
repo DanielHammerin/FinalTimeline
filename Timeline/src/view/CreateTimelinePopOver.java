@@ -61,7 +61,7 @@ public class CreateTimelinePopOver extends PopOver{
 
         //Event which initializes the creation of a TimelineGrid and the Timeline
         createButton.setOnMouseClicked(CreateTimeline -> {
-            if(titleTxt.getText().isEmpty()){
+            if(titleTxt.getText().isEmpty() || descriptionTxt.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() ==null){
                 this.hide();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Insufficient information");

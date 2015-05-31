@@ -218,6 +218,7 @@ public class SQLDAO
             EventNT eventNT = new EventNT(rs.getString("Title"),rs.getString("Description"),g);
             events.add(eventNT);
         }
+        conn.close();
         return  events;
     }
 
@@ -250,6 +251,7 @@ public class SQLDAO
             EventTime eventTime = new EventTime(rs.getString("Title"), rs.getString("Description"),startDate,endDate);
             events.add(eventTime);
         }
+        conn.close();
         return events;
     }
 
@@ -290,7 +292,7 @@ public class SQLDAO
         while(rs.next()){
             dayTimelineTitle = rs.getString(1);
         }
-
+    conn.close();
         return  getTimeline(dayTimelineTitle);
     }
 
@@ -312,7 +314,9 @@ public class SQLDAO
         while(rs.next()){
             dayTimelineTitle = rs.getString(1);
         }
+        conn.close();
         return getTimeline(dayTimelineTitle);
+
     }
 
     /**
@@ -325,6 +329,7 @@ public class SQLDAO
         Connection c = openConnection();
         Statement s = c.createStatement();
         s.executeUpdate(myQuery);
+        c.close();
     }
 
     public void deleteEvent(MyEvent event) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
@@ -338,6 +343,7 @@ public class SQLDAO
         Connection c = openConnection();
         Statement s = c.createStatement();
         s.executeUpdate(query);
+        c.close();
     }
 
     /**
@@ -392,8 +398,9 @@ public class SQLDAO
 
     public Connection openConnection() throws ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException {
 
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/timeline","root","");
+        DriverManager.setLoginTimeout(5);
         Class.forName("com.mysql.jdbc.Driver").newInstance();
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/timeline","root","");;
         return conn;
     }
 

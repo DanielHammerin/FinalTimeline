@@ -1,5 +1,4 @@
 package view;
-
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -62,7 +61,6 @@ public class AddNewEventPopOver extends PopOver {
         image2.setFitHeight(30);
         saveBtn = new Button("Add event", image1);
         cancelBtn = new Button("Cancel", image2);
-
         startDatePicker.setPrefWidth(240.0);
         endDatePicker.setPrefWidth(240.0);
         startDatePicker.setPromptText("Event start date");
@@ -116,7 +114,6 @@ public class AddNewEventPopOver extends PopOver {
         });
         myComboBox.getSelectionModel().selectFirst();
         timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-
         saveBtn.setOnMouseClicked(saveChanges -> {
             if (endDatePicker.getValue() == null) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
@@ -125,7 +122,6 @@ public class AddNewEventPopOver extends PopOver {
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
-
                 try {
                     sqldao.saveEvent(timelineToAddEvent, ent);
                     timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
@@ -136,7 +132,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -144,7 +139,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -159,22 +153,18 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 }
                 this.hide();
             } else {
                 LocalDate start = startDatePicker.getValue();
                 LocalDate end = endDatePicker.getValue();
-
                 GregorianCalendar gregorianStart = new GregorianCalendar();
                 GregorianCalendar gregorianEnd = new GregorianCalendar();
-
                 Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 gregorianStart.setTime(dStart);
                 gregorianEnd.setTime(dEnd);
-
                 EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
                 try {
                     sqldao.saveEvent(timelineToAddEvent, ewt);
@@ -186,7 +176,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -194,7 +183,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -209,7 +197,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-
                     e.printStackTrace();
                 }
                 this.hide();

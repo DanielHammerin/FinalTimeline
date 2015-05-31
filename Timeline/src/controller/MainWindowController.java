@@ -7,6 +7,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
@@ -72,7 +73,7 @@ public class MainWindowController implements Initializable {
 					popOverAddNewEvent.hide();
 					popOverAddNewEvent = null;
 				}
-				if (popOverEditTimeline != null && popOverAddNewEvent.isShowing()) {
+				if (popOverEditTimeline != null && popOverEditTimeline.isShowing()) {
 					popOverEditTimeline.hide();
 					popOverEditTimeline = null;
 				}
@@ -100,16 +101,31 @@ public class MainWindowController implements Initializable {
 				}
 				try {
 					popOverLoad = new LoadTimelinePopOver(vBoxModules);
+					popOverLoad.show(loadimelineButton);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Database Error Connection");
+					alert.setHeaderText("Error!");
+					alert.setContentText("There was an error trying to connect to the database");
+					alert.showAndWait();
 					e.printStackTrace();
 				} catch (InstantiationException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Database Error Connection");
+					alert.setHeaderText("Error!");
+					alert.setContentText("There was an error trying to connect to the database");
+					alert.showAndWait();
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Database Error Connection");
+					alert.setHeaderText("Error!");
+					alert.setContentText("There was an error trying to connect to the database");
+					alert.showAndWait();
 					e.printStackTrace();
 				}
-				popOverLoad.show(loadimelineButton);
 			}
 		});
 		editTimelineButton.setOnMouseClicked(editTimeline -> {
@@ -135,6 +151,11 @@ public class MainWindowController implements Initializable {
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Database Error Connection");
+					alert.setHeaderText("Error!");
+					alert.setContentText("There was an error trying to connect to the database\\" + e.getMessage());
+					alert.showAndWait();
 					e.printStackTrace();
 				} catch (InstantiationException e) {
 					e.printStackTrace();
@@ -156,7 +177,7 @@ public class MainWindowController implements Initializable {
 					popOverLoad.hide();
 					popOverLoad = null;
 				}
-				if (popOverEditTimeline != null && popOverAddNewEvent.isShowing()) {
+				if (popOverEditTimeline != null && popOverEditTimeline.isShowing()) {
 					popOverEditTimeline.hide();
 					popOverEditTimeline = null;
 				}
@@ -165,9 +186,18 @@ public class MainWindowController implements Initializable {
 						popOverAddNewEvent = new AddNewEventPopOver(this);
 						popOverAddNewEvent.show(addNewEventButton);
 					}else{
-						//If error, handle it Mauro, lol
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("No existing timelines");
+						alert.setHeaderText("Error!");
+						alert.setContentText("There are currently no timelines in  the database");
+						alert.showAndWait();
 					}
 				} catch (Exception e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Database Error Connection");
+					alert.setHeaderText("Error!");
+					alert.setContentText("There was an error trying to connect to the database\\"+e.getMessage());
+					alert.showAndWait();
 					e.printStackTrace();
 				}
 			}
