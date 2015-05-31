@@ -160,7 +160,7 @@ public class EditTimelinePopOver extends PopOver{
         });
         deleteButton.setOnMouseClicked(event -> {
             try {
-                selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                selectedTimeline = MainWindowController.mainWindowController.getThisTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
                 MainWindowController.mainWindowController.redrawRemoveTimeline(selectedTimeline);
                 for (EventTime ev : selectedTimeline.getEventTimes()) { sqldao.deleteEvent(ev); }
                 for (EventNT ev : selectedTimeline.getEventNTs()) { sqldao.deleteEvent(ev); }

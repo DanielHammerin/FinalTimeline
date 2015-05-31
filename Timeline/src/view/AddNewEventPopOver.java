@@ -87,7 +87,6 @@ public class AddNewEventPopOver extends PopOver {
 
                 lStart = LocalDate.of(timelineToAddEvent.getStartDate().get(Calendar.YEAR), timelineToAddEvent.getStartDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getStartDate().get(Calendar.DAY_OF_MONTH));
                 lEnd = LocalDate.of(timelineToAddEvent.getEndDate().get(Calendar.YEAR), timelineToAddEvent.getEndDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getEndDate().get(Calendar.DAY_OF_MONTH));
-                System.out.println("In listener");
                 final Callback<DatePicker, DateCell> dayCellFactory =
                         new Callback<DatePicker, DateCell>() {
                             @Override
@@ -128,11 +127,11 @@ public class AddNewEventPopOver extends PopOver {
                 else {
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
-                    EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
+                    EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent, timelineToAddEvent);
                     try {
                         if (!sqldao.isThereADuplicateEvent(ent)) {
                             sqldao.saveEvent(timelineToAddEvent, ent);
-                            timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                            timelineToAddEvent = ent.getDayTimeline();
                             mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
                             this.hide();
                         } else {
@@ -189,11 +188,11 @@ public class AddNewEventPopOver extends PopOver {
                     Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
                     gregorianStart.setTime(dStart);
                     gregorianEnd.setTime(dEnd);
-                    EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
+                    EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd, timelineToAddEvent);
                     try {
                         if (!sqldao.isThereADuplicateEvent(ewt)) {
                             sqldao.saveEvent(timelineToAddEvent, ewt);
-                            timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
+                            timelineToAddEvent = ewt.getDayTimeline();
                             mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
                             this.hide();
                         } else {

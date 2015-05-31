@@ -81,7 +81,7 @@ public class EditEventPopover extends PopOver {
             abortButton.setTooltip(new Tooltip("Cancel"));
         });
 
-        DayTimeline dayTimeline = sqldao.getTimelineFromEventTime(event);
+        DayTimeline dayTimeline = event.getDayTimeline();
 
         LocalDate lStart = LocalDate.of(dayTimeline.getStartDate().get(Calendar.YEAR), dayTimeline.getStartDate().get(Calendar.MONTH) + 1, dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
         LocalDate lEnd = LocalDate.of(dayTimeline.getEndDate().get(Calendar.YEAR), dayTimeline.getEndDate().get(Calendar.MONTH) + 1, dayTimeline.getEndDate().get(Calendar.DAY_OF_MONTH));
@@ -158,7 +158,7 @@ public class EditEventPopover extends PopOver {
 
                     try {
                         sqldao.updateEventTime(oldEventName, event);
-                        DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
+                        DayTimeline daytimeline = event.getDayTimeline();
                         MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
                     } catch (ClassNotFoundException e) {
                         Alert alert = new Alert(AlertType.ERROR);
@@ -204,7 +204,7 @@ public class EditEventPopover extends PopOver {
         deleteButton.setOnMouseClicked(event1 -> {
             if (currentEventTime != null){
                 try {
-                    DayTimeline current = sqldao.getTimelineFromEventTime(currentEventTime);
+                    DayTimeline current = currentEventTime.getDayTimeline();
                     MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventTime);
                     sqldao.deleteEvent(currentEventTime);
                     this.hide();
@@ -319,7 +319,7 @@ public class EditEventPopover extends PopOver {
                 event.setDateOfEvent(gregorianStart);
                 try {
                     sqldao.updateEventNT(oldEventName, event);
-                    DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
+                    DayTimeline daytimeline = event.getDayTimeline();
                     MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
                 } catch (ClassNotFoundException e) {
 

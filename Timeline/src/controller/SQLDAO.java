@@ -305,51 +305,6 @@ public class SQLDAO
     }
 
     /**
-     * This method returns the correct timeline that an event is argument is passed as.
-     * @param eventNT
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public DayTimeline getTimelineFromEventNT(EventNT eventNT) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Connection conn = openConnection();
-        String dayTimelineTitle = "";
-        String myQuery = "SELECT timeline FROM eventnotime WHERE title = '"+eventNT.getTitle()+"'" ;
-
-        ResultSet rs = conn.createStatement().executeQuery(myQuery);
-        while(rs.next()){
-            dayTimelineTitle = rs.getString(1);
-        }
-    conn.close();
-        return  getTimeline(dayTimelineTitle);
-    }
-
-    /**
-     * Identical method to the previous method
-     * @param eventTime
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public DayTimeline getTimelineFromEventTime(EventTime eventTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Connection conn = openConnection();
-        String dayTimelineTitle = "";
-        String myQuery = "SELECT timeline FROM eventtime WHERE title = '"+eventTime.getTitle()+"'" ;
-
-        ResultSet rs = conn.createStatement().executeQuery(myQuery);
-        while(rs.next()){
-            dayTimelineTitle = rs.getString(1);
-        }
-        conn.close();
-        return getTimeline(dayTimelineTitle);
-
-    }
-
-    /**
      * Deletes a timeline from the database.
      * @param title the title of the timeline to be removed
      */

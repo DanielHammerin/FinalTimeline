@@ -250,15 +250,14 @@ public class MainWindowController implements Initializable {
 
 	public void redrawRemoveTimeline(DayTimeline toRemove)
 	{
-		int indexToRemove = 0;
 		for(int i=0;i<vBoxModules.getChildren().size();i++){
-			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
+			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid)
+			{
 				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
 				DayTimeline current = newDayTimelineGrid.getDayTimeline();
-				if (current.equals(toRemove)) { indexToRemove = i; break;}
+				if (current.equals(toRemove)) { vBoxModules.getChildren().remove(i); break;}
 			}
 		}
-		vBoxModules.getChildren().remove(indexToRemove);
 	}
 
 	public void redrawOneTimeline(String oldTimelineTitle, DayTimeline newTimeline){
@@ -274,6 +273,19 @@ public class MainWindowController implements Initializable {
 			}
 		}
 	}
+
+	public DayTimeline getThisTimeline(String titleOfTemline) {
+		DayTimeline out = new DayTimeline();
+		for(int i=0; i < vBoxModules.getChildren().size(); i++) {
+			if (vBoxModules.getChildren().get(i) instanceof NewDayTimelineGrid) {
+				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
+				DayTimeline comparedTimeline = newDayTimelineGrid.getDayTimeline();
+				if (comparedTimeline.getTitle().equalsIgnoreCase(titleOfTemline)) { return comparedTimeline; }
+			}
+		}
+		return out;
+	}
+
 	/* These are auto generated properties created for the FXML, needed for
        * the GUI to work.*/
 	@FXML
@@ -292,4 +304,6 @@ public class MainWindowController implements Initializable {
 	private ScrollPane mainScrollPane;
 
 	public Stage mainStage;
+
+
 }

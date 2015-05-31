@@ -204,6 +204,7 @@ public class NewDayTimelineGrid extends VBox
         removeStackPanes();
         dayTimeline.addEventTime(toBeAdded);
         drawEvents();
+        System.out.println("Event utritat");
     }
 
     /**
