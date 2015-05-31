@@ -384,7 +384,8 @@ public class NewDayTimelineGrid extends VBox
         }
 
         /* Resetting the variables for the drawing of the events with no duration*/
-        compareCal = (GregorianCalendar) dayTimeline.getStartDate().clone();
+        compareCal = new GregorianCalendar(dayTimeline.getStartDate().get(Calendar.YEAR), dayTimeline.getStartDate().get(Calendar.MONTH),
+                dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
         daysPassed = 0;
 
         EventNT currentEventNT;
