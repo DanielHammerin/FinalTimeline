@@ -129,7 +129,7 @@ public class EditTimelinePopOver extends PopOver{
                 dayTimeline.getEventTimes().addAll(timelineToDelete.getEventTimes());
                 sqldao.deleteTimeline(timelineToDelete.getTitle());
                 sqldao.saveTimeline(dayTimeline);
-                mwc.redrawOneTimeline(dayTimeline);
+                mwc.redrawOneTimeline(timelineToDelete.getTitle(), dayTimeline);
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Database Error Connection");

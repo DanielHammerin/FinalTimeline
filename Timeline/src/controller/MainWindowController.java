@@ -42,6 +42,7 @@ public class MainWindowController implements Initializable {
 		mainWindowController = this;
 		vBoxModules.prefWidthProperty().bind(mainAnchorPane.widthProperty());
 		vBoxModules.prefHeightProperty().bind(mainAnchorPane.heightProperty());
+
 		newTimelineButton.setOnMouseEntered(event -> {
 			newTimelineButton.setTooltip(new Tooltip("Create a timeline"));
 		});
@@ -93,7 +94,7 @@ public class MainWindowController implements Initializable {
 					popOverAddNewEvent.hide();
 					popOverAddNewEvent = null;
 				}
-				if (popOverEditTimeline != null && popOverAddNewEvent.isShowing()) {
+				if (popOverEditTimeline != null && popOverEditTimeline.isShowing()) {
 					popOverEditTimeline.hide();
 					popOverEditTimeline = null;
 				}
@@ -188,17 +189,24 @@ public class MainWindowController implements Initializable {
 						EventTime eventTime = (EventTime)myEvent;
 						newDayTimelineGrid.redrawEventsAddEvent(eventTime);
 					}
+					vBoxModules.getChildren().remove(newDayTimelineGrid);
+					vBoxModules.getChildren().add(newDayTimelineGrid);
+					break;
 				}
+
 			}
 		}
 	}
-	public void redrawOneTimeline(DayTimeline timeline){
-		for(int i=0;i<vBoxModules.getChildren().size();i++){
-			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
+	public void redrawOneTimeline(String oldTimelineTitle, DayTimeline newTimeline){
+		for(int i=0; i < vBoxModules.getChildren().size(); i++) {
+			if (vBoxModules.getChildren().get(i) instanceof NewDayTimelineGrid) {
 				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
-				vBoxModules.getChildren().remove(newDayTimelineGrid);
-				//vBoxModules.getChildren().remove(vBoxModules.getChildren().get(i));
-				vBoxModules.getChildren().add(new NewDayTimelineGrid(timeline));
+				DayTimeline comparedTimeline = newDayTimelineGrid.getDayTimeline();
+				if(comparedTimeline.getTitle().equals(oldTimelineTitle)) {
+					vBoxModules.getChildren().remove(newDayTimelineGrid);
+					vBoxModules.getChildren().add(new NewDayTimelineGrid(newTimeline));
+					break;
+				}
 			}
 		}
 	}

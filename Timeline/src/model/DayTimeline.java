@@ -20,6 +20,7 @@ public class DayTimeline extends Timeline
 	/* Same as previous*/
 	SimpleDateFormat dayF = new SimpleDateFormat("dd");
 	private static final int MAX_DAYS = 365;
+	private boolean isShown = false;
 
 	public DayTimeline() { }
 
@@ -105,5 +106,14 @@ public class DayTimeline extends Timeline
 			throw new IllegalArgumentException("The date of the event \"" + in.getTitle() + "\" is outside" +
 					" the timelines start or end date.");
 		}
+	}
+
+	public boolean isShown() {
+		if(isShown == true){return true;}
+		else{ return false;}
+	}
+
+	public void isShown(boolean isShown) {
+		this.isShown = isShown;
 	}
 }

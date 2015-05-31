@@ -29,7 +29,6 @@ public class LoadTimelinePopOver extends PopOver {
     private VBox vBox = new VBox();
     private HBox hbox = new HBox();
     private ListView<String> myListview = new ListView<String>();
-    private Label messageLabel = new Label();
     private SQLDAO sqldao = new SQLDAO();
     private Button loadButton;
     private Button refreshButton;
@@ -41,12 +40,6 @@ public class LoadTimelinePopOver extends PopOver {
      */
 
     public LoadTimelinePopOver(VBox mainVBox) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-//        ColumnConstraints c1 = new ColumnConstraints();
-//        ColumnConstraints c2 = new ColumnConstraints();
-//        c1.setPercentWidth(50);
-//        c2.setPercentWidth(50);
-//
-//        vBox.getColumnConstraints().addAll(c1, c2);
 
         ImageView image1 = new ImageView(new Image(getClass().getResourceAsStream("Icons/LoadTimeline.png")));
         ImageView image2 = new ImageView(new Image(getClass().getResourceAsStream("Icons/Refresh.png")));
@@ -66,7 +59,6 @@ public class LoadTimelinePopOver extends PopOver {
         vBox.setPrefHeight(300);
         vBox.setPrefWidth(300);
 
-        messageLabel.setTextFill(Color.DARKRED);
         LinkedList<DayTimeline> allTimelines = sqldao.getAllTimelines();
 
         for (int i = 0; i < allTimelines.size(); i++){ // add timeline titles to the list view
@@ -85,7 +77,6 @@ public class LoadTimelinePopOver extends PopOver {
                 MainWindowController.allTheTimelines.add(d.getDayTimeline());
                 mainVBox.getChildren().add(d);
                 this.hide();
-
             }catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Database Error Connection");
