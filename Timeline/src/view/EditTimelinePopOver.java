@@ -142,12 +142,8 @@ public class EditTimelinePopOver extends PopOver{
         deleteButton.setOnMouseClicked(event -> {
             try {
                 selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
-                for (EventTime ev : selectedTimeline.getEventTimes()) {
-                    sqldao.deleteEvent(ev);
-                }
-                for (EventNT ev : selectedTimeline.getEventNTs()) {
-                    sqldao.deleteEvent(ev);
-                }
+                for (EventTime ev : selectedTimeline.getEventTimes()) { sqldao.deleteEvent(ev); }
+                for (EventNT ev : selectedTimeline.getEventNTs()) { sqldao.deleteEvent(ev); }
                 sqldao.deleteTimeline(selectedTimeline.getTitle());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
