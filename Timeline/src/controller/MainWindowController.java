@@ -207,7 +207,7 @@ public class MainWindowController implements Initializable {
 	 * Redraws the time line passed as an argument.
 	 * @param dayTimeline
 	 */
-	public void redrawOneTimelineEvent(DayTimeline dayTimeline, MyEvent myEvent){
+	public void redrawOneTimelineAddEvent(DayTimeline dayTimeline, MyEvent myEvent){
 		for(int i=0;i<vBoxModules.getChildren().size();i++){
 			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
 				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
@@ -219,14 +219,32 @@ public class MainWindowController implements Initializable {
 						EventTime eventTime = (EventTime)myEvent;
 						newDayTimelineGrid.redrawEventsAddEvent(eventTime);
 					}
-					vBoxModules.getChildren().remove(newDayTimelineGrid);
-					vBoxModules.getChildren().add(newDayTimelineGrid);
 					break;
 				}
 
 			}
 		}
 	}
+
+	public void redrawOneTimelineRemoveEvent(DayTimeline dayTimeline, MyEvent myEvent){
+		for(int i=0;i<vBoxModules.getChildren().size();i++){
+			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
+				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
+				if(Objects.equals(newDayTimelineGrid.getDayTimeline().getTitle(), dayTimeline.getTitle())){
+					if(myEvent instanceof  EventNT){
+						EventNT eventNT = (EventNT)myEvent;
+						newDayTimelineGrid.redrawEventsRemoveEvent(eventNT);
+					}else{
+						EventTime eventTime = (EventTime)myEvent;
+						newDayTimelineGrid.redrawEventsRemoveEvent(eventTime);
+					}
+					break;
+				}
+
+			}
+		}
+	}
+
 	public void redrawOneTimeline(String oldTimelineTitle, DayTimeline newTimeline){
 		for(int i=0; i < vBoxModules.getChildren().size(); i++) {
 			if (vBoxModules.getChildren().get(i) instanceof NewDayTimelineGrid) {

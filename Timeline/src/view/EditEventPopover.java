@@ -36,11 +36,14 @@ public class EditEventPopover extends PopOver {
     private Button abortButton;
     private Button deleteButton;
     private String oldEventName;
+    private EventTime currentEventTime;
+    private EventNT currentEventNT;
     /**
      * This pop-over makes it possible for the user to change an event
      * @param event
      */
     public EditEventPopover(EventTime event) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        currentEventTime = event;
         /*
         Setting of the inital values from the current event, so the user can see what the old values of the event was
          */
@@ -149,7 +152,7 @@ public class EditEventPopover extends PopOver {
                 try {
                     sqldao.updateEventTime(oldEventName, event);
                     DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
-                    MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
+                    MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
                 } catch (ClassNotFoundException e) {
 
                     Alert alert = new Alert(AlertType.ERROR);
@@ -191,6 +194,25 @@ public class EditEventPopover extends PopOver {
             }
         });
 
+        deleteButton.setOnMouseClicked(event1 -> {
+            if (currentEventTime != null)
+            {
+                try {
+                    DayTimeline current = sqldao.getTimelineFromEventTime(currentEventTime);
+                    MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventTime);
+                    sqldao.deleteEvent(currentEventTime);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         abortButton.setOnMouseClicked(abort -> {
             this.hide();
         });
@@ -198,6 +220,7 @@ public class EditEventPopover extends PopOver {
 
 
     public EditEventPopover(EventNT event) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        currentEventNT = event;
         Image edit = new Image(getClass().getResourceAsStream("Icons/FinishEditing.png"));
         ImageView image1 = new ImageView(edit);
         Image cancel = new Image(getClass().getResourceAsStream("Icons/Cancel.png"));
@@ -281,7 +304,7 @@ public class EditEventPopover extends PopOver {
             try {
                 sqldao.updateEventNT(oldEventName, event);
                 DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
-                MainWindowController.mainWindowController.redrawOneTimelineEvent(daytimeline, event);
+                MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
             } catch (ClassNotFoundException e) {
 
                 Alert alert = new Alert(AlertType.ERROR);
@@ -320,6 +343,25 @@ public class EditEventPopover extends PopOver {
                 e.printStackTrace();
             }
             this.hide();
+        });
+
+        deleteButton.setOnMouseClicked(event1 -> {
+            if (currentEventNT != null)
+            {
+                try {
+                    DayTimeline current = sqldao.getTimelineFromEventNT(currentEventNT);
+                    MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventNT);
+                    sqldao.deleteEvent(currentEventNT);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         abortButton.setOnMouseClicked(abort -> {

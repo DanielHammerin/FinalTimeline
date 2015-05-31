@@ -3,7 +3,6 @@ import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -125,7 +124,7 @@ public class AddNewEventPopOver extends PopOver {
                 try {
                     sqldao.saveEvent(timelineToAddEvent, ent);
                     timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
-                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
+                    mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
                 } catch (ClassNotFoundException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
@@ -169,7 +168,7 @@ public class AddNewEventPopOver extends PopOver {
                 try {
                     sqldao.saveEvent(timelineToAddEvent, ewt);
                     timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
-                    mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
+                    mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
                 } catch (ClassNotFoundException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
