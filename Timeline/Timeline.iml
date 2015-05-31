@@ -28,13 +28,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../controlsfx-8.20.8.jar!/" />
+          <root url="jar://$CONTROLS_FX$!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="controlsfx-8.20.8" level="project" />
-    <orderEntry type="library" name="mysql-connector-java-5.1.31" level="project" />
   </component>
 </module>

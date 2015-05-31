@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import model.*;
 import org.controlsfx.control.PopOver;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 /**
  * Created by Alexander, Hatem and Mauro on 30/05/2015.
@@ -137,6 +138,26 @@ public class EditTimelinePopOver extends PopOver{
                 e.printStackTrace();
             }
             this.hide();
+        });
+        deleteButton.setOnMouseClicked(event -> {
+            try {
+                selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+                for (EventTime ev : selectedTimeline.getEventTimes()) {
+                    sqldao.deleteEvent(ev);
+                }
+                for (EventNT ev : selectedTimeline.getEventNTs()) {
+                    sqldao.deleteEvent(ev);
+                }
+                sqldao.deleteTimeline(selectedTimeline.getTitle());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         });
         vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, hbox);
         vbox.setPrefHeight(240.0);
