@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+
+
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
     <children>
+        <HBox fx:id="header" maxHeight="100.0" maxWidth="-1.0" minHeight="150.0" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+            <children>
+                <ImageView fitHeight="150" fitWidth="1500" >
+                    <image>
+                        <Image url="@Icons/banner.jpg" />
+                    </image>
+                </ImageView>
+            </children>
+        </HBox>
         <AnchorPane fx:id="mainAnchorPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
                 <GridPane gridLinesVisible="true" layoutY="-5.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -86,6 +90,7 @@
                         </VBox>
                     </children>
                 </GridPane>
+
             </children>
         </AnchorPane>
     </children>

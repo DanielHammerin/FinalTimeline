@@ -1,5 +1,5 @@
 package application;
-	
+
 import controller.MainWindowController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,6 +22,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root1, 1200,800);
 			scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("Time Span");
 			primaryStage.setMinWidth(800);
 			primaryStage.setMinHeight(600);
 
@@ -31,7 +32,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

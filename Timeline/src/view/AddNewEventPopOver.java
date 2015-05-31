@@ -1,4 +1,5 @@
 package view;
+
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -50,6 +51,7 @@ public class AddNewEventPopOver extends PopOver {
         for (DayTimeline t : tmlns) {
             myComboBox.getItems().addAll(t.getTitle());
         }
+
         Image create1 = new Image(getClass().getResourceAsStream("Icons/FinishEditing.png"));
         ImageView image1 = new ImageView(create1);
         Image create2 = new Image(getClass().getResourceAsStream("Icons/Cancel.png"));
@@ -60,15 +62,21 @@ public class AddNewEventPopOver extends PopOver {
         image2.setFitHeight(30);
         saveBtn = new Button("Add event", image1);
         cancelBtn = new Button("Cancel", image2);
+
         startDatePicker.setPrefWidth(240.0);
         endDatePicker.setPrefWidth(240.0);
         startDatePicker.setPromptText("Event start date");
         endDatePicker.setPromptText("Event end date");
-        titleField.setPrefWidth(150);
+
+        titleField.setPrefWidth(240.0);
+        descriptionField.setPrefWidth(230.0);
+        descriptionField.setPrefHeight(150);
+        descriptionField.setWrapText(true);
         titleField.setPromptText("Event title");
         descriptionField.setPromptText("Event description");
         eventNT = new ToggleButton("Non-Durated Event");
         eventWT = new ToggleButton("Durated Event");
+
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {
@@ -78,6 +86,7 @@ public class AddNewEventPopOver extends PopOver {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+
                 lStart = LocalDate.of(timelineToAddEvent.getStartDate().get(Calendar.YEAR), timelineToAddEvent.getStartDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getStartDate().get(Calendar.DAY_OF_MONTH));
                 lEnd = LocalDate.of(timelineToAddEvent.getEndDate().get(Calendar.YEAR), timelineToAddEvent.getEndDate().get(Calendar.MONTH) + 1, timelineToAddEvent.getEndDate().get(Calendar.DAY_OF_MONTH));
                 System.out.println("In listener");
@@ -107,15 +116,18 @@ public class AddNewEventPopOver extends PopOver {
         });
         myComboBox.getSelectionModel().selectFirst();
         timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+
         saveBtn.setOnMouseClicked(saveChanges -> {
-            if(endDatePicker.getValue() == null) {
+            if (endDatePicker.getValue() == null) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
+
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
+
                 try {
-                    sqldao.saveEvent(timelineToAddEvent,ent);
+                    sqldao.saveEvent(timelineToAddEvent, ent);
                     timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
                     mwc.redrawOneTimelineEvent(timelineToAddEvent, ent);
                 } catch (ClassNotFoundException e) {
@@ -124,6 +136,7 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -131,6 +144,7 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -145,22 +159,25 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 }
                 this.hide();
-            }
-            else{
+            } else {
                 LocalDate start = startDatePicker.getValue();
                 LocalDate end = endDatePicker.getValue();
+
                 GregorianCalendar gregorianStart = new GregorianCalendar();
                 GregorianCalendar gregorianEnd = new GregorianCalendar();
+
                 Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 gregorianStart.setTime(dStart);
                 gregorianEnd.setTime(dEnd);
+
                 EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
                 try {
-                    sqldao.saveEvent(timelineToAddEvent,ewt);
+                    sqldao.saveEvent(timelineToAddEvent, ewt);
                     timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
                     mwc.redrawOneTimelineEvent(timelineToAddEvent, ewt);
                 } catch (ClassNotFoundException e) {
@@ -169,6 +186,7 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -176,6 +194,7 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -190,6 +209,7 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
+
                     e.printStackTrace();
                 }
                 this.hide();
@@ -204,7 +224,7 @@ public class AddNewEventPopOver extends PopOver {
         hbr.getChildren().addAll(eventNT, eventWT);
         vb.getChildren().addAll(myComboBox, hbr, titleField, descriptionField, startDatePicker, endDatePicker, hb);
         vb.prefWidthProperty().bind(this.prefWidthProperty());
-        vb.setPrefHeight(190.0);
+        vb.setPrefHeight(200);
         this.setContentNode(vb);
         eventNT.setToggleGroup(tg);
         eventWT.setToggleGroup(tg);
