@@ -10,7 +10,7 @@
     <children>
         <HBox fx:id="header" maxHeight="100.0" maxWidth="-1.0" minHeight="100.0" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
             <children>
-                <ImageView fitHeight="100" fitWidth="1500" >
+                <ImageView fitHeight="100" fitWidth="1500" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                     <image>
                         <Image url="@Icons/banner.jpg" />
                     </image>

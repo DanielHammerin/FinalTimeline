@@ -1,5 +1,4 @@
 package view;
-
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -9,24 +8,24 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.*;
 import org.controlsfx.control.PopOver;
 import java.sql.SQLException;
 import java.util.LinkedList;
-
 /**
  * Created by Alexander, Hatem and Mauro on 30/05/2015.
  */
 public class EditTimelinePopOver extends PopOver{
     private VBox vbox = new VBox();
+    private HBox hbox = new HBox();
     private ComboBox  myComboBox = new ComboBox();
     private TextField titleTextField = new TextField();
     private TextArea descriptionTextArea = new TextArea();
     private Button addBtn;
-
+    private Button deleteButton;
     DayTimeline selectedTimeline = new DayTimeline();
-
     public EditTimelinePopOver(MainWindowController mwc) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         SQLDAO sqldao = new SQLDAO();
         this.setHideOnEscape(true);
@@ -39,13 +38,10 @@ public class EditTimelinePopOver extends PopOver{
         descriptionTextArea.setPrefHeight(150);
         descriptionTextArea.setWrapText(true);
         myComboBox.setPrefWidth(140.0);
-
         LinkedList<DayTimeline> allDayTimelines = sqldao.getAllTimelines();
-
         for (Timeline t : allDayTimelines) {
             myComboBox.getItems().addAll(t.getTitle());
         }
-
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String t, String t1) {
@@ -59,23 +55,21 @@ public class EditTimelinePopOver extends PopOver{
                     alert.showAndWait();
                     e.printStackTrace();
                 }
-
                 titleTextField.setText(selectedTimeline.getTitle());
                 descriptionTextArea.setText(selectedTimeline.getDescription());
             }
         });
-
         myComboBox.getSelectionModel().selectFirst();
-
         try {
             selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
+
+            this.hide();
         } catch (ClassNotFoundException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Database Connection");
             alert.setHeaderText("Error!");
             alert.setContentText("Database connection Error");
             alert.showAndWait();
-
             e.printStackTrace();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -90,7 +84,6 @@ public class EditTimelinePopOver extends PopOver{
             alert.setHeaderText("Error!");
             alert.setContentText("Database connection Error");
             alert.showAndWait();
-
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -98,11 +91,8 @@ public class EditTimelinePopOver extends PopOver{
             alert.setHeaderText("Error!");
             alert.setContentText("Database connection Error");
             alert.showAndWait();
-
             e.printStackTrace();
         }
-        this.hide();
-
         try {
             selectedTimeline = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
         } catch (Exception e) {
@@ -111,18 +101,26 @@ public class EditTimelinePopOver extends PopOver{
             alert.setHeaderText("Error!");
             alert.setContentText("Database connection error");
             alert.showAndWait();
-
             e.printStackTrace();
         }
-
+        ImageView image2 =  new ImageView(new Image(getClass().getResourceAsStream("Icons/Delete.png")));
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("Icons/FinishEditing.png")));
-        image.setFitHeight(50);
-        image.setFitWidth(50);
-        addBtn = new Button("Finish editing", image);
-
+        image.setFitHeight(30);
+        image.setFitWidth(30);
+        image2.setFitHeight(30);
+        image2.setFitWidth(30);
+        addBtn = new Button("", image);
+        deleteButton = new Button("", image2);
+        hbox.getChildren().addAll(addBtn, deleteButton);
+        hbox.setSpacing(45.0);
+        addBtn.setOnMouseEntered(event -> {
+            addBtn.setTooltip(new Tooltip("Finish editing"));
+        });
+        deleteButton.setOnMouseEntered(event -> {
+            deleteButton.setTooltip(new Tooltip("Delete timeline"));
+        });
         addBtn.setOnMouseClicked(editTimeline -> {
             DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), selectedTimeline.getStartDate(), selectedTimeline.getEndDate());
-
             try {
                 DayTimeline timelineToDelete = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
                 dayTimeline.getEventNTs().addAll(timelineToDelete.getEventNTs());
@@ -140,9 +138,9 @@ public class EditTimelinePopOver extends PopOver{
             }
             this.hide();
         });
-        vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, addBtn);
-        vbox.setPrefHeight(260.0);
-        vbox.setPrefWidth(143.2);
+        vbox.getChildren().addAll(myComboBox, titleTextField, descriptionTextArea, hbox);
+        vbox.setPrefHeight(240.0);
+        vbox.setPrefWidth(140.0);
         this.setContentNode(vbox);
     }
 }

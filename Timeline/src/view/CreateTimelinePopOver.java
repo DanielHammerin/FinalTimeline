@@ -10,8 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import model.DayTimeline;
 import org.controlsfx.control.PopOver;
 
@@ -61,7 +59,7 @@ public class CreateTimelinePopOver extends PopOver{
 
         //Event which initializes the creation of a TimelineGrid and the Timeline
         createButton.setOnMouseClicked(CreateTimeline -> {
-            if(titleTxt.getText().isEmpty() || descriptionTxt.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() ==null){
+            if (titleTxt.getText().isEmpty() || descriptionTxt.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
                 this.hide();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Insufficient information");
@@ -83,7 +81,7 @@ public class CreateTimelinePopOver extends PopOver{
             NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
 
             try {
-                if (!sqldao.isThereADuplicate(d.getDayTimeline())) {
+                if (!sqldao.isThereADuplicateTimeline(d.getDayTimeline())) {
                     try {
                         sqldao.saveTimeline(d.getDayTimeline());
                     } catch (Exception e) {
@@ -96,7 +94,7 @@ public class CreateTimelinePopOver extends PopOver{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Duplicated Timelines");
                     alert.setHeaderText("Error!");
-                    alert.setContentText("There are duplicated Timelines in the Database");
+                    alert.setContentText("There is already a timeline named "+d.getDayTimeline().getTitle()+" in the database. Please choose another name.");
                     alert.showAndWait();
                 }
             } catch (Exception e) {

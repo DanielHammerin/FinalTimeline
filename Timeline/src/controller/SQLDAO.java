@@ -261,7 +261,7 @@ public class SQLDAO
      * @return
      * @throws Exception
      */
-    public boolean isThereADuplicate(DayTimeline dayTimeline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public boolean isThereADuplicateTimeline(DayTimeline dayTimeline) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         LinkedList<DayTimeline> allTimelines2 = getAllTimelines();
         for(DayTimeline dtl : allTimelines2){
             if(Objects.equals(dtl.getTitle(), dayTimeline.getTitle())){
@@ -270,6 +270,31 @@ public class SQLDAO
                 a.setContentText("There exists an timeline called"+dtl.getTitle());
                 return true;
             }
+        }
+        return  false;
+    }
+
+    public boolean isThereADuplicateEvent(MyEvent myEvent) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+
+        Connection conn = openConnection();
+        String myQuery;
+
+        if(myEvent instanceof  EventNT){
+            myQuery= "SELECT *\n" +
+                    "FROM eventnotime\n" +
+                    "WHERE title = '"+myEvent.getTitle()+"'" ;
+        }else{
+            myQuery= "SELECT *\n" +
+                    "FROM eventtime\n" +
+                    "WHERE title = '"+myEvent.getTitle()+"'" ;
+        }
+
+        ResultSet rs = conn.createStatement().executeQuery(myQuery);
+        while(rs.next()){
+            String s = rs.getString("title");
+           if(Objects.equals(s, myEvent.getTitle())){
+               return true;
+           }
         }
         return  false;
     }

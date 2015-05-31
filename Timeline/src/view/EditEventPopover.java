@@ -154,7 +154,6 @@ public class EditEventPopover extends PopOver {
                     DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
                     MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
                 } catch (ClassNotFoundException e) {
-
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Database Error Connection");
                     alert.setHeaderText("Error!");

@@ -1,4 +1,5 @@
 package view;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import controller.MainWindowController;
 import controller.SQLDAO;
 import javafx.beans.value.ChangeListener;
@@ -43,7 +44,6 @@ public class AddNewEventPopOver extends PopOver {
      * @throws Exception
      */
     public AddNewEventPopOver(MainWindowController mwc) throws Exception{
-        SQLDAO sqldao = new SQLDAO();
         LinkedList<DayTimeline> tmlns = sqldao.getAllTimelines();
         myComboBox.setPrefWidth(240);
         for (DayTimeline t : tmlns) {
@@ -73,6 +73,7 @@ public class AddNewEventPopOver extends PopOver {
         descriptionField.setPromptText("Event description");
         eventNT = new ToggleButton("Non-Durated Event");
         eventWT = new ToggleButton("Durated Event");
+        eventWT.setSelected(true);
 
         myComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -114,17 +115,27 @@ public class AddNewEventPopOver extends PopOver {
         myComboBox.getSelectionModel().selectFirst();
         timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
         saveBtn.setOnMouseClicked(saveChanges -> {
-            if (endDatePicker.getValue() == null) {
+            if (eventNT.isSelected()) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
 
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
                 EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
+
                 try {
-                    sqldao.saveEvent(timelineToAddEvent, ent);
-                    timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
-                    mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
+                    if(!sqldao.isThereADuplicateEvent(ent)){
+                        sqldao.saveEvent(timelineToAddEvent, ent);
+                        timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                        mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
+                        this.hide();
+                    }else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Duplicated Timelines");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There is already an event named '"+ent.getTitle()+"' in the database. Please choose another name.");
+                        alert.showAndWait();
+                    }
                 } catch (ClassNotFoundException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
@@ -154,7 +165,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.showAndWait();
                     e.printStackTrace();
                 }
-                this.hide();
             } else {
                 LocalDate start = startDatePicker.getValue();
                 LocalDate end = endDatePicker.getValue();
@@ -166,9 +176,18 @@ public class AddNewEventPopOver extends PopOver {
                 gregorianEnd.setTime(dEnd);
                 EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
                 try {
-                    sqldao.saveEvent(timelineToAddEvent, ewt);
-                    timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
-                    mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
+                    if(!sqldao.isThereADuplicateEvent(ewt)){
+                        sqldao.saveEvent(timelineToAddEvent, ewt);
+                        timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
+                        mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
+                        this.hide();
+                    }else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Duplicated Timelines");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There is already an event named '" + ewt.getTitle() + "' in the database. Please choose another name.");
+                        alert.showAndWait();
+                    }
                 } catch (ClassNotFoundException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
@@ -178,11 +197,12 @@ public class AddNewEventPopOver extends PopOver {
                     e.printStackTrace();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
+                    alert.setTitle("Duplicate en");
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
                     e.printStackTrace();
+
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
@@ -198,7 +218,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.showAndWait();
                     e.printStackTrace();
                 }
-                this.hide();
             }
         });
         cancelBtn.setOnMouseClicked(abort -> {
