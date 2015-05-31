@@ -201,8 +201,12 @@ public class NewDayTimelineGrid extends VBox
      */
     public void redrawEventsAddEvent(EventTime toBeAdded)
     {
+        System.out.println("inne i redraw");
         removeStackPanes();
+        System.out.println("tagit bort stack panes");
         dayTimeline.addEventTime(toBeAdded);
+        System.out.println("lagt till event");
+        System.out.println(dayTimeline.getTitle() + "   " + dayTimeline.getDescription());
         drawEvents();
         System.out.println("Event utritat");
     }
@@ -266,20 +270,22 @@ public class NewDayTimelineGrid extends VBox
 
         /* This calendar object is the equivalent of an incrementing int
         * in a for loop, it increases with one day each iteration. */
-        GregorianCalendar compareCal = (GregorianCalendar) dayTimeline.getStartDate().clone();
+        GregorianCalendar compareCal = new GregorianCalendar(dayTimeline.getStartDate().get(Calendar.YEAR), dayTimeline.getStartDate().get(Calendar.MONTH),
+                dayTimeline.getStartDate().get(Calendar.DAY_OF_MONTH));
 
         /* This variable is needed to set the layoutX property of the rectangles
          * should be, that is the distance from the start of the timeline. */
         int daysPassed = 0;
         EventTime currentEventTime;
 
-
         /* This part draws the timelines events with duration*/
         if (eventTimeIterator.hasNext())
         {
+//            System.out.println("\nJag, tidslinjen " + dayTimeline.getTitle() + " har " + dayTimeline.getEventTimes().size() + " st events. ");
             currentEventTime = eventTimeIterator.next();
+
             boolean done = false;
-            while (!done)
+            while (!done && compareCal.compareTo(dayTimeline.getEndDate()) <= 0)
             {
                 /* Setting the margins for the events*/
                 gp.setMargin(currentEventTime.getStackPane(), new Insets(5));
@@ -388,7 +394,7 @@ public class NewDayTimelineGrid extends VBox
         if ( eventNTIterator.hasNext()) {
             currentEventNT = eventNTIterator.next();
             boolean done = false;
-            while (!done)
+            while (!done && compareCal.compareTo(dayTimeline.getEndDate()) <= 0)
             {
                 /* If compareTo == 0 than its time to draw the event. */
                 if (currentEventNT.getDate().compareTo(compareCal) == 0) {
