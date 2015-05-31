@@ -112,9 +112,9 @@ public class AddNewEventPopOver extends PopOver {
             }
         });
         myComboBox.getSelectionModel().selectFirst();
-        timelineToAddEvent = sqldao.getTimeline(myComboBox.getSelectionModel().getSelectedItem().toString());
         saveBtn.setOnMouseClicked(saveChanges -> {
             if (eventNT.isSelected()) {
+
                 LocalDate startDatePickerValue = startDatePicker.getValue();
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
                 if(titleField.getText().isEmpty() || startDatePicker.getValue() == null) {
@@ -138,7 +138,7 @@ public class AddNewEventPopOver extends PopOver {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Duplicated Timelines");
                             alert.setHeaderText("Error!");
-                            alert.setContentText("There is already an event named '" + ent.getTitle() + "' in the database. Please choose another name.");
+                            alert.setContentText("There is already an event named '" + ent.getTitle() + "' in the timeline. Please choose another name.");
                             alert.showAndWait();
                         }
                     } catch (ClassNotFoundException e) {
@@ -188,20 +188,30 @@ public class AddNewEventPopOver extends PopOver {
                     Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
                     gregorianStart.setTime(dStart);
                     gregorianEnd.setTime(dEnd);
+                    if(start.isAfter(end)){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Time span error");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("The start date has to be before the end date");
+                        alert.showAndWait();
+                        throw new IllegalArgumentException("The start date has to be before the end date");
+                    }
                     EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd, timelineToAddEvent);
                     try {
-                        if (!sqldao.isThereADuplicateEvent(ewt)) {
-                            sqldao.saveEvent(timelineToAddEvent, ewt);
-                            timelineToAddEvent = ewt.getDayTimeline();
-                            mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
-                            this.hide();
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Duplicated Timelines");
-                            alert.setHeaderText("Error!");
-                            alert.setContentText("There is already an event named '" + ewt.getTitle() + "' in the database. Please choose another name.");
-                            alert.showAndWait();
-                        }
+                            if (!sqldao.isThereADuplicateEvent(ewt)) {
+                                sqldao.saveEvent(timelineToAddEvent, ewt);
+                                timelineToAddEvent = ewt.getDayTimeline();
+                                mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
+                                this.hide();
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Duplicated Timelines");
+                                alert.setHeaderText("Error!");
+                                alert.setContentText("There is already an event named '" + ewt.getTitle() + "' in the timeline. Please choose another name.");
+                                alert.showAndWait();
+                            }
+
+
                     } catch (ClassNotFoundException e) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Database Connection");

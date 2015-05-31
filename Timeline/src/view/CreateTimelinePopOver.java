@@ -59,8 +59,7 @@ public class CreateTimelinePopOver extends PopOver{
 
         //Event which initializes the creation of a TimelineGrid and the Timeline
         createButton.setOnMouseClicked(CreateTimeline -> {
-            if (titleTxt.getText().isEmpty() || descriptionTxt.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
-                this.hide();
+            if (titleTxt.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Insufficient information");
                 alert.setHeaderText("Warning");
@@ -68,19 +67,36 @@ public class CreateTimelinePopOver extends PopOver{
                 alert.showAndWait();
                 throw new IllegalArgumentException("The title, start date and end date fields have to be filled to create a timeline");
             }
+            if (titleTxt.getText().length() > 30) {
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Too big title");
+                alert.setHeaderText("Warning");
+                alert.setContentText("The title has to be at max 30 characters long.");
+                alert.showAndWait();
+                throw new IllegalArgumentException("The title has to be at max 30 characters long.");
+            }
+
 
             LocalDate localStart = startDatePicker.getValue();
             LocalDate localEnd = endDatePicker.getValue();
 
+            if (localStart.isAfter(localEnd)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Time span error");
+                alert.setHeaderText("Error!");
+                alert.setContentText("The start date has to be before the end date");
+                alert.showAndWait();
+                throw new IllegalArgumentException("The start date has to be before the end date");
+            }
             GregorianCalendar gregorianStart = new GregorianCalendar();
             gregorianStart.set(localStart.getYear(), localStart.getMonthValue() - 1, localStart.getDayOfMonth());
 
             GregorianCalendar gregorianEnd = new GregorianCalendar();
             gregorianEnd.set(localEnd.getYear(), localEnd.getMonthValue() - 1, localEnd.getDayOfMonth());
 
-            NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
-
             try {
+                NewDayTimelineGrid d = new NewDayTimelineGrid(new DayTimeline(titleTxt.getText(), descriptionTxt.getText(), gregorianStart, gregorianEnd));
                 if (!sqldao.isThereADuplicateTimeline(d.getDayTimeline())) {
                     try {
                         sqldao.saveTimeline(d.getDayTimeline());
@@ -94,7 +110,7 @@ public class CreateTimelinePopOver extends PopOver{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Duplicated Timelines");
                     alert.setHeaderText("Error!");
-                    alert.setContentText("There is already a timeline named "+d.getDayTimeline().getTitle()+" in the database. Please choose another name.");
+                    alert.setContentText("There is already a timeline named " + d.getDayTimeline().getTitle() + " in the database. Please choose another name.");
                     alert.showAndWait();
                 }
             } catch (Exception e) {

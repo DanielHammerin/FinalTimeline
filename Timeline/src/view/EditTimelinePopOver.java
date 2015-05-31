@@ -139,6 +139,25 @@ public class EditTimelinePopOver extends PopOver{
         });
 
         addBtn.setOnMouseClicked(editTimeline -> {
+            if(titleTextField.getText().length() > 30) {
+                this.hide();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Too big title");
+                alert.setHeaderText("Warning");
+                alert.setContentText("The title has to be at max 30 characters long.");
+                alert.showAndWait();
+                throw new IllegalArgumentException("The title has to be at max 30 characters long.");
+            }
+            if (titleTextField.getText().isEmpty()) {
+                this.hide();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Insufficient information");
+                alert.setHeaderText("Warning");
+                alert.setContentText("The title has to be filled to create a timeline");
+                alert.showAndWait();
+                throw new IllegalArgumentException("The title has to be filled to create a timeline");
+            }
+
             DayTimeline dayTimeline = new DayTimeline(titleTextField.getText(), descriptionTextArea.getText(), selectedTimeline.getStartDate(), selectedTimeline.getEndDate());
 
             try {
