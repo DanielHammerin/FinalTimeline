@@ -67,7 +67,7 @@ public class AddNewEventPopOver extends PopOver {
 
         titleField.setPrefWidth(240.0);
         descriptionField.setPrefWidth(230.0);
-        descriptionField.setPrefHeight(150);
+        descriptionField.setPrefHeight(70);
         descriptionField.setWrapText(true);
         titleField.setPromptText("Event title");
         descriptionField.setPromptText("Event description");
@@ -118,103 +118,121 @@ public class AddNewEventPopOver extends PopOver {
             if (eventNT.isSelected()) {
                 LocalDate startDatePickerValue = startDatePicker.getValue();
                 GregorianCalendar newDateOfEvent = new GregorianCalendar();
-
+                if(titleField.getText().isEmpty() || startDatePicker.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Insufficient information");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("The title and the start date of the event have to be specified");
+                    alert.showAndWait();
+                }
+                else {
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
-                EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent,timelineToAddEvent);
-
-                try {
-                   if(!sqldao.isThereADuplicateEvent(ent)){
-                        sqldao.saveEvent(timelineToAddEvent, ent);
-                        timelineToAddEvent = ent.getDayTimeline();
-                        mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
-                        this.hide();
-                    }else {
+                    EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
+                    try {
+                        if (!sqldao.isThereADuplicateEvent(ent)) {
+                            sqldao.saveEvent(timelineToAddEvent, ent);
+                            timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                            mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
+                            this.hide();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Duplicated Timelines");
+                            alert.setHeaderText("Error!");
+                            alert.setContentText("There is already an event named '" + ent.getTitle() + "' in the database. Please choose another name.");
+                            alert.showAndWait();
+                        }
+                    } catch (ClassNotFoundException e) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Duplicated Timelines");
+                        alert.setTitle("Database Connection");
                         alert.setHeaderText("Error!");
-                        alert.setContentText("There is already an event named '"+ent.getTitle()+"' in the database. Please choose another name.");
+                        alert.setContentText("Database connection Error");
                         alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
                     }
-                } catch (ClassNotFoundException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
                 }
             } else {
-                LocalDate start = startDatePicker.getValue();
-                LocalDate end = endDatePicker.getValue();
-                GregorianCalendar gregorianStart = new GregorianCalendar();
-                GregorianCalendar gregorianEnd = new GregorianCalendar();
-                Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                gregorianStart.setTime(dStart);
-                gregorianEnd.setTime(dEnd);
-                EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd,timelineToAddEvent);
-                try {
-                    if(!sqldao.isThereADuplicateEvent(ewt)){
-                        sqldao.saveEvent(timelineToAddEvent, ewt);
-                        timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
-                        mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
-                        this.hide();
-                   }else {
+                if(titleField.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Insufficient information");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("The title, the start date and the end date of the event have to be specified");
+                    alert.showAndWait();
+                }
+                else {
+                    LocalDate start = startDatePicker.getValue();
+                    LocalDate end = endDatePicker.getValue();
+                    GregorianCalendar gregorianStart = new GregorianCalendar();
+                    GregorianCalendar gregorianEnd = new GregorianCalendar();
+                    Date dStart = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    gregorianStart.setTime(dStart);
+                    gregorianEnd.setTime(dEnd);
+                    EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
+                    try {
+                        if (!sqldao.isThereADuplicateEvent(ewt)) {
+                            sqldao.saveEvent(timelineToAddEvent, ewt);
+                            timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
+                            mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
+                            this.hide();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Duplicated Timelines");
+                            alert.setHeaderText("Error!");
+                            alert.setContentText("There is already an event named '" + ewt.getTitle() + "' in the database. Please choose another name.");
+                            alert.showAndWait();
+                        }
+                    } catch (ClassNotFoundException e) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Duplicated Timelines");
+                        alert.setTitle("Database Connection");
                         alert.setHeaderText("Error!");
-                        alert.setContentText("There is already an event named '" + ewt.getTitle() + "' in the database. Please choose another name.");
+                        alert.setContentText("Database connection Error");
                         alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Duplicate en");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+
+                    } catch (InstantiationException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Database Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("Database connection Error");
+                        alert.showAndWait();
+                        e.printStackTrace();
                     }
-                } catch (ClassNotFoundException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Duplicate en");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                } catch (InstantiationException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("Database connection Error");
-                    alert.showAndWait();
-                    e.printStackTrace();
                 }
             }
         });
@@ -227,7 +245,7 @@ public class AddNewEventPopOver extends PopOver {
         hbr.getChildren().addAll(eventNT, eventWT);
         vb.getChildren().addAll(myComboBox, hbr, titleField, descriptionField, startDatePicker, endDatePicker, hb);
         vb.prefWidthProperty().bind(this.prefWidthProperty());
-        vb.setPrefHeight(200);
+        vb.setPrefHeight(235);
         this.setContentNode(vb);
         eventNT.setToggleGroup(tg);
         eventWT.setToggleGroup(tg);

@@ -51,13 +51,13 @@ public class LoadTimelinePopOver extends PopOver {
         refreshButton = new Button("Refresh",image2);
         refreshButton.setAlignment(Pos.BOTTOM_RIGHT);
 
+        myListview.setPrefHeight(200);
+
         this.setHideOnEscape(true);
         this.setDetachable(false);
         this.hide();
         this.setContentNode(vBox);
         this.arrowLocationProperty().set(ArrowLocation.LEFT_TOP);
-        vBox.setPrefHeight(300);
-        vBox.setPrefWidth(300);
 
         LinkedList<DayTimeline> allTimelines = sqldao.getAllTimelines();
 
@@ -89,6 +89,7 @@ public class LoadTimelinePopOver extends PopOver {
         hbox.setSpacing(56);
         vBox.getChildren().addAll(myListview, hbox);
         vBox.setPrefHeight(250);
+        vBox.setPrefWidth(300);
         this.setContentNode(vBox);
     }
 }

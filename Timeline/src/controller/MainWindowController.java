@@ -1,4 +1,5 @@
 package controller;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -10,7 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -287,5 +290,6 @@ public class MainWindowController implements Initializable {
 	private Button editTimelineButton;
 	@FXML
 	private ScrollPane mainScrollPane;
+
 	public Stage mainStage;
 }

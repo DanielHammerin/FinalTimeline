@@ -125,71 +125,79 @@ public class EditEventPopover extends PopOver {
 
         //Initialization of the button with routine of saving the changes
         saveButton.setOnMouseClicked(saveChanges -> {
-
-            event.setTitle(titleField.getText());
-            event.setDescription(descriptionField.getText());
-
-            LocalDate start = startDatePicker.getValue();
-            LocalDate end = endDatePicker.getValue();
-
-            if (end.isBefore(start)) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Impossible dates");
+            if(titleField.getText().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Insufficient information");
                 alert.setHeaderText("Error!");
-                alert.setContentText("The start date of an event has to be before the end date!");
+                alert.setContentText("The title, the start date and the end date of the event have to be specified.");
                 alert.showAndWait();
-            } else {
-                GregorianCalendar gregorianStart = new GregorianCalendar();
-                Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                gregorianStart.setTime(tempStartDate);
-                event.setStartTime(gregorianStart);
+            }
+            else {
+                event.setTitle(titleField.getText());
+                event.setDescription(descriptionField.getText());
 
-                GregorianCalendar gregorianEnd = new GregorianCalendar();
-                Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                gregorianEnd.setTime(tempEndDate);
-                event.setFinishTime(gregorianEnd);
+                LocalDate start = startDatePicker.getValue();
+                LocalDate end = endDatePicker.getValue();
 
-                try {
-                    sqldao.updateEventTime(oldEventName, event);
-                    DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
-                    MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
-                } catch (ClassNotFoundException e) {
+                if (end.isBefore(start)) {
                     Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
+                    alert.setTitle("Impossible dates");
                     alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
+                    alert.setContentText("The start date of an event has to be before the end date!");
                     alert.showAndWait();
+                } else {
+                    GregorianCalendar gregorianStart = new GregorianCalendar();
+                    Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    gregorianStart.setTime(tempStartDate);
+                    event.setStartTime(gregorianStart);
 
-                    e.printStackTrace();
-                } catch (SQLException e) {
+                    GregorianCalendar gregorianEnd = new GregorianCalendar();
+                    Date tempEndDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    gregorianEnd.setTime(tempEndDate);
+                    event.setFinishTime(gregorianEnd);
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                    try {
+                        sqldao.updateEventTime(oldEventName, event);
+                        DayTimeline daytimeline = sqldao.getTimelineFromEventTime(event);
+                        MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
+                    } catch (ClassNotFoundException e) {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Database Error Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There was an error trying to connect to the database.");
+                        alert.showAndWait();
 
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Database Error Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There was an error trying to connect to the database.");
+                        alert.showAndWait();
 
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
 
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Database Error Connection");
-                    alert.setHeaderText("Error!");
-                    alert.setContentText("There was an error trying to connect to the database");
-                    alert.showAndWait();
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Database Error Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There was an error trying to connect to the database.");
+                        alert.showAndWait();
 
-                    e.printStackTrace();
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Database Error Connection");
+                        alert.setHeaderText("Error!");
+                        alert.setContentText("There was an error trying to connect to the database.");
+                        alert.showAndWait();
+
+                        e.printStackTrace();
+                    }
+                    this.hide();
                 }
-                this.hide();
             }
         });
 
@@ -210,6 +218,7 @@ public class EditEventPopover extends PopOver {
                     e.printStackTrace();
                 }
             }
+            this.hide();
         });
 
         abortButton.setOnMouseClicked(abort -> {
@@ -291,62 +300,70 @@ public class EditEventPopover extends PopOver {
 
         //Saves the changes from the GUI in the event
         saveButton.setOnMouseClicked(saveChanges -> {
-            oldEventName = event.getTitle();
-            event.setTitle(titleField.getText());
-            event.setDescription(descriptionField.getText());
-
-            GregorianCalendar gregorianStart = new GregorianCalendar();
-            LocalDate start = startDatePicker.getValue();
-            Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            gregorianStart.setTime(tempStartDate);
-            event.setDateOfEvent(gregorianStart);
-            try {
-                sqldao.updateEventNT(oldEventName, event);
-                DayTimeline daytimeline = event.getDayTimeline();
-                MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
-            } catch (ClassNotFoundException e) {
-
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Database Error Connection");
+            if(titleField.getText().isEmpty() || startDatePicker.getValue() == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Insufficient information");
                 alert.setHeaderText("Error!");
-                alert.setContentText("There was an error trying to connect to the database");
+                alert.setContentText("The title and the start date of the event have to be specified.");
                 alert.showAndWait();
+            }
+            else {
+                oldEventName = event.getTitle();
+                event.setTitle(titleField.getText());
+                event.setDescription(descriptionField.getText());
 
-                e.printStackTrace();
-            } catch (SQLException e) {
+                GregorianCalendar gregorianStart = new GregorianCalendar();
+                LocalDate start = startDatePicker.getValue();
+                Date tempStartDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                gregorianStart.setTime(tempStartDate);
+                event.setDateOfEvent(gregorianStart);
+                try {
+                    sqldao.updateEventNT(oldEventName, event);
+                    DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
+                    MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
+                } catch (ClassNotFoundException e) {
 
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Database Error Connection");
-                alert.setHeaderText("Error!");
-                alert.setContentText("There was an error trying to connect to the database");
-                alert.showAndWait();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database.");
+                    alert.showAndWait();
 
-                e.printStackTrace();
-            } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
 
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Database Error Connection");
-                alert.setHeaderText("Error!");
-                alert.setContentText("There was an error trying to connect to the database");
-                alert.showAndWait();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database.");
+                    alert.showAndWait();
 
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
 
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Database Error Connection");
-                alert.setHeaderText("Error!");
-                alert.setContentText("There was an error trying to connect to the database");
-                alert.showAndWait();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database.");
+                    alert.showAndWait();
 
-                e.printStackTrace();
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Database Error Connection");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("There was an error trying to connect to the database.");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+                }
             }
             this.hide();
         });
 
         deleteButton.setOnMouseClicked(event1 -> {
-            if (currentEventNT != null)
-            {
+            if (currentEventNT != null) {
                 try {
                     DayTimeline current = currentEventNT.getDayTimeline();
                     MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventNT);
@@ -361,6 +378,7 @@ public class EditEventPopover extends PopOver {
                     e.printStackTrace();
                 }
             }
+            this.hide();
         });
 
         abortButton.setOnMouseClicked(abort -> {
