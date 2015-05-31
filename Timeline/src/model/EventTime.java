@@ -16,13 +16,17 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 
 	private GregorianCalendar startTime;
 	private GregorianCalendar finishTime;
+
+
+	private DayTimeline dayTimeline;
 	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
 
-	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft)
+	public EventTime(String t, String d, GregorianCalendar st, GregorianCalendar ft, DayTimeline dayTimeline)
 	{
 		super(t, d);
+		this.dayTimeline = dayTimeline;
 		if (st.compareTo(ft) > 0) {throw new IllegalArgumentException("The start date has to be before the end date."); }
 		this.startTime = st;
 		this.finishTime = ft;
@@ -134,6 +138,14 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 			if (finishTime.compareTo(in.getFinishTime()) < 0) { return true; }
 		}
 		return isOverlapping;
+	}
+
+	public DayTimeline getDayTimeline() {
+		return dayTimeline;
+	}
+
+	public void setDayTimeline(DayTimeline dayTimeline) {
+		this.dayTimeline = dayTimeline;
 	}
 
 }

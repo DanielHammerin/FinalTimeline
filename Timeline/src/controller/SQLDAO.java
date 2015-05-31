@@ -215,7 +215,7 @@ public class SQLDAO
         while(rs.next()){
             GregorianCalendar g = new GregorianCalendar() ;
             g.setTime(rs.getDate("startdate"));
-            EventNT eventNT = new EventNT(rs.getString("Title"),rs.getString("Description"),g);
+            EventNT eventNT = new EventNT(rs.getString("Title"),rs.getString("Description"),g,dayTimeline);
             events.add(eventNT);
         }
         conn.close();
@@ -248,7 +248,7 @@ public class SQLDAO
             startDate.setTime(rs.getDate("startdate"));
             endDate.setTime(rs.getDate("enddate"));
 
-            EventTime eventTime = new EventTime(rs.getString("Title"), rs.getString("Description"),startDate,endDate);
+            EventTime eventTime = new EventTime(rs.getString("Title"), rs.getString("Description"),startDate,endDate,dayTimeline);
             events.add(eventTime);
         }
         conn.close();
@@ -278,15 +278,20 @@ public class SQLDAO
 
         Connection conn = openConnection();
         String myQuery;
+        DayTimeline dayTimeline;
 
         if(myEvent instanceof  EventNT){
+           EventNT eventNT = (EventNT)myEvent;
+            dayTimeline = eventNT.getDayTimeline();
             myQuery= "SELECT *\n" +
                     "FROM eventnotime\n" +
-                    "WHERE title = '"+myEvent.getTitle()+"'" ;
+                    "WHERE title = '"+myEvent.getTitle()+"'and timeline ='"+dayTimeline.getTitle()+"'" ;
         }else{
+            EventTime eventTime = (EventTime)myEvent;
+            dayTimeline = eventTime.getDayTimeline();
             myQuery= "SELECT *\n" +
                     "FROM eventtime\n" +
-                    "WHERE title = '"+myEvent.getTitle()+"'" ;
+                    "WHERE title = '"+myEvent.getTitle()+"' and timeline ='"+dayTimeline.getTitle()+"'" ;
         }
 
         ResultSet rs = conn.createStatement().executeQuery(myQuery);

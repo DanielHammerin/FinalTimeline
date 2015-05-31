@@ -13,12 +13,17 @@ import view.EditEventPopover;
 public class EventNT extends MyEvent implements Comparable<EventNT>{
 
 	private GregorianCalendar dateOfEvent;
+
+
+
+	private DayTimeline dayTimeline;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
 	Circle eventCircle;
 
-	public EventNT (String t, String d, GregorianCalendar date){
+	public EventNT (String t, String d, GregorianCalendar date,DayTimeline dayTimeline){
 		super(t, d);
+		this.dayTimeline = dayTimeline;
 		dateOfEvent = date;
 		eventCircle = new Circle(13);
 		eventCircle.setFill(Color.valueOf("#71E874"));
@@ -82,4 +87,11 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 		this.dateOfEvent = dateOfEvent;
 	}
 
+	public DayTimeline getDayTimeline() {
+		return dayTimeline;
+	}
+
+	public void setDayTimeline(DayTimeline dayTimeline) {
+		this.dayTimeline = dayTimeline;
+	}
 }

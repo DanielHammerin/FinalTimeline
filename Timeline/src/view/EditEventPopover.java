@@ -194,12 +194,12 @@ public class EditEventPopover extends PopOver {
         });
 
         deleteButton.setOnMouseClicked(event1 -> {
-            if (currentEventTime != null)
-            {
+            if (currentEventTime != null){
                 try {
                     DayTimeline current = sqldao.getTimelineFromEventTime(currentEventTime);
                     MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventTime);
                     sqldao.deleteEvent(currentEventTime);
+                    this.hide();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (SQLException e) {
@@ -250,7 +250,7 @@ public class EditEventPopover extends PopOver {
             abortButton.setTooltip(new Tooltip("Cancel"));
         });
 
-        DayTimeline dayTimeline = sqldao.getTimelineFromEventNT(event);
+        DayTimeline dayTimeline = event.getDayTimeline();
         titleField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
 
@@ -302,7 +302,7 @@ public class EditEventPopover extends PopOver {
             event.setDateOfEvent(gregorianStart);
             try {
                 sqldao.updateEventNT(oldEventName, event);
-                DayTimeline daytimeline = sqldao.getTimelineFromEventNT(event);
+                DayTimeline daytimeline = event.getDayTimeline();
                 MainWindowController.mainWindowController.redrawOneTimelineAddEvent(daytimeline, event);
             } catch (ClassNotFoundException e) {
 
@@ -348,7 +348,7 @@ public class EditEventPopover extends PopOver {
             if (currentEventNT != null)
             {
                 try {
-                    DayTimeline current = sqldao.getTimelineFromEventNT(currentEventNT);
+                    DayTimeline current = currentEventNT.getDayTimeline();
                     MainWindowController.mainWindowController.redrawOneTimelineRemoveEvent(current, currentEventNT);
                     sqldao.deleteEvent(currentEventNT);
                 } catch (ClassNotFoundException e) {

@@ -121,12 +121,12 @@ public class AddNewEventPopOver extends PopOver {
 
                 Date d = Date.from(startDatePickerValue.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 newDateOfEvent.setTime(d);
-                EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent);
+                EventNT ent = new EventNT(titleField.getText(), descriptionField.getText(), newDateOfEvent,timelineToAddEvent);
 
                 try {
-                    if(!sqldao.isThereADuplicateEvent(ent)){
+                   if(!sqldao.isThereADuplicateEvent(ent)){
                         sqldao.saveEvent(timelineToAddEvent, ent);
-                        timelineToAddEvent = sqldao.getTimelineFromEventNT(ent);
+                        timelineToAddEvent = ent.getDayTimeline();
                         mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ent);
                         this.hide();
                     }else {
@@ -174,14 +174,14 @@ public class AddNewEventPopOver extends PopOver {
                 Date dEnd = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 gregorianStart.setTime(dStart);
                 gregorianEnd.setTime(dEnd);
-                EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd);
+                EventTime ewt = new EventTime(titleField.getText(), descriptionField.getText(), gregorianStart, gregorianEnd,timelineToAddEvent);
                 try {
                     if(!sqldao.isThereADuplicateEvent(ewt)){
                         sqldao.saveEvent(timelineToAddEvent, ewt);
                         timelineToAddEvent = sqldao.getTimelineFromEventTime(ewt);
                         mwc.redrawOneTimelineAddEvent(timelineToAddEvent, ewt);
                         this.hide();
-                    }else {
+                   }else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Duplicated Timelines");
                         alert.setHeaderText("Error!");
@@ -201,8 +201,6 @@ public class AddNewEventPopOver extends PopOver {
                     alert.setHeaderText("Error!");
                     alert.setContentText("Database connection Error");
                     alert.showAndWait();
-                    e.printStackTrace();
-
                 } catch (InstantiationException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database Connection");
