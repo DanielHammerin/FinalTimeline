@@ -5,7 +5,6 @@ import controller.SQLDAO;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -103,7 +102,6 @@ public class EditEventPopover extends PopOver {
                         };
                     }
                 };
-
         startDatePicker.setDayCellFactory(dayCellFactory);
         endDatePicker.setDayCellFactory(dayCellFactory);
 

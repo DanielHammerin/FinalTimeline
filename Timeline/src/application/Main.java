@@ -19,7 +19,7 @@ public class Main extends Application {
 			root1 = loader.load();
 			MainWindowController mainWindowController = loader.getController();
 			mainWindowController.mainStage = primaryStage;
-			Scene scene = new Scene(root1, 1200,800);
+			Scene scene = new Scene(root1, 1200,650);
 			scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Time Span");
