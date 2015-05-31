@@ -13,7 +13,6 @@ import view.EditEventPopover;
 public class EventNT extends MyEvent implements Comparable<EventNT>{
 
 	private GregorianCalendar dateOfEvent;
-	Pane backGroundPane;
 	StackPane eventPane;
 	EditEventPopover editEventPopover;
 	Circle eventCircle;
@@ -21,12 +20,8 @@ public class EventNT extends MyEvent implements Comparable<EventNT>{
 	public EventNT (String t, String d, GregorianCalendar date){
 		super(t, d);
 		dateOfEvent = date;
-		backGroundPane = new Pane();
-		backGroundPane.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-		Text title = new Text(t);
-		title.setWrappingWidth(backGroundPane.getWidth());
 		eventCircle = new Circle(13);
-		eventCircle.setFill(Color.LIGHTGREEN);
+		eventCircle.setFill(Color.valueOf("#71E874"));
 
 		eventPane = new StackPane(eventCircle);
 		eventPane.setPrefHeight(50);

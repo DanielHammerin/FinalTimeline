@@ -27,7 +27,7 @@ public class EventTime extends MyEvent implements Comparable<EventTime>
 		this.startTime = st;
 		this.finishTime = ft;
 		backGroundPane = new Pane();
-		backGroundPane.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		backGroundPane.setStyle("-fx-background-color: #92A2E8");
 		eventPane = new StackPane(backGroundPane, new Text(getTitleText(t, st, ft)));
 		eventPane.setPrefHeight(50);
 		eventPane.setOnMouseClicked(rightClick ->{
