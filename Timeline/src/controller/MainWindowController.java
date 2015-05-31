@@ -245,6 +245,19 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	public void redrawRemoveTimeline(DayTimeline toRemove)
+	{
+		int indexToRemove = 0;
+		for(int i=0;i<vBoxModules.getChildren().size();i++){
+			if(vBoxModules.getChildren().get(i) instanceof  NewDayTimelineGrid){
+				NewDayTimelineGrid newDayTimelineGrid = (NewDayTimelineGrid)vBoxModules.getChildren().get(i);
+				DayTimeline current = newDayTimelineGrid.getDayTimeline();
+				if (current.equals(toRemove)) { indexToRemove = i; break;}
+			}
+		}
+		vBoxModules.getChildren().remove(indexToRemove);
+	}
+
 	public void redrawOneTimeline(String oldTimelineTitle, DayTimeline newTimeline){
 		for(int i=0; i < vBoxModules.getChildren().size(); i++) {
 			if (vBoxModules.getChildren().get(i) instanceof NewDayTimelineGrid) {

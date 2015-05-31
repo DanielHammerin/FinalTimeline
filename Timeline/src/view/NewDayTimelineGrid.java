@@ -70,6 +70,7 @@ public class NewDayTimelineGrid extends VBox
         this.getChildren().add(theGrid);
     }
 
+
     /**
      * The method for drawing the top part of the grid with which year
      * month and day that is.
